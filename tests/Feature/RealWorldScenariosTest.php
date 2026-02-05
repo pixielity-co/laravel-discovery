@@ -93,7 +93,7 @@ class RealWorldScenariosTest extends TestCase
             ->discovery
             ->directories($settingsDirectory)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Verify settings classes were discovered
         $this->assertNotEmpty($settingsClasses);
@@ -104,7 +104,7 @@ class RealWorldScenariosTest extends TestCase
         $validatedProperties = $this
             ->discovery
             ->properties(TestValidateAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify validated properties were discovered
         $this->assertNotEmpty($validatedProperties);
@@ -148,7 +148,7 @@ class RealWorldScenariosTest extends TestCase
         $routes = $this
             ->discovery
             ->methods(TestRouteAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify routes were discovered
         $this->assertNotEmpty($routes);
@@ -211,7 +211,7 @@ class RealWorldScenariosTest extends TestCase
             ->discovery
             ->attribute(TestServiceAttribute::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Verify plugins were discovered
         $this->assertNotEmpty($plugins);
@@ -223,7 +223,7 @@ class RealWorldScenariosTest extends TestCase
             ->attribute(TestServiceAttribute::class)
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         $this->assertNotEmpty($pluginsWithInterface);
         $this->assertArrayHasKey(TestService::class, $pluginsWithInterface);
@@ -260,7 +260,7 @@ class RealWorldScenariosTest extends TestCase
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Verify health checks were discovered
         $this->assertNotEmpty($healthChecks);
@@ -273,7 +273,7 @@ class RealWorldScenariosTest extends TestCase
             ->attribute(TestCardAttribute::class)
             ->where('enabled', true)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         $this->assertIsArray($enabledHealthChecks);
 
@@ -316,7 +316,7 @@ class RealWorldScenariosTest extends TestCase
             ->directories($commandsDirectory)
             ->extending(Command::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Verify commands were discovered
         $this->assertNotEmpty($commands);
@@ -364,7 +364,7 @@ class RealWorldScenariosTest extends TestCase
             ->discovery
             ->attribute(TestAttribute::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Verify middleware were discovered
         $this->assertIsArray($middleware);
@@ -375,7 +375,7 @@ class RealWorldScenariosTest extends TestCase
             ->directories(__DIR__ . '/../Fixtures/Classes')
             ->attribute(TestAttribute::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         $this->assertIsArray($middlewareByDirectory);
     }
@@ -411,7 +411,7 @@ class RealWorldScenariosTest extends TestCase
             ->discovery
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Verify listeners were discovered
         $this->assertNotEmpty($listeners);
@@ -423,7 +423,7 @@ class RealWorldScenariosTest extends TestCase
             ->implementing(ServiceInterface::class)
             ->attribute(TestServiceAttribute::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         $this->assertNotEmpty($attributedListeners);
         $this->assertArrayHasKey(TestService::class, $attributedListeners);

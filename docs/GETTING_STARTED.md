@@ -15,7 +15,7 @@ A step-by-step guide to get you up and running with the Discovery package.
 ### Step 1: Install via Composer
 
 ```bash
-composer require fulers/discovery
+composer require pixielity/laravel-discovery
 ```
 
 ### Step 2: Publish Configuration (Optional)
@@ -295,9 +295,9 @@ public function runHealthChecks(): array
 
 ### Get Help
 
-- 💬 [GitHub Discussions](https://github.com/fulers/discovery/discussions)
-- 🐛 [Report Issues](https://github.com/fulers/discovery/issues)
-- 📧 [Email Support](mailto:support@fulers.com)
+- 💬 [GitHub Discussions](https://github.com/pixielity/laravel-discovery/discussions)
+- 🐛 [Report Issues](https://github.com/pixielity/laravel-discovery/issues)
+- 📧 [Email Support](mailto:support@pixielity.com)
 
 ---
 

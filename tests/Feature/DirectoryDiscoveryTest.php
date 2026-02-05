@@ -50,7 +50,7 @@ class DirectoryDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Cards')
-            ->get();
+            ->get()->all();
 
         // Assert: Should find classes
         $this->assertIsArray($results);
@@ -71,7 +71,7 @@ class DirectoryDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/*')
-            ->get();
+            ->get()->all();
 
         // Assert: Should find classes from multiple subdirectories
         $this->assertIsArray($results);
@@ -94,7 +94,7 @@ class DirectoryDiscoveryTest extends TestCase
                 __DIR__ . '/../Fixtures/Classes/Cards',
                 __DIR__ . '/../Fixtures/Classes/Services',
             ])
-            ->get();
+            ->get()->all();
 
         // Assert: Should find classes from both directories
         $this->assertIsArray($results);
@@ -116,7 +116,7 @@ class DirectoryDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Services')
             ->implementing(ServiceInterface::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find service implementations
         $this->assertIsArray($results);
@@ -144,7 +144,7 @@ class DirectoryDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Commands')
             ->extending(Command::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find command classes
         $this->assertIsArray($results);
@@ -165,7 +165,7 @@ class DirectoryDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Services')
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Should only include concrete classes
         $this->assertIsArray($results);

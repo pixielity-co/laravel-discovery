@@ -212,11 +212,11 @@ class CacheManagerTest extends TestCase
      */
     public function test_respects_cache_enabled_config(): void
     {
-        // Arrange: Disable caching
-        config()->set('discovery.cache.enabled', false);
-
-        // Arrange: Create a new cache manager with disabled config
-        $cacheManager = resolve(CacheManager::class);
+        // Arrange: Create a new cache manager with caching disabled
+        $cacheManager = new CacheManager(
+            cachePath: sys_get_temp_dir() . '/discovery_cache',
+            enabled: false
+        );
 
         // Act: Attempt to store cache
         $cacheManager->put('test', ['data' => 'value']);
@@ -250,14 +250,15 @@ class CacheManagerTest extends TestCase
 
         // Arrange: Ensure the directory doesn't exist
         if (is_dir($newPath)) {
+            array_map(unlink(...), glob("{$newPath}/*") ?: []);
             rmdir($newPath);
         }
 
-        // Arrange: Configure the new cache path
-        config()->set('discovery.cache.path', $newPath);
-
-        // Arrange: Create a new cache manager
-        $cacheManager = resolve(CacheManager::class);
+        // Arrange: Create a new cache manager with the new path
+        $cacheManager = new CacheManager(
+            cachePath: $newPath,
+            enabled: true
+        );
 
         // Act: Store cache data (should create directory)
         $cacheManager->put('test', ['data' => 'value']);

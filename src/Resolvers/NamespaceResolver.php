@@ -110,6 +110,32 @@ class NamespaceResolver implements NamespaceResolverInterface
             return "App\\{$namespace}";
         }
 
+        // Pattern: packages/{Package}/tests/{Namespace}/{Class}.php
+        if (preg_match('#/packages/([^/]+)/tests/(.+)\.php$#', $path, $matches)) {
+            $package = $matches[1];
+            $relativePath = $matches[2];
+            $namespace = Str::replace('/', '\\', $relativePath);
+
+            return "Pixielity\\{$package}\\Tests\\{$namespace}";
+        }
+
+        // Pattern: tests/{Namespace}/{Class}.php (standalone package)
+        if (preg_match('#/tests/(.+)\.php$#', $path, $matches)) {
+            $relativePath = $matches[1];
+            $namespace = Str::replace('/', '\\', $relativePath);
+
+            // Try to determine the base namespace from composer.json or use a default
+            // For now, we'll check if this is in a package directory
+            if (preg_match('#/packages/([^/]+)/#', $path, $packageMatches)) {
+                $package = $packageMatches[1];
+
+                return "Pixielity\\{$package}\\Tests\\{$namespace}";
+            }
+
+            // Fallback for standalone tests
+            return "Tests\\{$namespace}";
+        }
+
         return null;
     }
 }

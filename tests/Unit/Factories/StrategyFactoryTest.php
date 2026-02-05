@@ -52,10 +52,8 @@ class StrategyFactoryTest extends TestCase
 
     /**
      * The application instance.
-     *
-     * @var Application
      */
-    protected Application $app;
+    protected $app;
 
     /**
      * Setup the test environment.

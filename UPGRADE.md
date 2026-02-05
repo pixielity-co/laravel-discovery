@@ -23,7 +23,7 @@ None - this is the initial stable release.
 1. Update composer.json:
 
 ```bash
-composer require fulers/discovery:^1.0
+composer require pixielity/laravel-discovery:^1.0
 ```
 
 2. Publish configuration (optional):
@@ -61,7 +61,7 @@ This package follows [Semantic Versioning](https://semver.org/):
 1. Read the CHANGELOG.md for your target version
 2. Check for breaking changes in this document
 3. Update your composer.json
-4. Run `composer update fulers/discovery`
+4. Run `composer update pixielity/laravel-discovery`
 5. Test your application thoroughly
 6. Clear all caches
 
@@ -73,6 +73,6 @@ This package follows [Semantic Versioning](https://semver.org/):
 
 ## Getting Help
 
-- 📧 Email: support@fulers.com
-- 🐛 Issues: [GitHub Issues](https://github.com/fulers/discovery/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/fulers/discovery/discussions)
+- 📧 Email: support@pixielity.com
+- 🐛 Issues: [GitHub Issues](https://github.com/pixielity/laravel-discovery/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/pixielity/laravel-discovery/discussions)

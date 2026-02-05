@@ -50,7 +50,7 @@ class InterfaceDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->implementing(ServiceInterface::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find implementations
         $this->assertIsArray($results);
@@ -79,7 +79,7 @@ class InterfaceDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Services')
             ->implementing(ServiceInterface::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find implementations in directory
         $this->assertIsArray($results);
@@ -100,7 +100,7 @@ class InterfaceDiscoveryTest extends TestCase
             ->discovery
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Should only include concrete classes
         $this->assertIsArray($results);
@@ -129,7 +129,7 @@ class InterfaceDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->implementing(ServiceInterface::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should handle classes with multiple interfaces
         $this->assertIsArray($results);

@@ -90,7 +90,7 @@ class ChainedDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories($cardsDirectory)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify both card classes were discovered
         $this->assertNotEmpty($results);
@@ -128,7 +128,7 @@ class ChainedDiscoveryTest extends TestCase
             ->attribute(TestServiceAttribute::class)
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Verify TestService was discovered
         $this->assertNotEmpty($results);
@@ -160,7 +160,7 @@ class ChainedDiscoveryTest extends TestCase
             ->discovery
             ->directories($commandsDirectory)
             ->extending(Command::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify commands were discovered
         $this->assertNotEmpty($results);
@@ -195,7 +195,7 @@ class ChainedDiscoveryTest extends TestCase
             ->methods(TestRouteAttribute::class)
             ->where('method', 'GET')
             ->cached($cacheKey)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify results were found
         $this->assertNotEmpty($results);
@@ -206,7 +206,7 @@ class ChainedDiscoveryTest extends TestCase
             ->methods(TestRouteAttribute::class)
             ->where('method', 'GET')
             ->cached($cacheKey)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify cached results match original results
         $this->assertEquals($results, $cachedResults);
@@ -239,7 +239,7 @@ class ChainedDiscoveryTest extends TestCase
             ->properties(TestValidateAttribute::class)
             ->where('required', true)
             ->cached($cacheKey)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify results were found
         $this->assertNotEmpty($results);
@@ -275,7 +275,7 @@ class ChainedDiscoveryTest extends TestCase
             ->implementing(ServiceInterface::class)
             ->instantiable()
             ->filter(fn($class): bool => !str_contains($class, 'Abstract'))
-            ->get();
+            ->get()->all();
 
         // Assert: Verify TestService was discovered
         $this->assertNotEmpty($results);
@@ -314,7 +314,7 @@ class ChainedDiscoveryTest extends TestCase
             ->directories($servicesDirectory)
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Verify results were found
         $this->assertNotEmpty($results);
@@ -346,7 +346,7 @@ class ChainedDiscoveryTest extends TestCase
             ->directories($servicesDirectory)
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Act: Discover with validators in order B (reversed)
         $results2 = $this
@@ -354,7 +354,7 @@ class ChainedDiscoveryTest extends TestCase
             ->directories($servicesDirectory)
             ->instantiable()
             ->implementing(ServiceInterface::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify both result sets are identical
         $this->assertEquals($results1, $results2);

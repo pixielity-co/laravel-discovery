@@ -53,7 +53,7 @@ class CachingTest extends TestCase
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->cached('test_cache_1')
-            ->get();
+            ->get()->all();
 
         // Assert: Results should be cached
         $this->assertIsArray($results);
@@ -74,14 +74,14 @@ class CachingTest extends TestCase
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->cached('test_cache_2')
-            ->get();
+            ->get()->all();
 
         // Act: Second call - should return cached results
         $results2 = $this
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->cached('test_cache_2')
-            ->get();
+            ->get()->all();
 
         // Assert: Both results should be identical
         $this->assertEquals($results1, $results2);
@@ -103,7 +103,7 @@ class CachingTest extends TestCase
             ->attribute(TestCardAttribute::class)
             ->where('enabled', true)
             ->cached('test_cache_key1')
-            ->get();
+            ->get()->all();
 
         // Act: Cache with key2 (different filter)
         $results2 = $this
@@ -111,7 +111,7 @@ class CachingTest extends TestCase
             ->attribute(TestCardAttribute::class)
             ->where('enabled', false)
             ->cached('test_cache_key2')
-            ->get();
+            ->get()->all();
 
         // Assert: Results should be different
         $this->assertIsArray($results1);
@@ -133,7 +133,7 @@ class CachingTest extends TestCase
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->cached('test_cache_3')
-            ->get();
+            ->get()->all();
 
         // Act: Clear the cache
         $this->discovery->clearCache('test_cache_3');
@@ -160,7 +160,7 @@ class CachingTest extends TestCase
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->cached('test_cache_4')
-            ->get();
+            ->get()->all();
 
         // Assert: Should still return results (just not cached)
         $this->assertIsArray($results);
@@ -183,7 +183,7 @@ class CachingTest extends TestCase
         $results = $this
             ->discovery
             ->attribute(TestCardAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should work without caching
         $this->assertIsArray($results);

@@ -49,7 +49,7 @@ class ParentClassDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->extending(Command::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find extensions
         $this->assertIsArray($results);
@@ -77,7 +77,7 @@ class ParentClassDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Commands')
             ->extending(Command::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find extensions in directory
         $this->assertIsArray($results);
@@ -98,7 +98,7 @@ class ParentClassDiscoveryTest extends TestCase
             ->discovery
             ->extending(Command::class)
             ->instantiable()
-            ->get();
+            ->get()->all();
 
         // Assert: Should only include concrete classes
         $this->assertIsArray($results);
@@ -126,7 +126,7 @@ class ParentClassDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->extending(Command::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should handle multi-level inheritance
         $this->assertIsArray($results);

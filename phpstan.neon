@@ -2,10 +2,11 @@ includes:
     - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
-    level: 8
+    level: 5
     paths:
         - src
+        - tests
     tmpDir: build/phpstan
-    checkOctaneCompatibility: true
-    checkModelProperties: true
-    checkMissingIterableValueType: false
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue

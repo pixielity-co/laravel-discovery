@@ -50,7 +50,7 @@ class PropertyDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->properties(TestValidateAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find properties with validation attributes
         $this->assertIsArray($results);
@@ -71,7 +71,7 @@ class PropertyDiscoveryTest extends TestCase
             ->discovery
             ->properties(TestValidateAttribute::class)
             ->where('required', true)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find required properties
         $this->assertIsArray($results);
@@ -98,7 +98,7 @@ class PropertyDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->properties(TestValidateAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find properties from multiple classes
         $this->assertIsArray($results);
@@ -130,7 +130,7 @@ class PropertyDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->properties(TestValidateAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Metadata should be complete
         if (!empty($results)) {
@@ -157,7 +157,7 @@ class PropertyDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->properties(TestValidateAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should handle typed properties
         $this->assertIsArray($results);

@@ -71,7 +71,7 @@ class MonorepoDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories($packageDirectories)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify classes were discovered from multiple packages
         $this->assertIsArray($results);
@@ -109,7 +109,7 @@ class MonorepoDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories($moduleDirectories)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify classes were discovered from modules
         $this->assertIsArray($results);
@@ -143,7 +143,7 @@ class MonorepoDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories($packageDirectory)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify namespace resolution
         $this->assertIsArray($results);
@@ -181,7 +181,7 @@ class MonorepoDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories($moduleDirectory)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify namespace resolution
         $this->assertIsArray($results);
@@ -230,7 +230,7 @@ class MonorepoDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories($customDirectories)
-            ->get();
+            ->get()->all();
 
         // Assert: Verify discovery handled all structures
         $this->assertIsArray($results);

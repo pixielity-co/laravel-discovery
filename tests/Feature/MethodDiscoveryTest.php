@@ -50,7 +50,7 @@ class MethodDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->methods(TestRouteAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find methods with route attributes
         $this->assertIsArray($results);
@@ -71,7 +71,7 @@ class MethodDiscoveryTest extends TestCase
             ->discovery
             ->methods(TestRouteAttribute::class)
             ->where('method', 'GET')
-            ->get();
+            ->get()->all();
 
         // Assert: Should find GET methods
         $this->assertIsArray($results);
@@ -98,7 +98,7 @@ class MethodDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->methods(TestRouteAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should find methods from multiple controllers
         $this->assertIsArray($results);
@@ -130,7 +130,7 @@ class MethodDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->methods(TestRouteAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Metadata should be complete
         if (!empty($results)) {
@@ -157,7 +157,7 @@ class MethodDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->methods(TestRouteAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Should handle both types
         $this->assertIsArray($results);

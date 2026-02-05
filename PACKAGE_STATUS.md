@@ -54,16 +54,16 @@ The Discovery package has been fully prepared for Composer/Packagist publishing 
 
 ## ⚠️ One Remaining Issue
 
-### Dependency on `fulers/support`
+### Dependency on `pixielity/support`
 
-The package currently depends on `fulers/support` which is an internal package not published to Packagist.
+The package currently depends on `pixielity/support` which is an internal package not published to Packagist.
 
 **Three Options:**
 
 #### Option 1: Publish Support Package First (Recommended)
 
 ```bash
-# Prepare and publish fulers/support to Packagist
+# Prepare and publish pixielity/support to Packagist
 # Then Discovery can depend on it
 ```
 
@@ -103,12 +103,12 @@ composer analyse
 ### 2. Create GitHub Repository
 
 ```bash
-gh repo create fulers/discovery --public
+gh repo create pixielity/laravel-discovery --public
 git init
 git add .
 git commit -m "Initial release v1.0.0"
 git branch -M main
-git remote add origin git@github.com:fulers/discovery.git
+git remote add origin git@github.com:pixielity/laravel-discovery.git
 git push -u origin main
 git tag -a v1.0.0 -m "Release version 1.0.0"
 git push origin v1.0.0
@@ -117,7 +117,7 @@ git push origin v1.0.0
 ### 3. Submit to Packagist
 
 1. Go to https://packagist.org/packages/submit
-2. Enter: `https://github.com/fulers/discovery`
+2. Enter: `https://github.com/pixielity/laravel-discovery`
 3. Click "Check" then "Submit"
 
 ### 4. Configure Auto-Update
@@ -129,7 +129,7 @@ Enable GitHub webhook in Packagist settings for automatic updates on new release
 ```bash
 composer create-project laravel/laravel test-app
 cd test-app
-composer require fulers/discovery
+composer require pixielity/laravel-discovery
 php artisan vendor:publish --tag=discovery-config
 ```
 
@@ -184,7 +184,7 @@ php artisan vendor:publish --tag=discovery-config
 
 **Recommended Approach:**
 
-1. **Option 1** - Publish `fulers/support` package first
+1. **Option 1** - Publish `pixielity/support` package first
     - This is the cleanest solution
     - Allows other packages to benefit from shared utilities
     - Maintains clean separation of concerns
@@ -262,7 +262,7 @@ packages/Discovery/
 
 **Choose your path:**
 
-**Path A (Recommended):** Prepare `fulers/support` for publishing
+**Path A (Recommended):** Prepare `pixielity/support` for publishing
 
 - Apply same production readiness process
 - Publish to Packagist
@@ -270,7 +270,7 @@ packages/Discovery/
 
 **Path B (Faster):** Make Discovery standalone
 
-- Replace `fulers/support` with Laravel helpers
+- Replace `pixielity/support` with Laravel helpers
 - Test thoroughly
 - Publish immediately
 

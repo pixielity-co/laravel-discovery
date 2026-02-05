@@ -4,12 +4,12 @@
 
 **Powerful class discovery system for Laravel with attribute-based scanning, directory traversal, and monorepo support**
 
-[![Latest Version](https://img.shields.io/packagist/v/fulers/discovery.svg?style=flat-square)](https://packagist.org/packages/fulers/discovery)
-[![Total Downloads](https://img.shields.io/packagist/dt/fulers/discovery.svg?style=flat-square)](https://packagist.org/packages/fulers/discovery)
-[![Tests](https://github.com/fulers/discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/fulers/discovery/actions/workflows/tests.yml)
+[![Latest Version](https://img.shields.io/packagist/v/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
+[![Total Downloads](https://img.shields.io/packagist/dt/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
+[![Tests](https://github.com/pixielity/laravel-discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/pixielity/laravel-discovery/actions/workflows/tests.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat-square)](https://phpstan.org/)
-[![License](https://img.shields.io/packagist/l/fulers/discovery.svg?style=flat-square)](https://packagist.org/packages/fulers/discovery)
-[![PHP Version](https://img.shields.io/packagist/php-v/fulers/discovery.svg?style=flat-square)](https://packagist.org/packages/fulers/discovery)
+[![License](https://img.shields.io/packagist/l/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
+[![PHP Version](https://img.shields.io/packagist/php-v/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
 
 [Features](#-features) •
 [Installation](#-installation) •
@@ -137,7 +137,7 @@ foreach ($cards as $class => $metadata) {
 Install via Composer:
 
 ```bash
-composer require fulers/discovery
+composer require pixielity/laravel-discovery
 ```
 
 ---
@@ -1563,7 +1563,7 @@ $classes = Discovery::directories($_GET['path'])->get();
 
 ### Reporting Vulnerabilities
 
-Please report security vulnerabilities to: **security@fulers.com**
+Please report security vulnerabilities to: **security@pixielity.com**
 
 See [SECURITY.md](SECURITY.md) for our security policy.
 
@@ -1577,7 +1577,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ```bash
 # Clone repository
-git clone https://github.com/fulers/discovery.git
+git clone https://github.com/pixielity/laravel-discovery.git
 cd discovery
 
 # Install dependencies
@@ -1624,7 +1624,7 @@ This package stands on the shoulders of giants. Special thanks to:
 
 ### Community
 
-- All our [contributors](https://github.com/fulers/discovery/graphs/contributors)
+- All our [contributors](https://github.com/pixielity/laravel-discovery/graphs/contributors)
 - The Laravel community for feedback and support
 - Everyone who reported issues and suggested improvements
 
@@ -1671,22 +1671,22 @@ SOFTWARE.
 
 ### Documentation
 
-- 📖 [Full Documentation](https://github.com/fulers/discovery/wiki)
+- 📖 [Full Documentation](https://github.com/pixielity/laravel-discovery/wiki)
 - 📚 [API Reference](.docs/API.md)
 - 🔄 [Upgrade Guide](UPGRADE.md)
 - 📝 [Changelog](CHANGELOG.md)
 
 ### Community
 
-- 💬 [GitHub Discussions](https://github.com/fulers/discovery/discussions) - Ask questions, share ideas
-- 🐛 [GitHub Issues](https://github.com/fulers/discovery/issues) - Report bugs, request features
-- 📧 [Email Support](mailto:support@fulers.com) - Direct support
+- 💬 [GitHub Discussions](https://github.com/pixielity/laravel-discovery/discussions) - Ask questions, share ideas
+- 🐛 [GitHub Issues](https://github.com/pixielity/laravel-discovery/issues) - Report bugs, request features
+- 📧 [Email Support](mailto:support@pixielity.com) - Direct support
 
 ### Stay Updated
 
-- ⭐ [Star on GitHub](https://github.com/fulers/discovery)
-- 👀 [Watch Releases](https://github.com/fulers/discovery/releases)
-- 🐦 [Follow on Twitter](https://twitter.com/fulers)
+- ⭐ [Star on GitHub](https://github.com/pixielity/laravel-discovery)
+- 👀 [Watch Releases](https://github.com/pixielity/laravel-discovery/releases)
+- 🐦 [Follow on Twitter](https://twitter.com/pixielity)
 
 ---
 
@@ -1694,6 +1694,6 @@ SOFTWARE.
 
 **[⬆ Back to Top](#-discovery-package)**
 
-Made with ❤️ by the [Pixielity Team](https://github.com/fulers)
+Made with ❤️ by the [Pixielity Team](https://github.com/pixielity)
 
 </div>

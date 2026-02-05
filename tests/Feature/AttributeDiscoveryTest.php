@@ -52,7 +52,7 @@ class AttributeDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->attribute(TestAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Results should be an array
         $this->assertIsArray($results);
@@ -72,7 +72,7 @@ class AttributeDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->attribute(TestCardAttribute::class)
-            ->get();
+            ->get()->all();
 
         // Assert: Results should be an array
         $this->assertIsArray($results);
@@ -105,7 +105,7 @@ class AttributeDiscoveryTest extends TestCase
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->where('enabled', true)
-            ->get();
+            ->get()->all();
 
         // Assert: Results should be an array
         $this->assertIsArray($results);
@@ -132,7 +132,7 @@ class AttributeDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Cards')
-            ->get();
+            ->get()->all();
 
         // Assert: Should find classes in the Cards directory
         $this->assertIsArray($results);
@@ -154,14 +154,14 @@ class AttributeDiscoveryTest extends TestCase
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->cached('test_cards')
-            ->get();
+            ->get()->all();
 
         // Act: Second discovery with same cache key
         $results2 = $this
             ->discovery
             ->attribute(TestCardAttribute::class)
             ->cached('test_cards')
-            ->get();
+            ->get()->all();
 
         // Assert: Both results should be identical
         $this->assertEquals($results1, $results2);
@@ -181,7 +181,7 @@ class AttributeDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->attribute('NonExistentAttribute')
-            ->get();
+            ->get()->all();
 
         // Assert: Should return empty array
         $this->assertIsArray($results);
