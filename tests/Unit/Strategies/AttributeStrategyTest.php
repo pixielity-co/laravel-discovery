@@ -89,11 +89,12 @@ class AttributeStrategyTest extends TestCase
      * Test includes attribute metadata.
      *
      * This test verifies that the strategy includes attribute
-     * metadata in the discovery results.
+     * metadata in the discovery results via getMetadata().
      *
      * ## Scenario:
      * - Create strategy for TestCardAttribute
      * - Discover classes
+     * - Get metadata for discovered class
      * - Verify metadata includes attribute instance
      *
      * ## Assertions:
@@ -111,8 +112,12 @@ class AttributeStrategyTest extends TestCase
         // Assert: If results exist, verify metadata structure
         if ($results !== []) {
             $first = reset($results);
-            $this->assertIsArray($first);
-            $this->assertArrayHasKey('attribute', $first);
+            $this->assertIsString($first);
+
+            // Get metadata for the first class
+            $metadata = $attributeStrategy->getMetadata($first);
+            $this->assertIsArray($metadata);
+            $this->assertArrayHasKey('attribute', $metadata);
         } else {
             $this->markTestSkipped('No classes found with TestCardAttribute');
         }
@@ -171,10 +176,14 @@ class AttributeStrategyTest extends TestCase
         // Assert: If results exist, verify attribute properties
         if ($results !== []) {
             $first = reset($results);
-            $this->assertIsArray($first);
-            $this->assertArrayHasKey('attribute', $first);
+            $this->assertIsString($first);
 
-            $attribute = $first['attribute'];
+            // Get metadata for the first class
+            $metadata = $attributeStrategy->getMetadata($first);
+            $this->assertIsArray($metadata);
+            $this->assertArrayHasKey('attribute', $metadata);
+
+            $attribute = $metadata['attribute'];
             $this->assertIsObject($attribute);
             $this->assertObjectHasProperty('enabled', $attribute);
             $this->assertObjectHasProperty('priority', $attribute);
@@ -221,7 +230,7 @@ class AttributeStrategyTest extends TestCase
      * ## Scenario:
      * - Create strategy for TestCardAttribute
      * - Discover classes
-     * - Filter by enabled property
+     * - Filter by enabled property using metadata
      *
      * ## Assertions:
      * - Filtering works correctly
@@ -235,10 +244,13 @@ class AttributeStrategyTest extends TestCase
         // Act: Discover classes
         $results = $attributeStrategy->discover();
 
-        // Act: Filter by enabled = true
+        // Act: Filter by enabled = true using metadata
         $filtered = Arr::filter(
             $results,
-            fn(array $metadata) => isset($metadata['attribute']) && $metadata['attribute']->enabled === true
+            function (string $class) use ($attributeStrategy) {
+                $metadata = $attributeStrategy->getMetadata($class);
+                return isset($metadata['attribute']) && $metadata['attribute']->enabled === true;
+            }
         );
 
         // Assert: Filtered results should be an array

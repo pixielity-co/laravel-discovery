@@ -65,11 +65,8 @@ class PropertyFilterTest extends TestCase
         // Arrange: Create filter for enabled = true
         $filter = new PropertyFilter('enabled', true);
 
-        // Arrange: Get all classes with the attribute
-        $allClasses = [
-            DashboardCard::class,
-            AnalyticsCard::class,
-        ];
+        // Arrange: Discover all classes with the attribute
+        $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
         $filtered = $filter->apply($allClasses, $this->strategy);
@@ -99,11 +96,8 @@ class PropertyFilterTest extends TestCase
         // Arrange: Create filter for enabled = false
         $filter = new PropertyFilter('enabled', false);
 
-        // Arrange: Get all classes with the attribute
-        $allClasses = [
-            DashboardCard::class,
-            AnalyticsCard::class,
-        ];
+        // Arrange: Discover all classes with the attribute
+        $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
         $filtered = $filter->apply($allClasses, $this->strategy);
@@ -133,11 +127,8 @@ class PropertyFilterTest extends TestCase
         // Arrange: Create filter for priority = 10 (high priority)
         $filter = new PropertyFilter('priority', 10);
 
-        // Arrange: Get all classes with the attribute
-        $allClasses = [
-            DashboardCard::class,
-            AnalyticsCard::class,
-        ];
+        // Arrange: Discover all classes with the attribute
+        $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
         $filtered = $filter->apply($allClasses, $this->strategy);
@@ -167,11 +158,8 @@ class PropertyFilterTest extends TestCase
         // Arrange: Create filter for priority = 5 (lower priority)
         $filter = new PropertyFilter('priority', 5);
 
-        // Arrange: Get all classes with the attribute
-        $allClasses = [
-            DashboardCard::class,
-            AnalyticsCard::class,
-        ];
+        // Arrange: Discover all classes with the attribute
+        $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
         $filtered = $filter->apply($allClasses, $this->strategy);
@@ -201,11 +189,8 @@ class PropertyFilterTest extends TestCase
         // Arrange: Create filter for group = 'main'
         $filter = new PropertyFilter('group', 'main');
 
-        // Arrange: Get all classes with the attribute
-        $allClasses = [
-            DashboardCard::class,
-            AnalyticsCard::class,
-        ];
+        // Arrange: Discover all classes with the attribute
+        $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
         $filtered = $filter->apply($allClasses, $this->strategy);
@@ -269,11 +254,8 @@ class PropertyFilterTest extends TestCase
         // Arrange: Create filter for non-existent property
         $filter = new PropertyFilter('nonExistentProperty', 'value');
 
-        // Arrange: Get all classes with the attribute
-        $allClasses = [
-            DashboardCard::class,
-            AnalyticsCard::class,
-        ];
+        // Arrange: Discover all classes with the attribute
+        $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
         $filtered = $filter->apply($allClasses, $this->strategy);
@@ -301,11 +283,8 @@ class PropertyFilterTest extends TestCase
         // Arrange: Create filter for null value
         $filter = new PropertyFilter('group', null);
 
-        // Arrange: Get all classes with the attribute
-        $allClasses = [
-            DashboardCard::class,
-            AnalyticsCard::class,
-        ];
+        // Arrange: Discover all classes with the attribute
+        $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
         $filtered = $filter->apply($allClasses, $this->strategy);

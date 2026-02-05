@@ -37,7 +37,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Pixielity\\Discovery\\": "src/"
+      "Pixielity\\Discovery\\": "src/",
+      "Pixielity\\Discovery\\Tests\\Fixtures\\": "tests/Fixtures/"
     }
   },
   "autoload-dev": {

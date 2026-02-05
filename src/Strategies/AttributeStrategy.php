@@ -2,7 +2,7 @@
 
 namespace Pixielity\Discovery\Strategies;
 
-use Olvlvl\ComposerAttributeCollector\Attributes;
+use olvlvl\ComposerAttributeCollector\Attributes;
 use olvlvl\ComposerAttributeCollector\TargetClass;
 use Pixielity\Discovery\Contracts\DiscoveryStrategyInterface;
 use Pixielity\Discovery\Support\Arr;

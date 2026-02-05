@@ -1,14 +1,12 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests;
 
 use Illuminate\Foundation\Application;
-use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Override;
 use Pixielity\Discovery\Providers\DiscoveryServiceProvider;
+use Mockery;
+use Override;
 
 /**
  * Base Test Case for ServiceProvider Package Tests.
@@ -35,6 +33,12 @@ abstract class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Load the attributes file for composer-attribute-collector
+        $attributesFile = __DIR__ . '/../vendor/attributes.php';
+        if (file_exists($attributesFile)) {
+            require_once $attributesFile;
+        }
     }
 
     /**
