@@ -511,7 +511,6 @@ tests/Fixtures/
 │   │   └── ServiceInterface.php       # Interface
 │   ├── Commands/
 │   │   ├── TestCommand.php            # Extends Command
-│   │   └── BaseCommand.php            # Base command class
 │   ├── Settings/
 │   │   ├── AppSettings.php            # With properties
 │   │   └── UserSettings.php           # With properties

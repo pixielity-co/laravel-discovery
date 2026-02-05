@@ -1,0 +1,51 @@
+# Auto-labeling configuration for pull requests
+
+# Documentation
+documentation:
+  - changed-files:
+    - any-glob-to-any-file: ['docs/**', '*.md', 'README.md']
+
+# Tests
+tests:
+  - changed-files:
+    - any-glob-to-any-file: ['tests/**', 'phpunit.xml']
+
+# Source code
+source:
+  - changed-files:
+    - any-glob-to-any-file: ['src/**']
+
+# CI/CD
+ci:
+  - changed-files:
+    - any-glob-to-any-file: ['.github/**']
+
+# Dependencies
+dependencies:
+  - changed-files:
+    - any-glob-to-any-file: ['composer.json', 'composer.lock']
+
+# Configuration
+configuration:
+  - changed-files:
+    - any-glob-to-any-file: ['config/**', 'phpstan.neon', 'pint.json']
+
+# Cache related
+cache:
+  - changed-files:
+    - any-glob-to-any-file: ['src/Cache/**']
+
+# Strategies
+strategies:
+  - changed-files:
+    - any-glob-to-any-file: ['src/Strategies/**']
+
+# Filters
+filters:
+  - changed-files:
+    - any-glob-to-any-file: ['src/Filters/**']
+
+# Validators
+validators:
+  - changed-files:
+    - any-glob-to-any-file: ['src/Validators/**']

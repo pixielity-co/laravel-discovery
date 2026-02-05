@@ -3,6 +3,7 @@
 namespace Pixielity\Discovery\Validators;
 
 use Pixielity\Discovery\Contracts\ValidatorInterface;
+use Pixielity\Discovery\Support\Reflection;
 use Throwable;
 
 /**
