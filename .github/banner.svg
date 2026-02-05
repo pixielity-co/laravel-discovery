@@ -1,0 +1,93 @@
+<svg width="1200" height="300" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+        </linearGradient>
+
+        <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#f093fb;stop-opacity:0.3" />
+            <stop offset="100%" style="stop-color:#f5576c;stop-opacity:0.3" />
+        </linearGradient>
+
+        <filter id="glow">
+            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+            <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+
+    <!-- Background -->
+    <rect width="1200" height="300" fill="url(#bgGradient)" />
+
+    <!-- Decorative circles -->
+    <circle cx="100" cy="50" r="80" fill="url(#accentGradient)" opacity="0.2" />
+    <circle cx="1100" cy="250" r="100" fill="url(#accentGradient)" opacity="0.2" />
+    <circle cx="950" cy="80" r="60" fill="url(#accentGradient)" opacity="0.15" />
+
+    <!-- Search/Discovery Icon -->
+    <g transform="translate(80, 100)">
+        <!-- Magnifying glass circle -->
+        <circle cx="40" cy="40" r="35" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.9" />
+        <circle cx="40" cy="40" r="25" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.6" />
+
+        <!-- Magnifying glass handle -->
+        <line x1="65" y1="65" x2="85" y2="85" stroke="#ffffff" stroke-width="6"
+            stroke-linecap="round" opacity="0.9" />
+
+        <!-- Code brackets inside -->
+        <text x="28" y="50" font-family="monospace" font-size="24" fill="#ffffff" opacity="0.8"
+            font-weight="bold">&lt;/&gt;</text>
+    </g>
+
+    <!-- Main Title -->
+    <text x="200" y="140" font-family="'Segoe UI', Arial, sans-serif" font-size="72"
+        font-weight="bold" fill="#ffffff" filter="url(#glow)">
+        Discovery
+    </text>
+
+    <!-- Subtitle -->
+    <text x="200" y="180" font-family="'Segoe UI', Arial, sans-serif" font-size="24" fill="#ffffff"
+        opacity="0.9">
+        Powerful Class Discovery for Laravel
+    </text>
+
+    <!-- Feature badges -->
+    <g transform="translate(200, 210)">
+        <!-- PHP 8.3+ Badge -->
+        <rect x="0" y="0" width="100" height="30" rx="15" fill="#ffffff" opacity="0.2" />
+        <text x="50" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="14"
+            fill="#ffffff" text-anchor="middle" font-weight="600">PHP 8.3+</text>
+
+        <!-- Laravel Badge -->
+        <rect x="115" y="0" width="110" height="30" rx="15" fill="#ffffff" opacity="0.2" />
+        <text x="170" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="14"
+            fill="#ffffff" text-anchor="middle" font-weight="600">Laravel 11+</text>
+
+        <!-- Attributes Badge -->
+        <rect x="240" y="0" width="110" height="30" rx="15" fill="#ffffff" opacity="0.2" />
+        <text x="295" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="14"
+            fill="#ffffff" text-anchor="middle" font-weight="600">Attributes</text>
+
+        <!-- Monorepo Badge -->
+        <rect x="365" y="0" width="120" height="30" rx="15" fill="#ffffff" opacity="0.2" />
+        <text x="425" y="20" font-family="'Segoe UI', Arial, sans-serif" font-size="14"
+            fill="#ffffff" text-anchor="middle" font-weight="600">Monorepo</text>
+    </g>
+
+    <!-- Decorative code snippet -->
+    <g transform="translate(850, 80)" opacity="0.3">
+        <rect width="300" height="160" rx="8" fill="#000000" opacity="0.3" />
+        <text x="15" y="30" font-family="monospace" font-size="14" fill="#ffffff">
+            Discovery::attribute(</text>
+        <text x="30" y="55" font-family="monospace" font-size="14" fill="#f093fb">AsCard::class</text>
+        <text x="15" y="80" font-family="monospace" font-size="14" fill="#ffffff">)</text>
+        <text x="30" y="105" font-family="monospace" font-size="14" fill="#ffffff">
+            -&gt;where('enabled', </text>
+        <text x="45" y="130" font-family="monospace" font-size="14" fill="#4ade80">true</text>
+        <text x="80" y="130" font-family="monospace" font-size="14" fill="#ffffff">)</text>
+        <text x="30" y="155" font-family="monospace" font-size="14" fill="#ffffff">-&gt;get();</text>
+    </g>
+</svg>

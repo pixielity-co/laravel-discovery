@@ -1,12 +1,14 @@
 <div align="center">
 
-# 🔍 Discovery Package
+<img src=".github/banner.svg" alt="Laravel Discovery" width="100%">
+
+<br><br>
 
 **Powerful class discovery system for Laravel with attribute-based scanning, directory traversal, and monorepo support**
 
 [![Latest Version](https://img.shields.io/packagist/v/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
 [![Total Downloads](https://img.shields.io/packagist/dt/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
-[![Tests](https://github.com/pixielity/laravel-discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/pixielity/laravel-discovery/actions/workflows/tests.yml)
+[![Tests](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/pixielity/laravel-discovery/actions/workflows/tests.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat-square)](https://phpstan.org/)
 [![License](https://img.shields.io/packagist/l/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
 [![PHP Version](https://img.shields.io/packagist/php-v/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
