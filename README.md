@@ -31,12 +31,12 @@
 - [Quick Start](#-quick-start)
 - [Core Concepts](#-core-concepts)
 - [Discovery Methods](#-discovery-methods)
-  - [Attribute Discovery](#1-attribute-discovery)
-  - [Directory Discovery](#2-directory-discovery)
-  - [Interface Discovery](#3-interface-discovery)
-  - [Parent Class Discovery](#4-parent-class-discovery)
-  - [Method Discovery](#5-method-discovery)
-  - [Property Discovery](#6-property-discovery)
+    - [Attribute Discovery](#1-attribute-discovery)
+    - [Directory Discovery](#2-directory-discovery)
+    - [Interface Discovery](#3-interface-discovery)
+    - [Parent Class Discovery](#4-parent-class-discovery)
+    - [Method Discovery](#5-method-discovery)
+    - [Property Discovery](#6-property-discovery)
 - [Filters & Validators](#-filters--validators)
 - [Caching](#-caching)
 - [Configuration](#-configuration)
@@ -57,8 +57,8 @@ Discovery is a production-ready Laravel package that provides a powerful, flexib
 
 ### Why Discovery?
 
-
 **Traditional Approach:**
+
 ```php
 // Manual registration - tedious and error-prone
 $this->app->singleton(DashboardCard::class);
@@ -68,6 +68,7 @@ $this->app->singleton(ReportsCard::class);
 ```
 
 **With Discovery:**
+
 ```php
 // Automatic discovery - clean and maintainable
 $cards = Discovery::attribute(AsCard::class)
@@ -85,6 +86,7 @@ foreach ($cards as $class => $metadata) {
 ## ✨ Features
 
 ### 🎯 Discovery Strategies
+
 - **Attribute-Based Discovery** - Lightning-fast discovery using PHP 8 attributes via composer-attribute-collector
 - **Directory Scanning** - Scan directories with glob pattern support for complex monorepo structures
 - **Interface Discovery** - Find all classes implementing specific interfaces
@@ -93,24 +95,28 @@ foreach ($cards as $class => $metadata) {
 - **Property Discovery** - Discover properties with attributes
 
 ### ⚡ Performance
+
 - **Built-in Caching** - File-based caching system for optimal performance
 - **Lazy Loading** - Load only what you need, when you need it
 - **Optimized for Monorepos** - Efficient scanning of large codebases
 - **Composer Integration** - Leverages composer-attribute-collector for blazing-fast attribute discovery
 
 ### 🏗️ Architecture
+
 - **Full Dependency Injection** - Laravel 12 container integration throughout
 - **SOLID Principles** - Clean, maintainable, and extensible architecture
 - **Strategy Pattern** - Easily extensible with custom discovery strategies
 - **Fluent API** - Chainable builder pattern for intuitive usage
 
 ### 🧪 Quality
+
 - **Type Safe** - Full PHP 8.3+ type hints and strict types
 - **Well Tested** - Comprehensive test suite with high coverage
 - **PHPStan Level 8** - Maximum static analysis level
 - **PSR-12 Compliant** - Follows PHP coding standards
 
 ### 🔧 Developer Experience
+
 - **Laravel Facade** - Clean, static API for discovery operations
 - **Comprehensive Documentation** - Detailed docs with real-world examples
 - **Monorepo Ready** - Built for complex multi-package projects
@@ -134,16 +140,6 @@ Install via Composer:
 composer require fulers/discovery
 ```
 
-The package will automatically register its service provider via Laravel's package auto-discovery.
-
-### Publish Configuration (Optional)
-
-```bash
-php artisan vendor:publish --tag=discovery-config
-```
-
-This will create `config/discovery.php` where you can customize caching, monorepo paths, and more.
-
 ---
 
 ## 🚀 Quick Start
@@ -151,7 +147,7 @@ This will create `config/discovery.php` where you can customize caching, monorep
 ### Basic Usage
 
 ```php
-use Fulers\Discovery\Facades\Discovery;
+use Pixielity\Discovery\Facades\Discovery;
 
 // Discover classes by attribute
 $cards = Discovery::attribute(AsCard::class)->get();
@@ -170,7 +166,7 @@ $healthChecks = Discovery::implementing(HealthCheckInterface::class)
 ### With Dependency Injection
 
 ```php
-use Fulers\Discovery\Contracts\DiscoveryManagerInterface;
+use Pixielity\Discovery\Contracts\DiscoveryManagerInterface;
 
 class SettingsService
 {
@@ -252,7 +248,7 @@ Discover classes decorated with PHP 8 attributes. This is the **fastest** discov
 #### Basic Usage
 
 ```php
-use Fulers\Discovery\Facades\Discovery;
+use Pixielity\Discovery\Facades\Discovery;
 
 $cards = Discovery::attribute(AsCard::class)->get();
 ```
@@ -594,16 +590,16 @@ Discovery::attribute(AsCard::class)
 
 #### Supported Operators
 
-| Operator | Description | Example |
-|----------|-------------|---------|
-| `=`, `==` | Exact match | `->where('enabled', true)` |
-| `!=`, `<>` | Not equal | `->where('status', '!=', 'disabled')` |
-| `>` | Greater than | `->where('priority', '>', 5)` |
-| `>=` | Greater or equal | `->where('priority', '>=', 5)` |
-| `<` | Less than | `->where('priority', '<', 10)` |
-| `<=` | Less or equal | `->where('priority', '<=', 10)` |
-| `contains` | Array contains | `->where('tags', 'contains', 'admin')` |
-| `in` | Value in array | `->where('status', 'in', ['active'])` |
+| Operator   | Description      | Example                                |
+| ---------- | ---------------- | -------------------------------------- |
+| `=`, `==`  | Exact match      | `->where('enabled', true)`             |
+| `!=`, `<>` | Not equal        | `->where('status', '!=', 'disabled')`  |
+| `>`        | Greater than     | `->where('priority', '>', 5)`          |
+| `>=`       | Greater or equal | `->where('priority', '>=', 5)`         |
+| `<`        | Less than        | `->where('priority', '<', 10)`         |
+| `<=`       | Less or equal    | `->where('priority', '<=', 10)`        |
+| `contains` | Array contains   | `->where('tags', 'contains', 'admin')` |
+| `in`       | Value in array   | `->where('status', 'in', ['active'])`  |
 
 ### Callback Filters
 
@@ -613,7 +609,7 @@ Custom filtering logic with callbacks.
 Discovery::attribute(AsCard::class)
     ->filter(function($class, $metadata) {
         $attribute = $metadata['attribute'];
-        return $attribute->priority > 5 
+        return $attribute->priority > 5
             && str_starts_with($class, 'App\\Cards\\');
     })
     ->get();
@@ -715,31 +711,35 @@ DISCOVERY_CACHE_ENABLED=false
 
 ### Performance Impact
 
-| Operation | Without Cache | With Cache | Improvement |
-|-----------|--------------|------------|-------------|
-| Attribute Discovery | ~50ms | ~2ms | **25x faster** |
-| Directory Scan (100 files) | ~120ms | ~3ms | **40x faster** |
-| Interface Discovery | ~80ms | ~2ms | **40x faster** |
+| Operation                  | Without Cache | With Cache | Improvement    |
+| -------------------------- | ------------- | ---------- | -------------- |
+| Attribute Discovery        | ~50ms         | ~2ms       | **25x faster** |
+| Directory Scan (100 files) | ~120ms        | ~3ms       | **40x faster** |
+| Interface Discovery        | ~80ms         | ~2ms       | **40x faster** |
 
 ### Best Practices
 
 1. **Always cache in production**
+
 ```php
 DISCOVERY_CACHE_ENABLED=true
 ```
 
 2. **Use descriptive cache keys**
+
 ```php
 ->cached('user-settings')  // ✅ Good
 ->cached('cache1')         // ❌ Bad
 ```
 
 3. **Clear cache after deployment**
+
 ```bash
 php artisan cache:clear
 ```
 
 4. **Use attribute discovery when possible** (fastest)
+
 ```php
 // ✅ Fast - Uses composer cache
 Discovery::attribute(AsCard::class)->get();
@@ -781,7 +781,7 @@ return [
     'monorepo' => [
         'packages' => [
             'path' => 'packages/*',
-            'namespace' => 'Fulers\{package}',
+            'namespace' => 'Pixielity\{package}',
         ],
         'modules' => [
             'path' => 'modules/*',
@@ -823,9 +823,9 @@ The package automatically resolves namespaces for monorepo structures:
 
 ```
 packages/
-├── Auth/src/Settings/AuthSettings.php      → Fulers\Auth\Settings\AuthSettings
-├── Billing/src/Settings/BillingSettings.php → Fulers\Billing\Settings\BillingSettings
-└── Users/src/Settings/UserSettings.php     → Fulers\Users\Settings\UserSettings
+├── Auth/src/Settings/AuthSettings.php      → Pixielity\Auth\Settings\AuthSettings
+├── Billing/src/Settings/BillingSettings.php → Pixielity\Billing\Settings\BillingSettings
+└── Users/src/Settings/UserSettings.php     → Pixielity\Users\Settings\UserSettings
 ```
 
 ---
@@ -854,6 +854,7 @@ public function boot(): void
 ```
 
 **Attribute Definition:**
+
 ```php
 #[Attribute(Attribute::TARGET_CLASS)]
 class AsSetting
@@ -867,6 +868,7 @@ class AsSetting
 ```
 
 **Settings Class:**
+
 ```php
 #[AsSetting(key: 'app.settings', group: 'application')]
 class AppSettings extends Settings
@@ -895,7 +897,7 @@ public function boot(): void
     foreach ($routes as $identifier => $metadata) {
         [$class, $method] = explode('::', $identifier);
         $route = $metadata['attribute'];
-        
+
         Route::{strtolower($route->method)}($route->path, [$class, $method])
             ->name($route->name)
             ->middleware($route->middleware);
@@ -904,6 +906,7 @@ public function boot(): void
 ```
 
 **Route Attribute:**
+
 ```php
 #[Attribute(Attribute::TARGET_METHOD)]
 class Route
@@ -918,6 +921,7 @@ class Route
 ```
 
 **Controller:**
+
 ```php
 class UserController extends Controller
 {
@@ -1008,14 +1012,14 @@ class PluginManager
 
         foreach ($plugins as $class => $metadata) {
             $plugin = app($class);
-            
+
             // Check dependencies
             $this->checkDependencies($metadata['attribute']->dependencies);
-            
+
             // Register and boot plugin
             $plugin->register();
             $plugin->boot();
-            
+
             Log::info("Plugin loaded: {$plugin->getName()} v{$plugin->getVersion()}");
         }
     }
@@ -1084,7 +1088,7 @@ class HealthController extends Controller
         foreach ($checks as $class => $metadata) {
             $check = app($class);
             $result = $check->check();
-            
+
             $results[] = [
                 'name' => $check->getName(),
                 'status' => $result->status,
@@ -1143,8 +1147,8 @@ public function boot(): void
 
     foreach ($listeners as $class => $metadata) {
         // Note: Listens is repeatable, so we get an array of attributes
-        $attributes = is_array($metadata['attribute']) 
-            ? $metadata['attribute'] 
+        $attributes = is_array($metadata['attribute'])
+            ? $metadata['attribute']
             : [$metadata['attribute']];
 
         foreach ($attributes as $attribute) {
@@ -1197,7 +1201,7 @@ public function boot(): void
 
     foreach ($rules as $class => $metadata) {
         $ruleName = $metadata['attribute']->name;
-        
+
         Validator::extend($ruleName, function ($attribute, $value, $parameters, $validator) use ($class) {
             $rule = app($class);
             return $rule->passes($attribute, $value);
@@ -1311,10 +1315,10 @@ public function registerMiddleware(): void
 
     foreach ($middlewares as $class => $metadata) {
         $attribute = $metadata['attribute'];
-        
+
         // Register alias
         $this->app['router']->aliasMiddleware($attribute->alias, $class);
-        
+
         // Register in groups
         foreach ($attribute->groups as $group) {
             $this->app['router']->pushMiddlewareToGroup($group, $class);
@@ -1472,12 +1476,12 @@ Execute discovery and return results.
 
 Performance tests on a monorepo with 500 classes:
 
-| Operation | Without Cache | With Cache | Improvement |
-|-----------|--------------|------------|-------------|
-| Attribute Discovery | 50ms | 2ms | **25x faster** |
-| Directory Scan (100 files) | 120ms | 3ms | **40x faster** |
-| Interface Discovery | 80ms | 2ms | **40x faster** |
-| Method Discovery | 60ms | 2ms | **30x faster** |
+| Operation                  | Without Cache | With Cache | Improvement    |
+| -------------------------- | ------------- | ---------- | -------------- |
+| Attribute Discovery        | 50ms          | 2ms        | **25x faster** |
+| Directory Scan (100 files) | 120ms         | 3ms        | **40x faster** |
+| Interface Discovery        | 80ms          | 2ms        | **40x faster** |
+| Method Discovery           | 60ms          | 2ms        | **30x faster** |
 
 ### Optimization Tips
 
@@ -1519,14 +1523,14 @@ composer analyse
 ### Writing Tests
 
 ```php
-use Fulers\Discovery\Tests\TestCase;
+use Pixielity\Discovery\Tests\TestCase;
 
 class MyDiscoveryTest extends TestCase
 {
     public function test_discovers_classes_with_attribute(): void
     {
         $classes = Discovery::attribute(MyAttribute::class)->get();
-        
+
         $this->assertNotEmpty($classes);
         $this->assertArrayHasKey(MyClass::class, $classes);
     }
@@ -1603,16 +1607,14 @@ This package stands on the shoulders of giants. Special thanks to:
 ### Core Dependencies
 
 - **[Laravel Framework](https://laravel.com)** - The PHP framework for web artisans
-  - Created by [Taylor Otwell](https://github.com/taylorotwell)
-  - Provides the foundation and container system
-  
+    - Created by [Taylor Otwell](https://github.com/taylorotwell)
+    - Provides the foundation and container system
 - **[composer-attribute-collector](https://github.com/olvlvl/composer-attribute-collector)** by [Olivier Laviale](https://github.com/olvlvl)
-  - Blazing-fast attribute collection via Composer
-  - Makes attribute discovery incredibly performant
-  
+    - Blazing-fast attribute collection via Composer
+    - Makes attribute discovery incredibly performant
 - **[Symfony Finder](https://symfony.com/doc/current/components/finder.html)** - The Symfony PHP framework
-  - Created by [Fabien Potencier](https://github.com/fabpot)
-  - Provides powerful file system traversal
+    - Created by [Fabien Potencier](https://github.com/fabpot)
+    - Provides powerful file system traversal
 
 ### Inspiration
 
@@ -1642,7 +1644,7 @@ The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
 ```
 MIT License
 
-Copyright (c) 2026 Fulers Team
+Copyright (c) 2026 Pixielity Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1692,6 +1694,6 @@ SOFTWARE.
 
 **[⬆ Back to Top](#-discovery-package)**
 
-Made with ❤️ by the [Fulers Team](https://github.com/fulers)
+Made with ❤️ by the [Pixielity Team](https://github.com/fulers)
 
 </div>

@@ -1,17 +1,17 @@
 <?php
 
-namespace Fulers\Discovery;
+namespace Pixielity\Discovery;
 
-use Fulers\Discovery\Contracts\CacheManagerInterface;
-use Fulers\Discovery\Contracts\DiscoveryStrategyInterface;
-use Fulers\Discovery\Filters\CallbackFilter;
-use Fulers\Discovery\Filters\PropertyFilter;
-use Fulers\Discovery\Strategies\DirectoryStrategy;
-use Fulers\Discovery\Validators\ExtendsValidator;
-use Fulers\Discovery\Validators\ImplementsValidator;
-use Fulers\Discovery\Validators\InstantiableValidator;
-use Fulers\Support\Arr;
 use Illuminate\Support\Collection;
+use Pixielity\Discovery\Contracts\CacheManagerInterface;
+use Pixielity\Discovery\Contracts\DiscoveryStrategyInterface;
+use Pixielity\Discovery\Filters\CallbackFilter;
+use Pixielity\Discovery\Filters\PropertyFilter;
+use Pixielity\Discovery\Strategies\DirectoryStrategy;
+use Pixielity\Discovery\Support\Arr;
+use Pixielity\Discovery\Validators\ExtendsValidator;
+use Pixielity\Discovery\Validators\ImplementsValidator;
+use Pixielity\Discovery\Validators\InstantiableValidator;
 use ReflectionClass;
 use ReflectionException;
 
@@ -283,7 +283,7 @@ class DiscoveryBuilder
      * @example
      * ```php
      * Discovery::directories('packages/*\/src')
-     *     ->withNamespacePattern('Fulers\{package}\{namespace}\{class}')
+     *     ->withNamespacePattern('Pixielity\{package}\{namespace}\{class}')
      *     ->get();
      * ```
      */
@@ -424,7 +424,7 @@ class DiscoveryBuilder
         // If using DirectoryStrategy, return the directories being scanned
         if ($this->strategy instanceof DirectoryStrategy) {
             return collect($this->strategy->getDirectories())
-                ->filter(fn ($dir): bool => is_dir($dir))
+                ->filter(fn($dir): bool => is_dir($dir))
                 ->values();
         }
 

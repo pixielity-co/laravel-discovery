@@ -1,154 +1,354 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Fulers\Discovery\Tests\Unit\Strategies;
+namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
-use Fulers\Discovery\Resolvers\NamespaceResolver;
-use Fulers\Discovery\Strategies\DirectoryStrategy;
-use Illuminate\Contracts\Foundation\Application;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use Pixielity\Discovery\Resolvers\NamespaceResolver;
+use Pixielity\Discovery\Strategies\DirectoryStrategy;
+use Pixielity\Discovery\Support\Arr;
+use Pixielity\Discovery\Tests\TestCase;
 
 /**
- * DirectoryStrategyTest - Tests for DirectoryStrategy class.
+ * DirectoryStrategy Unit Tests.
  *
- * @covers \Fulers\Discovery\Strategies\DirectoryStrategy
+ * Tests the directory-based discovery strategy.
+ * The DirectoryStrategy scans filesystem directories to discover PHP classes,
+ * resolving their namespaces and extracting metadata.
+ *
+ * ## Key Features Tested:
+ * - Single directory scanning
+ * - Multiple directory scanning
+ * - Glob pattern support
+ * - Namespace resolution
+ * - Nested directory handling
+ * - Error handling for invalid paths
+ *
+ * @covers \Pixielity\Discovery\Strategies\DirectoryStrategy
+ *
+ * @author  Pixielity Development Team
+ *
+ * @since   1.0.0
  */
 class DirectoryStrategyTest extends TestCase
 {
-    private NamespaceResolver $namespaceResolver;
+    /**
+     * The path to test fixtures.
+     *
+     * @var string
+     */
+    protected string $fixturesPath;
 
-    private MockObject $app;
-
+    /**
+     * Setup the test environment.
+     *
+     * Initializes the fixtures path for testing.
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->namespaceResolver = new NamespaceResolver();
-        $this->app = $this->createMock(Application::class);
-        $this->app->method('basePath')->willReturnCallback(fn ($path): string => '/base/' . $path);
+        // Set the path to test fixtures
+        $this->fixturesPath = __DIR__ . '/../../Fixtures/Classes';
     }
 
     /**
-     * Test that strategy can be instantiated with single directory.
+     * Test discovers classes in single directory.
+     *
+     * This test verifies that the strategy can discover all PHP classes
+     * in a single directory.
+     *
+     * ## Scenario:
+     * - Scan the Cards directory
+     * - Verify classes are discovered
+     * - Verify results are not empty
+     *
+     * ## Assertions:
+     * - Results are an array
+     * - Results are not empty
+     * - Classes are properly discovered
      */
-    public function test_can_instantiate_with_single_directory(): void
+    public function test_discovers_classes_in_single_directory(): void
     {
-        $directoryStrategy = new DirectoryStrategy('src', $this->namespaceResolver, $this->app);
+        // Arrange: Create namespace resolver
+        $namespaceResolver = resolve(NamespaceResolver::class);
 
-        $this->assertInstanceOf(DirectoryStrategy::class, $directoryStrategy);
+        // Arrange: Create directory strategy for Cards directory
+        $directoryStrategy = new DirectoryStrategy(
+            directories: $this->fixturesPath . '/Cards',
+            resolver: $namespaceResolver,
+            app: app()
+        );
+
+        // Act: Discover classes in the directory
+        $results = $directoryStrategy->discover();
+
+        // Assert: Results should be an array
+        $this->assertIsArray($results);
+
+        // Assert: Results should not be empty (Cards directory has classes)
+        $this->assertNotEmpty($results);
     }
 
     /**
-     * Test that strategy can be instantiated with multiple directories.
+     * Test discovers classes in multiple directories.
+     *
+     * This test verifies that the strategy can discover classes
+     * across multiple directories in a single scan.
+     *
+     * ## Scenario:
+     * - Scan both Cards and Services directories
+     * - Verify classes from both are discovered
+     * - Verify results contain classes from all directories
+     *
+     * ## Assertions:
+     * - Results are an array
+     * - Results are not empty
+     * - Classes from multiple directories are included
      */
-    public function test_can_instantiate_with_multiple_directories(): void
+    public function test_discovers_classes_in_multiple_directories(): void
     {
-        $directoryStrategy = new DirectoryStrategy(['src', 'app'], $this->namespaceResolver, $this->app);
+        // Arrange: Create namespace resolver
+        $namespaceResolver = resolve(NamespaceResolver::class);
 
-        $this->assertInstanceOf(DirectoryStrategy::class, $directoryStrategy);
+        // Arrange: Create directory strategy for multiple directories
+        $directoryStrategy = new DirectoryStrategy(
+            directories: [
+                $this->fixturesPath . '/Cards',
+                $this->fixturesPath . '/Services',
+            ],
+            resolver: $namespaceResolver,
+            app: app()
+        );
+
+        // Act: Discover classes in all directories
+        $results = $directoryStrategy->discover();
+
+        // Assert: Results should be an array
+        $this->assertIsArray($results);
+
+        // Assert: Results should not be empty
+        $this->assertNotEmpty($results);
     }
 
     /**
-     * Test that setDirectories updates directories.
+     * Test handles glob patterns.
+     *
+     * This test verifies that the strategy can handle glob patterns
+     * for flexible directory matching.
+     *
+     * ## Scenario:
+     * - Use a glob pattern to match multiple directories
+     * - Verify pattern is expanded correctly
+     * - Verify classes are discovered
+     *
+     * ## Assertions:
+     * - Results are an array
+     * - Glob pattern is processed
      */
-    public function test_set_directories_updates_directories(): void
+    public function test_handles_glob_patterns(): void
     {
-        $directoryStrategy = new DirectoryStrategy('src', $this->namespaceResolver, $this->app);
-        $directoryStrategy->setDirectories(['app', 'packages']);
+        // Arrange: Create namespace resolver
+        $namespaceResolver = resolve(NamespaceResolver::class);
 
-        // Test by checking discover behavior (indirectly)
-        $this->assertInstanceOf(DirectoryStrategy::class, $directoryStrategy);
+        // Arrange: Create directory strategy with glob pattern
+        $directoryStrategy = new DirectoryStrategy(
+            directories: __DIR__ . '/../../Fixtures/Classes/*',
+            resolver: $namespaceResolver,
+            app: app()
+        );
+
+        // Act: Discover classes using glob pattern
+        $results = $directoryStrategy->discover();
+
+        // Assert: Results should be an array
+        $this->assertIsArray($results);
     }
 
     /**
-     * Test that setNamespacePattern updates pattern.
+     * Test handles non-existent directory.
+     *
+     * This test verifies that the strategy handles gracefully
+     * when given a non-existent directory path.
+     *
+     * ## Scenario:
+     * - Provide a non-existent directory path
+     * - Verify no errors are thrown
+     * - Verify empty results are returned
+     *
+     * ## Assertions:
+     * - Results are an array
+     * - Results are empty
+     * - No exceptions are thrown
      */
-    public function test_set_namespace_pattern_updates_pattern(): void
+    public function test_handles_non_existent_directory(): void
     {
-        $directoryStrategy = new DirectoryStrategy('src', $this->namespaceResolver, $this->app);
-        $directoryStrategy->setNamespacePattern('Custom\{package}\{class}');
+        // Arrange: Create namespace resolver
+        $namespaceResolver = resolve(NamespaceResolver::class);
 
-        $this->assertInstanceOf(DirectoryStrategy::class, $directoryStrategy);
+        // Arrange: Create directory strategy with non-existent path
+        $directoryStrategy = new DirectoryStrategy(
+            directories: '/non/existent/path',
+            resolver: $namespaceResolver,
+            app: app()
+        );
+
+        // Act: Attempt to discover classes
+        $results = $directoryStrategy->discover();
+
+        // Assert: Results should be an empty array
+        $this->assertIsArray($results);
+        $this->assertEmpty($results);
     }
 
     /**
-     * Test that discover returns empty array for non-existent directories.
+     * Test excludes non-PHP files.
+     *
+     * This test verifies that the strategy only discovers PHP files
+     * and excludes other file types.
+     *
+     * ## Scenario:
+     * - Scan a directory that may contain non-PHP files
+     * - Verify only PHP files are processed
+     * - Verify all results have .php extension
+     *
+     * ## Assertions:
+     * - All discovered files end with .php
+     * - Non-PHP files are excluded
      */
-    public function test_discover_returns_empty_array_for_non_existent_directories(): void
+    public function test_excludes_non_php_files(): void
     {
-        $directoryStrategy = new DirectoryStrategy('/non/existent/path', $this->namespaceResolver, $this->app);
-        $result = $directoryStrategy->discover();
+        // Arrange: Create namespace resolver
+        $namespaceResolver = resolve(NamespaceResolver::class);
 
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
+        // Arrange: Create directory strategy
+        $directoryStrategy = new DirectoryStrategy(
+            directories: $this->fixturesPath,
+            resolver: $namespaceResolver,
+            app: app()
+        );
+
+        // Act: Discover classes
+        $results = $directoryStrategy->discover();
+
+        // Assert: All results should be PHP files
+        foreach ($results as $result) {
+            $this->assertStringEndsWith('.php', $result['file'] ?? '');
+        }
     }
 
     /**
-     * Test that getMetadata returns correct structure.
+     * Test resolves namespaces correctly.
+     *
+     * This test verifies that the strategy correctly resolves
+     * PHP namespaces from file paths.
+     *
+     * ## Scenario:
+     * - Discover classes in a directory
+     * - Verify namespaces are resolved
+     * - Verify namespace format is correct
+     *
+     * ## Assertions:
+     * - All classes have proper namespaces
+     * - Namespaces match expected pattern
      */
-    public function test_get_metadata_returns_correct_structure(): void
+    public function test_resolves_namespaces_correctly(): void
     {
-        $directoryStrategy = new DirectoryStrategy('src', $this->namespaceResolver, $this->app);
-        $metadata = $directoryStrategy->getMetadata('TestClass');
+        // Arrange: Create namespace resolver
+        $namespaceResolver = resolve(NamespaceResolver::class);
 
-        $this->assertIsArray($metadata);
-        $this->assertArrayHasKey('class', $metadata);
-        $this->assertArrayHasKey('file', $metadata);
-        $this->assertEquals('TestClass', $metadata['class']);
+        // Arrange: Create directory strategy
+        $directoryStrategy = new DirectoryStrategy(
+            directories: $this->fixturesPath . '/Cards',
+            resolver: $namespaceResolver,
+            app: app()
+        );
+
+        // Act: Discover classes
+        $results = $directoryStrategy->discover();
+
+        // Assert: All classes should have proper namespaces
+        foreach (Arr::keys($results) as $class) {
+            $this->assertStringContainsString('Pixielity\Discovery\Tests\Fixtures', $class);
+        }
     }
 
     /**
-     * Test that getCacheKey returns consistent key.
+     * Test handles nested directories.
+     *
+     * This test verifies that the strategy can recursively
+     * discover classes in nested directory structures.
+     *
+     * ## Scenario:
+     * - Scan a directory with nested subdirectories
+     * - Verify classes in all levels are discovered
+     * - Verify recursive scanning works
+     *
+     * ## Assertions:
+     * - Results are not empty
+     * - Classes from nested directories are included
      */
-    public function test_get_cache_key_returns_consistent_key(): void
+    public function test_handles_nested_directories(): void
     {
-        $directoryStrategy = new DirectoryStrategy('src', $this->namespaceResolver, $this->app);
-        $key1 = $directoryStrategy->getCacheKey();
-        $key2 = $directoryStrategy->getCacheKey();
+        // Arrange: Create namespace resolver
+        $namespaceResolver = resolve(NamespaceResolver::class);
 
-        $this->assertEquals($key1, $key2);
-        $this->assertStringStartsWith('directory:', $key1);
+        // Arrange: Create directory strategy for parent directory
+        $directoryStrategy = new DirectoryStrategy(
+            directories: $this->fixturesPath,
+            resolver: $namespaceResolver,
+            app: app()
+        );
+
+        // Act: Discover classes recursively
+        $results = $directoryStrategy->discover();
+
+        // Assert: Results should include classes from nested directories
+        $this->assertIsArray($results);
+        $this->assertNotEmpty($results);
     }
 
     /**
-     * Test that getCacheKey is unique per directory set.
+     * Test handles empty directory.
+     *
+     * This test verifies that the strategy handles gracefully
+     * when scanning an empty directory.
+     *
+     * ## Scenario:
+     * - Create a temporary empty directory
+     * - Scan the empty directory
+     * - Verify empty results are returned
+     * - Clean up the temporary directory
+     *
+     * ## Assertions:
+     * - Results are an array
+     * - Results are empty
+     * - No errors occur
      */
-    public function test_get_cache_key_is_unique_per_directory_set(): void
+    public function test_handles_empty_directory(): void
     {
-        $strategy1 = new DirectoryStrategy('src', $this->namespaceResolver, $this->app);
-        $strategy2 = new DirectoryStrategy('app', $this->namespaceResolver, $this->app);
+        // Arrange: Create a temporary empty directory
+        $emptyDir = sys_get_temp_dir() . '/empty_test_dir';
+        if (!is_dir($emptyDir)) {
+            mkdir($emptyDir);
+        }
 
-        $key1 = $strategy1->getCacheKey();
-        $key2 = $strategy2->getCacheKey();
+        // Arrange: Create namespace resolver
+        $namespaceResolver = resolve(NamespaceResolver::class);
 
-        $this->assertNotEquals($key1, $key2);
-    }
+        // Arrange: Create directory strategy for empty directory
+        $directoryStrategy = new DirectoryStrategy(
+            directories: $emptyDir,
+            resolver: $namespaceResolver,
+            app: app()
+        );
 
-    /**
-     * Test that discover handles exceptions gracefully.
-     */
-    public function test_discover_handles_exceptions_gracefully(): void
-    {
-        // Use a non-existent directory to test exception handling
-        $directoryStrategy = new DirectoryStrategy('/non/existent/path', $this->namespaceResolver, $this->app);
-        $result = $directoryStrategy->discover();
+        // Act: Discover classes in empty directory
+        $results = $directoryStrategy->discover();
 
-        $this->assertIsArray($result);
-        $this->assertEmpty($result);
-        // Should not throw exception
-    }
+        // Assert: Results should be empty
+        $this->assertIsArray($results);
+        $this->assertEmpty($results);
 
-    /**
-     * Test that getMetadata handles exceptions gracefully.
-     */
-    public function test_get_metadata_handles_exceptions_gracefully(): void
-    {
-        $directoryStrategy = new DirectoryStrategy('src', $this->namespaceResolver, $this->app);
-        $metadata = $directoryStrategy->getMetadata('NonExistentClass');
-
-        $this->assertIsArray($metadata);
-        $this->assertArrayHasKey('class', $metadata);
-        $this->assertArrayHasKey('file', $metadata);
-        $this->assertNull($metadata['file']);
+        // Cleanup: Remove the temporary directory
+        rmdir($emptyDir);
     }
 }

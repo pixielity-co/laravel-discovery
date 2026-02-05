@@ -1,11 +1,11 @@
 <?php
 
-namespace Fulers\Discovery\Cache;
+namespace Pixielity\Discovery\Cache;
 
-use Fulers\Discovery\Contracts\CacheManagerInterface;
 use Illuminate\Container\Attributes\Config;
 use Illuminate\Container\Attributes\Scoped;
 use Illuminate\Support\Facades\File;
+use Pixielity\Discovery\Contracts\CacheManagerInterface;
 use Throwable;
 
 /**
@@ -35,7 +35,7 @@ class CacheManager implements CacheManagerInterface
     public function __construct(
         #[Config('discovery.cache.path', null)]
         protected ?string $cachePath,
-        #[Config('discovery.cache.enabled', false)]
+        #[Config('discovery.cache.enabled', true)]
         protected ?bool $enabled
     ) {
         // Ensure a default cache path is set

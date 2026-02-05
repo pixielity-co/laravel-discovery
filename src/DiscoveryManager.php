@@ -1,12 +1,12 @@
 <?php
 
-namespace Fulers\Discovery;
+namespace Pixielity\Discovery;
 
-use Fulers\Discovery\Contracts\CacheManagerInterface;
-use Fulers\Discovery\Contracts\DiscoveryManagerInterface;
-use Fulers\Discovery\Contracts\StrategyFactoryInterface;
-use Fulers\Support\Arr;
-use Fulers\Support\Str;
+use Illuminate\Support\Str;
+use Pixielity\Discovery\Contracts\CacheManagerInterface;
+use Pixielity\Discovery\Contracts\DiscoveryManagerInterface;
+use Pixielity\Discovery\Contracts\StrategyFactoryInterface;
+use Pixielity\Discovery\Support\Arr;
 use Symfony\Component\Finder\Finder;
 
 /**

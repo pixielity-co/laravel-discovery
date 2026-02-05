@@ -1,12 +1,12 @@
 <?php
 
-namespace Fulers\Discovery\Strategies;
+namespace Pixielity\Discovery\Strategies;
 
-use Fulers\Discovery\Contracts\DiscoveryStrategyInterface;
-use Fulers\Support\Arr;
-use Fulers\Support\Reflection;
 use Olvlvl\ComposerAttributeCollector\Attributes;
 use olvlvl\ComposerAttributeCollector\TargetClass;
+use Pixielity\Discovery\Contracts\DiscoveryStrategyInterface;
+use Pixielity\Discovery\Support\Arr;
+use Pixielity\Discovery\Support\Reflection;
 use Throwable;
 
 /**
@@ -41,7 +41,7 @@ class AttributeStrategy implements DiscoveryStrategyInterface
     public function discover(): array
     {
         // Check if composer-attribute-collector is available
-        if (! Reflection::exists(Attributes::class)) {
+        if (!Reflection::exists(Attributes::class)) {
             return [];
         }
 
@@ -49,7 +49,7 @@ class AttributeStrategy implements DiscoveryStrategyInterface
             $this->targets = Attributes::findTargetClasses($this->attributeClass);
 
             return Arr::mapValues(
-                fn (TargetClass $targetClass): string => $targetClass->name,
+                fn(TargetClass $targetClass): string => $targetClass->name,
                 $this->targets
             );
         } catch (Throwable) {

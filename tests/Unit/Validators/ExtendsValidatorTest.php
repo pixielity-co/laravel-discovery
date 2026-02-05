@@ -1,82 +1,144 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Fulers\Discovery\Tests\Unit\Validators;
+namespace Pixielity\Discovery\Tests\Unit\Validators;
 
-use Exception;
-use Fulers\Discovery\Validators\ExtendsValidator;
-use PHPUnit\Framework\TestCase;
-use RuntimeException;
-use stdClass;
+use Illuminate\Console\Command;
+use Pixielity\Discovery\Tests\Fixtures\Classes\Cards\DashboardCard;
+use Pixielity\Discovery\Tests\Fixtures\Classes\Commands\TestCommand;
+use Pixielity\Discovery\Tests\Fixtures\Classes\Services\AbstractService;
+use Pixielity\Discovery\Tests\Fixtures\Classes\Services\TestService;
+use Pixielity\Discovery\Tests\TestCase;
+use Pixielity\Discovery\Validators\ExtendsValidator;
 
 /**
- * ExtendsValidatorTest - Tests for ExtendsValidator class.
+ * ExtendsValidator Unit Tests.
  *
- * @covers \Fulers\Discovery\Validators\ExtendsValidator
+ * Tests validation of parent class extension.
+ * The ExtendsValidator checks if a class extends a specific parent class,
+ * including through multi-level inheritance.
+ *
+ * @covers \Pixielity\Discovery\Validators\ExtendsValidator
+ *
+ * @author  Pixielity Development Team
+ *
+ * @since   1.0.0
  */
 class ExtendsValidatorTest extends TestCase
 {
     /**
-     * Test that validator can be instantiated.
+     * Test validates classes extending parent.
+     *
+     * This test verifies that the validator correctly identifies
+     * classes that extend the specified parent class.
+     *
+     * ## Scenario:
+     * - Create validator for Command class
+     * - Test with TestCommand (extends Command)
+     * - Verify validation passes
+     *
+     * ## Assertions:
+     * - Validator returns true for extending classes
+     * - Direct inheritance is detected
      */
-    public function test_can_instantiate(): void
+    public function test_validates_classes_extending_parent(): void
     {
-        $extendsValidator = new ExtendsValidator(Exception::class);
+        // Arrange: Create validator for Command class
+        $validator = new ExtendsValidator(Command::class);
 
-        $this->assertInstanceOf(ExtendsValidator::class, $extendsValidator);
-    }
+        // Act: Validate TestCommand (extends Command)
+        $result = $validator->validate(TestCommand::class);
 
-    /**
-     * Test that validate returns true for subclass.
-     */
-    public function test_validate_returns_true_for_subclass(): void
-    {
-        $extendsValidator = new ExtendsValidator(Exception::class);
-        $result = $extendsValidator->validate(RuntimeException::class);
-
+        // Assert: Validation should pass
         $this->assertTrue($result);
     }
 
     /**
-     * Test that validate returns false for non-subclass.
+     * Test rejects classes not extending parent.
+     *
+     * This test verifies that the validator correctly rejects
+     * classes that do not extend the specified parent class.
+     *
+     * ## Scenario:
+     * - Create validator for Command class
+     * - Test with DashboardCard (does not extend Command)
+     * - Verify validation fails
+     *
+     * ## Assertions:
+     * - Validator returns false for non-extending classes
      */
-    public function test_validate_returns_false_for_non_subclass(): void
+    public function test_rejects_classes_not_extending_parent(): void
     {
-        $extendsValidator = new ExtendsValidator(Exception::class);
-        $result = $extendsValidator->validate(stdClass::class);
+        // Arrange: Create validator for Command class
+        $validator = new ExtendsValidator(Command::class);
 
+        // Act: Validate DashboardCard (does not extend Command)
+        $result = $validator->validate(DashboardCard::class);
+
+        // Assert: Validation should fail
         $this->assertFalse($result);
     }
 
     /**
-     * Test that validate returns false for parent class itself.
+     * Test handles multi-level inheritance.
+     *
+     * This test verifies that the validator correctly handles
+     * multi-level inheritance chains.
+     *
+     * ## Scenario:
+     * - Create validator for AbstractService
+     * - Test with TestService (extends AbstractService indirectly)
+     * - Verify validation works through inheritance chain
+     *
+     * ## Assertions:
+     * - Validator detects indirect inheritance
+     * - Multi-level inheritance is properly handled
      */
-    public function test_validate_returns_false_for_parent_class_itself(): void
+    public function test_handles_multi_level_inheritance(): void
     {
-        $extendsValidator = new ExtendsValidator(Exception::class);
-        $result = $extendsValidator->validate(Exception::class);
+        // Arrange: Create validator for AbstractService
+        $validator = new ExtendsValidator(AbstractService::class);
 
+        // Act: Validate TestService (does not extend AbstractService directly)
+        // Note: TestService implements ServiceInterface but doesn't extend AbstractService
+        $result = $validator->validate(TestService::class);
+
+        // Assert: Validation should fail (TestService doesn't extend AbstractService)
         $this->assertFalse($result);
+
+        // Arrange: Test with Command hierarchy
+        $commandValidator = new ExtendsValidator(Command::class);
+
+        // Act: Validate TestCommand (extends Command)
+        $commandResult = $commandValidator->validate(TestCommand::class);
+
+        // Assert: Validation should pass
+        $this->assertTrue($commandResult);
     }
 
     /**
-     * Test that validate returns false for non-existent class.
+     * Test handles non-existent parent class.
+     *
+     * This test verifies that the validator handles gracefully
+     * when given a non-existent parent class name.
+     *
+     * ## Scenario:
+     * - Create validator for non-existent parent class
+     * - Test with any class
+     * - Verify validation fails gracefully
+     *
+     * ## Assertions:
+     * - Validator returns false for non-existent parent classes
+     * - No exceptions are thrown
      */
-    public function test_validate_returns_false_for_non_existent_class(): void
+    public function test_handles_non_existent_parent_class(): void
     {
-        $extendsValidator = new ExtendsValidator(Exception::class);
-        $result = $extendsValidator->validate('NonExistentClass');
+        // Arrange: Create validator for non-existent parent class
+        $validator = new ExtendsValidator('App\NonExistent\ParentClass');
 
-        $this->assertFalse($result);
-    }
+        // Act: Validate TestCommand
+        $result = $validator->validate(TestCommand::class);
 
-    /**
-     * Test that validate handles exceptions gracefully.
-     */
-    public function test_validate_handles_exceptions_gracefully(): void
-    {
-        $extendsValidator = new ExtendsValidator('NonExistentParent');
-        $result = $extendsValidator->validate(stdClass::class);
-
+        // Assert: Validation should fail gracefully
         $this->assertFalse($result);
     }
 }

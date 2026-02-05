@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Initial release
 - Attribute-based class discovery
 - Directory scanning with glob pattern support
@@ -21,23 +22,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Laravel 12 compatibility
 
 ### Changed
+
 - N/A
 
 ### Deprecated
+
 - N/A
 
 ### Removed
+
 - N/A
 
 ### Fixed
+
 - N/A
 
 ### Security
+
 - N/A
 
 ## [1.0.0] - 2026-02-06
 
 ### Added
+
 - Initial stable release
 - Core discovery functionality
 - Comprehensive documentation

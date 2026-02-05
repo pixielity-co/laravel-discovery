@@ -1,13 +1,14 @@
 <?php
 
-namespace Fulers\Discovery\Console\Commands;
+namespace Pixielity\Discovery\Console\Commands;
 
 use function count;
 
-use Fulers\Discovery\Contracts\CacheManagerInterface;
-use Fulers\Discovery\Contracts\DiscoveryManagerInterface;
-use Fulers\Foundation\Console\Commands\BaseCommand;
+use Illuminate\Console\Command;
 use Illuminate\Container\Attributes\Config;
+use Pixielity\Discovery\Concerns\InteractsWithPrompts;
+use Pixielity\Discovery\Contracts\CacheManagerInterface;
+use Pixielity\Discovery\Contracts\DiscoveryManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Throwable;
 
@@ -25,8 +26,10 @@ use Throwable;
     name: 'discovery:cache',
     description: 'Cache discovery results for production'
 )]
-class CacheDiscoveryCommand extends BaseCommand
+class CacheDiscoveryCommand extends Command
 {
+    use InteractsWithPrompts;
+
     /**
      * The name and signature of the console command.
      *
@@ -72,7 +75,7 @@ class CacheDiscoveryCommand extends BaseCommand
             if ($this->discoveryPaths === []) {
                 $this->caution('No discovery paths configured in config/discovery.php');
                 $this->newLine();
-                $this->info('💡 Add paths to the "paths" configuration key to enable cache warming.');
+                $this->informational('💡 Add paths to the "paths" configuration key to enable cache warming.');
 
                 return self::SUCCESS;
             }
@@ -96,7 +99,7 @@ class CacheDiscoveryCommand extends BaseCommand
             $skippedPaths = 0;
             $failedPaths = 0;
 
-            $this->info('Caching discovery results...');
+            $this->informational('Caching discovery results...');
             $this->newLine();
 
             // Create progress bar

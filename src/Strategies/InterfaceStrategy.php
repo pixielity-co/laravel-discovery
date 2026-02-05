@@ -1,11 +1,11 @@
 <?php
 
-namespace Fulers\Discovery\Strategies;
+namespace Pixielity\Discovery\Strategies;
 
-use Fulers\Discovery\Contracts\DiscoveryStrategyInterface;
-use Fulers\Discovery\Contracts\StrategyFactoryInterface;
-use Fulers\Support\Arr;
-use Fulers\Support\Reflection;
+use Pixielity\Discovery\Contracts\DiscoveryStrategyInterface;
+use Pixielity\Discovery\Contracts\StrategyFactoryInterface;
+use Pixielity\Discovery\Support\Arr;
+use Pixielity\Discovery\Support\Reflection;
 use RuntimeException;
 use Throwable;
 
@@ -81,7 +81,7 @@ class InterfaceStrategy implements DiscoveryStrategyInterface
     public function directories(string|array $directories): void
     {
         throw_unless(Reflection::implements($this->strategyFactory, StrategyFactoryInterface::class), RuntimeException::class, 'Cannot use directories() without a StrategyFactory. '
-        . 'Provide StrategyFactory in constructor or use global discovery mode.');
+            . 'Provide StrategyFactory in constructor or use global discovery mode.');
 
         // Create DirectoryStrategy through the factory with proper dependency injection
         $this->directoryStrategy = $this->strategyFactory->createDirectoryStrategy($directories);

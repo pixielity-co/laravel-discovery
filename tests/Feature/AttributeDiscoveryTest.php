@@ -1,0 +1,190 @@
+<?php declare(strict_types=1);
+
+namespace Pixielity\Discovery\Tests\Feature;
+
+use Pixielity\Discovery\Tests\Fixtures\Attributes\TestAttribute;
+use Pixielity\Discovery\Tests\Fixtures\Attributes\TestCardAttribute;
+use Pixielity\Discovery\Tests\TestCase;
+use Pixielity\Discovery\DiscoveryManager;
+
+/**
+ * AttributeDiscovery Feature Tests.
+ *
+ * End-to-end tests for attribute-based class discovery.
+ * Tests the complete flow from attribute scanning to result filtering.
+ *
+ * @covers \Pixielity\Discovery\DiscoveryManager
+ * @covers \Pixielity\Discovery\Strategies\AttributeStrategy
+ */
+class AttributeDiscoveryTest extends TestCase
+{
+    /**
+     * Discovery manager instance.
+     *
+     * @var DiscoveryManager
+     */
+    protected DiscoveryManager $discovery;
+
+    /**
+     * Set up the test environment.
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Resolve the discovery manager from the container
+        $this->discovery = app(DiscoveryManager::class);
+    }
+
+    /**
+     * Test discovers classes with simple attribute.
+     *
+     * Verifies that the discovery system can find classes decorated
+     * with a simple attribute that has no properties.
+     *
+     * @return void
+     */
+    public function test_discovers_classes_with_simple_attribute(): void
+    {
+        // Act: Discover all classes with TestAttribute
+        $results = $this
+            ->discovery
+            ->attribute(TestAttribute::class)
+            ->get();
+
+        // Assert: Results should be an array
+        $this->assertIsArray($results);
+    }
+
+    /**
+     * Test discovers classes with attribute properties.
+     *
+     * Verifies that attributes with properties (enabled, priority, etc.)
+     * are correctly discovered and their properties are accessible.
+     *
+     * @return void
+     */
+    public function test_discovers_classes_with_attribute_properties(): void
+    {
+        // Act: Discover classes with TestCardAttribute
+        $results = $this
+            ->discovery
+            ->attribute(TestCardAttribute::class)
+            ->get();
+
+        // Assert: Results should be an array
+        $this->assertIsArray($results);
+
+        // If results found, verify attribute properties exist
+        if (!empty($results)) {
+            $first = reset($results);
+
+            // Verify attribute metadata is present
+            $this->assertArrayHasKey('attribute', $first);
+
+            // Verify attribute has expected properties
+            $this->assertObjectHasProperty('enabled', $first['attribute']);
+            $this->assertObjectHasProperty('priority', $first['attribute']);
+        }
+    }
+
+    /**
+     * Test filters by attribute property.
+     *
+     * Verifies that discovered classes can be filtered based on
+     * their attribute property values using the where() method.
+     *
+     * @return void
+     */
+    public function test_filters_by_attribute_property(): void
+    {
+        // Act: Discover cards where enabled = true
+        $results = $this
+            ->discovery
+            ->attribute(TestCardAttribute::class)
+            ->where('enabled', true)
+            ->get();
+
+        // Assert: Results should be an array
+        $this->assertIsArray($results);
+
+        // Verify all results have enabled = true
+        foreach ($results as $metadata) {
+            if (isset($metadata['attribute'])) {
+                $this->assertTrue($metadata['attribute']->enabled);
+            }
+        }
+    }
+
+    /**
+     * Test combines with directory filter.
+     *
+     * Verifies that attribute discovery can be combined with
+     * directory filtering to narrow down results.
+     *
+     * @return void
+     */
+    public function test_combines_with_directory_filter(): void
+    {
+        // Act: Discover classes in specific directory
+        $results = $this
+            ->discovery
+            ->directories(__DIR__ . '/../Fixtures/Classes/Cards')
+            ->get();
+
+        // Assert: Should find classes in the Cards directory
+        $this->assertIsArray($results);
+        $this->assertNotEmpty($results);
+    }
+
+    /**
+     * Test caches results.
+     *
+     * Verifies that discovery results can be cached and subsequent
+     * calls with the same cache key return identical results.
+     *
+     * @return void
+     */
+    public function test_caches_results(): void
+    {
+        // Act: First discovery with caching
+        $results1 = $this
+            ->discovery
+            ->attribute(TestCardAttribute::class)
+            ->cached('test_cards')
+            ->get();
+
+        // Act: Second discovery with same cache key
+        $results2 = $this
+            ->discovery
+            ->attribute(TestCardAttribute::class)
+            ->cached('test_cards')
+            ->get();
+
+        // Assert: Both results should be identical
+        $this->assertEquals($results1, $results2);
+    }
+
+    /**
+     * Test handles no results.
+     *
+     * Verifies that when no classes match the attribute,
+     * an empty array is returned instead of null or exception.
+     *
+     * @return void
+     */
+    public function test_handles_no_results(): void
+    {
+        // Act: Try to discover non-existent attribute
+        $results = $this
+            ->discovery
+            ->attribute('NonExistentAttribute')
+            ->get();
+
+        // Assert: Should return empty array
+        $this->assertIsArray($results);
+        $this->assertEmpty($results);
+    }
+}

@@ -1,10 +1,10 @@
 <?php
 
-namespace Fulers\Discovery\Filters;
+namespace Pixielity\Discovery\Filters;
 
-use Fulers\Discovery\Contracts\DiscoveryStrategyInterface;
-use Fulers\Discovery\Contracts\FilterInterface;
-use Fulers\Support\Arr;
+use Pixielity\Discovery\Contracts\DiscoveryStrategyInterface;
+use Pixielity\Discovery\Contracts\FilterInterface;
+use Pixielity\Discovery\Support\Arr;
 
 /**
  * PropertyFilter - Filters classes by attribute property values.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Fulers\Discovery\Contracts;
+namespace Pixielity\Discovery\Contracts;
 
-use Fulers\Discovery\Resolvers\NamespaceResolver;
 use Illuminate\Container\Attributes\Bind;
 use Illuminate\Container\Attributes\Singleton;
+use Pixielity\Discovery\Resolvers\NamespaceResolver;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**

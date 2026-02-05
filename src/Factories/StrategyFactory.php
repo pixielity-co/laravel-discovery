@@ -1,17 +1,17 @@
 <?php
 
-namespace Fulers\Discovery\Factories;
+namespace Pixielity\Discovery\Factories;
 
-use Fulers\Discovery\Contracts\DiscoveryStrategyInterface;
-use Fulers\Discovery\Contracts\NamespaceResolverInterface;
-use Fulers\Discovery\Contracts\StrategyFactoryInterface;
-use Fulers\Discovery\Strategies\AttributeStrategy;
-use Fulers\Discovery\Strategies\DirectoryStrategy;
-use Fulers\Discovery\Strategies\InterfaceStrategy;
-use Fulers\Discovery\Strategies\MethodStrategy;
-use Fulers\Discovery\Strategies\ParentClassStrategy;
-use Fulers\Discovery\Strategies\PropertyStrategy;
 use Illuminate\Contracts\Foundation\Application;
+use Pixielity\Discovery\Contracts\DiscoveryStrategyInterface;
+use Pixielity\Discovery\Contracts\NamespaceResolverInterface;
+use Pixielity\Discovery\Contracts\StrategyFactoryInterface;
+use Pixielity\Discovery\Strategies\AttributeStrategy;
+use Pixielity\Discovery\Strategies\DirectoryStrategy;
+use Pixielity\Discovery\Strategies\InterfaceStrategy;
+use Pixielity\Discovery\Strategies\MethodStrategy;
+use Pixielity\Discovery\Strategies\ParentClassStrategy;
+use Pixielity\Discovery\Strategies\PropertyStrategy;
 
 /**
  * StrategyFactory - Creates discovery strategy instances with proper dependencies.

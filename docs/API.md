@@ -24,11 +24,13 @@ Main service class for discovery operations.
 Discover classes by attribute.
 
 **Parameters:**
+
 - `$attributeClass` - Fully qualified attribute class name
 
 **Returns:** `DiscoveryBuilder`
 
 **Example:**
+
 ```php
 Discovery::attribute(AsCard::class)->get();
 ```
@@ -40,11 +42,13 @@ Discovery::attribute(AsCard::class)->get();
 Discover classes in directories.
 
 **Parameters:**
+
 - `$directories` - Directory path(s), supports glob patterns
 
 **Returns:** `DiscoveryBuilder`
 
 **Example:**
+
 ```php
 Discovery::directories('packages/*/src/Settings')->get();
 ```
@@ -56,11 +60,13 @@ Discovery::directories('packages/*/src/Settings')->get();
 Discover classes implementing an interface.
 
 **Parameters:**
+
 - `$interface` - Fully qualified interface name
 
 **Returns:** `DiscoveryBuilder`
 
 **Example:**
+
 ```php
 Discovery::implementing(HealthCheckInterface::class)->get();
 ```
@@ -72,11 +78,13 @@ Discovery::implementing(HealthCheckInterface::class)->get();
 Discover classes extending a parent class.
 
 **Parameters:**
+
 - `$parentClass` - Fully qualified parent class name
 
 **Returns:** `DiscoveryBuilder`
 
 **Example:**
+
 ```php
 Discovery::extending(Command::class)->get();
 ```
@@ -88,11 +96,13 @@ Discovery::extending(Command::class)->get();
 Discover methods with an attribute.
 
 **Parameters:**
+
 - `$attributeClass` - Fully qualified attribute class name
 
 **Returns:** `DiscoveryBuilder`
 
 **Example:**
+
 ```php
 Discovery::methods(Route::class)->get();
 ```
@@ -104,11 +114,13 @@ Discovery::methods(Route::class)->get();
 Discover properties with an attribute.
 
 **Parameters:**
+
 - `$attributeClass` - Fully qualified attribute class name
 
 **Returns:** `DiscoveryBuilder`
 
 **Example:**
+
 ```php
 Discovery::properties(Validate::class)->get();
 ```
@@ -120,9 +132,11 @@ Discovery::properties(Validate::class)->get();
 Clear discovery caches.
 
 **Parameters:**
+
 - `$key` - Specific cache key, or null to clear all
 
 **Example:**
+
 ```php
 Discovery::clearCache('settings');
 ```
@@ -134,11 +148,13 @@ Discovery::clearCache('settings');
 Get Symfony Finder instance for advanced discovery.
 
 **Parameters:**
+
 - `$directories` - Directory path(s)
 
 **Returns:** `Symfony\Component\Finder\Finder`
 
 **Example:**
+
 ```php
 $finder = Discovery::finder('packages/*/src')
     ->name('*.php')
@@ -158,11 +174,13 @@ Fluent builder for configuring discovery operations.
 Filter by attribute property value.
 
 **Parameters:**
+
 - `$property` - Property name
 - `$operator` - Comparison operator or value
 - `$value` - Value to compare (optional)
 
 **Operators:**
+
 - `=`, `==` - Exact match
 - `!=`, `<>` - Not equal
 - `>`, `>=`, `<`, `<=` - Comparison
@@ -170,6 +188,7 @@ Filter by attribute property value.
 - `in` - Value in array
 
 **Example:**
+
 ```php
 Discovery::attribute(AsCard::class)
     ->where('enabled', true)
@@ -184,9 +203,11 @@ Discovery::attribute(AsCard::class)
 Add custom filter callback.
 
 **Parameters:**
+
 - `$callback` - Filter function `fn($class, $metadata) => bool`
 
 **Example:**
+
 ```php
 Discovery::attribute(AsCard::class)
     ->filter(fn($class, $meta) => $meta['attribute']->priority > 5)
@@ -200,6 +221,7 @@ Discovery::attribute(AsCard::class)
 Filter to only instantiable classes.
 
 **Example:**
+
 ```php
 Discovery::implementing(ServiceInterface::class)
     ->instantiable()
@@ -213,9 +235,11 @@ Discovery::implementing(ServiceInterface::class)
 Validate parent class.
 
 **Parameters:**
+
 - `$parentClass` - Fully qualified parent class name
 
 **Example:**
+
 ```php
 Discovery::directories('app/Commands')
     ->extends(Command::class)
@@ -229,9 +253,11 @@ Discovery::directories('app/Commands')
 Validate interface implementation.
 
 **Parameters:**
+
 - `$interface` - Fully qualified interface name
 
 **Example:**
+
 ```php
 Discovery::directories('app/Services')
     ->implements(ServiceInterface::class)
@@ -245,9 +271,11 @@ Discovery::directories('app/Services')
 Enable caching with key.
 
 **Parameters:**
+
 - `$key` - Cache key
 
 **Example:**
+
 ```php
 Discovery::attribute(AsCard::class)
     ->cached('cards')
@@ -263,6 +291,7 @@ Execute discovery and return results.
 **Returns:** `array<string, array>` - Associative array of class/method/property => metadata
 
 **Example:**
+
 ```php
 $results = Discovery::attribute(AsCard::class)->get();
 // [
@@ -333,6 +362,7 @@ Discovers properties with specific attributes.
 Filters by attribute property values.
 
 **Operators:**
+
 - `=`, `==` - Exact match
 - `!=`, `<>` - Not equal
 - `>`, `>=`, `<`, `<=` - Comparison

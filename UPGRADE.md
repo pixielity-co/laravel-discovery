@@ -21,16 +21,19 @@ None - this is the initial stable release.
 ### Migration Steps
 
 1. Update composer.json:
+
 ```bash
 composer require fulers/discovery:^1.0
 ```
 
 2. Publish configuration (optional):
+
 ```bash
 php artisan vendor:publish --tag=discovery-config
 ```
 
 3. Clear caches:
+
 ```bash
 php artisan cache:clear
 composer dump-autoload
@@ -65,7 +68,7 @@ This package follows [Semantic Versioning](https://semver.org/):
 ## Support Policy
 
 | Version | PHP Version | Laravel Version | Support Until |
-|---------|-------------|-----------------|---------------|
+| ------- | ----------- | --------------- | ------------- |
 | 1.x     | 8.3+        | 11.x, 12.x      | TBD           |
 
 ## Getting Help

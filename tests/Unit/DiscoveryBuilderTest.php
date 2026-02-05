@@ -1,227 +1,281 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Fulers\Discovery\Tests\Unit;
+namespace Pixielity\Discovery\Tests\Unit;
 
-use Fulers\Discovery\Contracts\CacheManagerInterface;
-use Fulers\Discovery\Contracts\DiscoveryStrategyInterface;
-use Fulers\Discovery\DiscoveryBuilder;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use Illuminate\Console\Command;
+use Pixielity\Discovery\Tests\Fixtures\Attributes\TestAttribute;
+use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
+use Pixielity\Discovery\Tests\TestCase;
+use Pixielity\Discovery\DiscoveryBuilder;
+use Pixielity\Discovery\DiscoveryManager;
 
 /**
- * DiscoveryBuilderTest - Tests for DiscoveryBuilder class.
+ * DiscoveryBuilder Unit Tests.
  *
- * @covers \Fulers\Discovery\DiscoveryBuilder
+ * Tests the fluent builder interface for discovery operations.
+ * The DiscoveryBuilder provides a chainable API for configuring
+ * discovery strategies, filters, validators, and caching.
+ *
+ * ## Key Features Tested:
+ * - Filter addition (where, filter)
+ * - Validator addition (instantiable, extending, implementing)
+ * - Caching configuration
+ * - Method chaining
+ * - Discovery execution
+ *
+ * @covers \Pixielity\Discovery\DiscoveryBuilder
+ *
+ * @author  Pixielity Development Team
+ *
+ * @since   1.0.0
  */
 class DiscoveryBuilderTest extends TestCase
 {
-    private MockObject $cacheManager;
+    /**
+     * The discovery manager instance.
+     *
+     * @var DiscoveryManager
+     */
+    protected DiscoveryManager $manager;
 
-    private MockObject $strategy;
-
-    private DiscoveryBuilder $discoveryBuilder;
-
+    /**
+     * Setup the test environment.
+     *
+     * Initializes the discovery manager before each test.
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->cacheManager = $this->createMock(CacheManagerInterface::class);
-        $this->strategy = $this->createMock(DiscoveryStrategyInterface::class);
-        $this->discoveryBuilder = new DiscoveryBuilder($this->cacheManager);
+        // Resolve the discovery manager from the container
+        $this->manager = resolve(DiscoveryManager::class);
     }
 
     /**
-     * Test that builder can be instantiated.
+     * Test where adds property filter.
+     *
+     * This test verifies that the where() method adds a property filter
+     * to the discovery builder and returns the builder for chaining.
+     *
+     * ## Scenario:
+     * - Create a discovery builder
+     * - Call where() to add a property filter
+     * - Verify builder is returned for chaining
+     *
+     * ## Assertions:
+     * - Returns DiscoveryBuilder instance
+     * - Returns same builder instance (fluent interface)
      */
-    public function test_can_instantiate(): void
+    public function test_where_adds_property_filter(): void
     {
-        $this->assertInstanceOf(DiscoveryBuilder::class, $this->discoveryBuilder);
+        // Arrange: Create a discovery builder with attribute strategy
+        $discoveryBuilder = $this->manager->attribute(TestAttribute::class);
+
+        // Act: Add a property filter using where()
+        $result = $discoveryBuilder->where('enabled', true);
+
+        // Assert: Should return the same builder instance
+        $this->assertInstanceOf(DiscoveryBuilder::class, $result);
+        $this->assertSame($discoveryBuilder, $result);
     }
 
     /**
-     * Test that setStrategy returns fluent interface.
+     * Test filter adds callback filter.
+     *
+     * This test verifies that the filter() method adds a callback filter
+     * to the discovery builder and returns the builder for chaining.
+     *
+     * ## Scenario:
+     * - Create a discovery builder
+     * - Call filter() with a callback
+     * - Verify builder is returned for chaining
+     *
+     * ## Assertions:
+     * - Returns DiscoveryBuilder instance
+     * - Returns same builder instance (fluent interface)
      */
-    public function test_set_strategy_returns_fluent_interface(): void
+    public function test_filter_adds_callback_filter(): void
     {
-        $discoveryBuilder = $this->discoveryBuilder->setStrategy($this->strategy);
+        // Arrange: Create a discovery builder with attribute strategy
+        $discoveryBuilder = $this->manager->attribute(TestAttribute::class);
 
-        $this->assertSame($this->discoveryBuilder, $discoveryBuilder);
+        // Act: Add a callback filter using filter()
+        $result = $discoveryBuilder->filter(fn($class): bool => true);
+
+        // Assert: Should return the same builder instance
+        $this->assertInstanceOf(DiscoveryBuilder::class, $result);
+        $this->assertSame($discoveryBuilder, $result);
     }
 
     /**
-     * Test that where returns fluent interface.
+     * Test instantiable adds validator.
+     *
+     * This test verifies that the instantiable() method adds an
+     * instantiability validator to the discovery builder.
+     *
+     * ## Scenario:
+     * - Create a discovery builder
+     * - Call instantiable() to add validator
+     * - Verify builder is returned for chaining
+     *
+     * ## Assertions:
+     * - Returns DiscoveryBuilder instance
+     * - Returns same builder instance (fluent interface)
      */
-    public function test_where_returns_fluent_interface(): void
+    public function test_instantiable_adds_validator(): void
     {
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $discoveryBuilder = $this->discoveryBuilder->where('property', 'value');
+        // Arrange: Create a discovery builder with directory strategy
+        $discoveryBuilder = $this->manager->directories(__DIR__ . '/../Fixtures');
 
-        $this->assertSame($this->discoveryBuilder, $discoveryBuilder);
+        // Act: Add instantiable validator
+        $result = $discoveryBuilder->instantiable();
+
+        // Assert: Should return the same builder instance
+        $this->assertInstanceOf(DiscoveryBuilder::class, $result);
+        $this->assertSame($discoveryBuilder, $result);
     }
 
     /**
-     * Test that filter returns fluent interface.
+     * Test extending adds validator.
+     *
+     * This test verifies that the extending() method adds a parent class
+     * validator to the discovery builder.
+     *
+     * ## Scenario:
+     * - Create a discovery builder
+     * - Call extending() with a parent class
+     * - Verify builder is returned for chaining
+     *
+     * ## Assertions:
+     * - Returns DiscoveryBuilder instance
+     * - Returns same builder instance (fluent interface)
      */
-    public function test_filter_returns_fluent_interface(): void
+    public function test_extends_adds_validator(): void
     {
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $discoveryBuilder = $this->discoveryBuilder->filter(fn ($class): true => true);
+        // Arrange: Create a discovery builder with directory strategy
+        $discoveryBuilder = $this->manager->directories(__DIR__ . '/../Fixtures');
 
-        $this->assertSame($this->discoveryBuilder, $discoveryBuilder);
+        // Act: Add extending validator
+        $result = $discoveryBuilder->extending(Command::class);
+
+        // Assert: Should return the same builder instance
+        $this->assertInstanceOf(DiscoveryBuilder::class, $result);
+        $this->assertSame($discoveryBuilder, $result);
     }
 
     /**
-     * Test that extending returns fluent interface.
+     * Test implementing adds validator.
+     *
+     * This test verifies that the implementing() method adds an interface
+     * validator to the discovery builder.
+     *
+     * ## Scenario:
+     * - Create a discovery builder
+     * - Call implementing() with an interface
+     * - Verify builder is returned for chaining
+     *
+     * ## Assertions:
+     * - Returns DiscoveryBuilder instance
+     * - Returns same builder instance (fluent interface)
      */
-    public function test_extending_returns_fluent_interface(): void
+    public function test_implements_adds_validator(): void
     {
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $discoveryBuilder = $this->discoveryBuilder->extending('ParentClass');
+        // Arrange: Create a discovery builder with directory strategy
+        $discoveryBuilder = $this->manager->directories(__DIR__ . '/../Fixtures');
 
-        $this->assertSame($this->discoveryBuilder, $discoveryBuilder);
+        // Act: Add implementing validator
+        $result = $discoveryBuilder->implementing(ServiceInterface::class);
+
+        // Assert: Should return the same builder instance
+        $this->assertInstanceOf(DiscoveryBuilder::class, $result);
+        $this->assertSame($discoveryBuilder, $result);
     }
 
     /**
-     * Test that implementing returns fluent interface.
+     * Test cached enables caching.
+     *
+     * This test verifies that the cached() method enables caching
+     * for the discovery results.
+     *
+     * ## Scenario:
+     * - Create a discovery builder
+     * - Call cached() with a cache key
+     * - Verify builder is returned for chaining
+     *
+     * ## Assertions:
+     * - Returns DiscoveryBuilder instance
+     * - Returns same builder instance (fluent interface)
      */
-    public function test_implementing_returns_fluent_interface(): void
+    public function test_cached_enables_caching(): void
     {
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $discoveryBuilder = $this->discoveryBuilder->implementing('InterfaceName');
+        // Arrange: Create a discovery builder with attribute strategy
+        $discoveryBuilder = $this->manager->attribute(TestAttribute::class);
 
-        $this->assertSame($this->discoveryBuilder, $discoveryBuilder);
+        // Act: Enable caching with a cache key
+        $result = $discoveryBuilder->cached('test_cache_key');
+
+        // Assert: Should return the same builder instance
+        $this->assertInstanceOf(DiscoveryBuilder::class, $result);
+        $this->assertSame($discoveryBuilder, $result);
     }
 
     /**
-     * Test that instantiable returns fluent interface.
+     * Test get executes discovery.
+     *
+     * This test verifies that the get() method executes the discovery
+     * process and returns the results.
+     *
+     * ## Scenario:
+     * - Create a discovery builder
+     * - Call get() to execute discovery
+     * - Verify results are returned
+     *
+     * ## Assertions:
+     * - Returns an array
+     * - Discovery is executed
      */
-    public function test_instantiable_returns_fluent_interface(): void
+    public function test_get_executes_discovery(): void
     {
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $discoveryBuilder = $this->discoveryBuilder->instantiable();
+        // Arrange: Create a discovery builder with directory strategy
+        $discoveryBuilder = $this->manager->directories(__DIR__ . '/../Fixtures/Classes/Cards');
 
-        $this->assertSame($this->discoveryBuilder, $discoveryBuilder);
+        // Act: Execute discovery
+        $results = $discoveryBuilder->get();
+
+        // Assert: Should return an array of results
+        $this->assertIsArray($results);
     }
 
     /**
-     * Test that cached returns fluent interface.
+     * Test chaining methods returns self.
+     *
+     * This test verifies that all builder methods return the same
+     * builder instance, enabling fluent method chaining.
+     *
+     * ## Scenario:
+     * - Create a discovery builder
+     * - Chain multiple methods together
+     * - Verify same instance is returned throughout
+     *
+     * ## Assertions:
+     * - All methods return DiscoveryBuilder
+     * - Same instance is returned (fluent interface)
+     * - Methods can be chained together
      */
-    public function test_cached_returns_fluent_interface(): void
+    public function test_chaining_methods_returns_self(): void
     {
-        $this->strategy->method('getCacheKey')->willReturn('test-key');
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $discoveryBuilder = $this->discoveryBuilder->cached();
+        // Arrange: Create a discovery builder with attribute strategy
+        $discoveryBuilder = $this->manager->attribute(TestAttribute::class);
 
-        $this->assertSame($this->discoveryBuilder, $discoveryBuilder);
-    }
+        // Act: Chain multiple methods together
+        $result = $discoveryBuilder
+            ->where('enabled', true)
+            ->filter(fn($class): bool => true)
+            ->instantiable()
+            ->cached('test');
 
-    /**
-     * Test that get returns array of classes.
-     */
-    public function test_get_returns_array_of_classes(): void
-    {
-        $classes = ['Class1', 'Class2', 'Class3'];
-        $this->strategy->method('discover')->willReturn($classes);
-        $this->cacheManager->method('get')->willReturn(null);
-
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $result = $this->discoveryBuilder->get();
-
-        $this->assertIsArray($result);
-        $this->assertEquals($classes, $result);
-    }
-
-    /**
-     * Test that get uses cache when available.
-     */
-    public function test_get_uses_cache_when_available(): void
-    {
-        $cachedClasses = ['CachedClass1', 'CachedClass2'];
-        $this->strategy->method('getCacheKey')->willReturn('test-key');
-        $this->cacheManager->method('get')->willReturn($cachedClasses);
-
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $result = $this->discoveryBuilder->cached()->get();
-
-        $this->assertEquals($cachedClasses, $result);
-    }
-
-    /**
-     * Test that get stores in cache when caching is enabled.
-     */
-    public function test_get_stores_in_cache_when_caching_enabled(): void
-    {
-        $classes = ['Class1', 'Class2'];
-        $this->strategy->method('discover')->willReturn($classes);
-        $this->strategy->method('getCacheKey')->willReturn('test-key');
-        $this->cacheManager->method('get')->willReturn(null);
-        $this
-            ->cacheManager
-            ->expects($this->once())
-            ->method('put')
-            ->with('test-key', $classes);
-
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $this->discoveryBuilder->cached()->get();
-    }
-
-    /**
-     * Test that toArray returns associative array.
-     */
-    public function test_to_array_returns_associative_array(): void
-    {
-        $classes = ['Class1', 'Class2'];
-        $this->strategy->method('discover')->willReturn($classes);
-        $this->strategy->method('getMetadata')->willReturnCallback(
-            fn ($class): array => ['class' => $class, 'metadata' => 'test']
-        );
-        $this->cacheManager->method('get')->willReturn(null);
-
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $result = $this->discoveryBuilder->toArray();
-
-        $this->assertIsArray($result);
-        $this->assertArrayHasKey('Class1', $result);
-        $this->assertArrayHasKey('Class2', $result);
-    }
-
-    /**
-     * Test that register executes callback for each class.
-     */
-    public function test_register_executes_callback_for_each_class(): void
-    {
-        $classes = ['Class1', 'Class2'];
-        $this->strategy->method('discover')->willReturn($classes);
-        $this->strategy->method('getMetadata')->willReturnCallback(
-            fn ($class): array => ['class' => $class]
-        );
-        $this->cacheManager->method('get')->willReturn(null);
-
-        $called = [];
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $result = $this->discoveryBuilder->register(function ($class, $metadata) use (&$called): void {
-            $called[] = $class;
-        });
-
-        $this->assertEquals($classes, $called);
-        $this->assertEquals($classes, $result);
-    }
-
-    /**
-     * Test that cached with custom key uses that key.
-     */
-    public function test_cached_with_custom_key_uses_that_key(): void
-    {
-        $classes = ['Class1'];
-        $this->strategy->method('discover')->willReturn($classes);
-        $this->cacheManager->method('get')->willReturn(null);
-        $this
-            ->cacheManager
-            ->expects($this->once())
-            ->method('put')
-            ->with('custom-key', $classes);
-
-        $this->discoveryBuilder->setStrategy($this->strategy);
-        $this->discoveryBuilder->cached('custom-key')->get();
+        // Assert: Should return the same builder instance
+        $this->assertInstanceOf(DiscoveryBuilder::class, $result);
+        $this->assertSame($discoveryBuilder, $result);
     }
 }

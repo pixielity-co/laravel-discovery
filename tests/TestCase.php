@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Fulers\Discovery\Tests;
+namespace Pixielity\Discovery\Tests;
 
 use Illuminate\Foundation\Application;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Override;
+use Pixielity\Discovery\Providers\DiscoveryServiceProvider;
 
 /**
  * Base Test Case for ServiceProvider Package Tests.
@@ -22,7 +23,7 @@ use Override;
  * - Clean test environment setup
  * - Module facade mocking support
  *
- * @author  Fulers Development Team
+ * @author  Pixielity Development Team
  *
  * @since   1.0.0
  */
@@ -54,7 +55,9 @@ abstract class TestCase extends Orchestra
      */
     protected function getPackageProviders($app): array
     {
-        return [];
+        return [
+            DiscoveryServiceProvider::class,
+        ];
     }
 
     /**

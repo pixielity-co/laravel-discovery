@@ -1,10 +1,10 @@
 <?php
 
-namespace Fulers\Discovery\Contracts;
+namespace Pixielity\Discovery\Contracts;
 
-use Fulers\Discovery\Cache\CacheManager;
 use Illuminate\Container\Attributes\Bind;
 use Illuminate\Container\Attributes\Scoped;
+use Pixielity\Discovery\Cache\CacheManager;
 
 /**
  * CacheManagerInterface - Contract for discovery cache management.

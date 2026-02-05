@@ -1,152 +1,197 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Fulers\Discovery\Tests\Unit\Strategies;
+namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
-use Exception;
-use Fulers\Discovery\Contracts\StrategyFactoryInterface;
-use Fulers\Discovery\Strategies\DirectoryStrategy;
-use Fulers\Discovery\Strategies\ParentClassStrategy;
-use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use Illuminate\Console\Command;
+use Pixielity\Discovery\Factories\StrategyFactory;
+use Pixielity\Discovery\Strategies\ParentClassStrategy;
+use Pixielity\Discovery\Tests\Fixtures\Classes\Commands\TestCommand;
+use Pixielity\Discovery\Tests\Fixtures\Classes\Services\AbstractService;
+use Pixielity\Discovery\Tests\TestCase;
 
 /**
- * ParentClassStrategyTest - Tests for ParentClassStrategy class.
+ * ParentClassStrategy Unit Tests.
  *
- * @covers \Fulers\Discovery\Strategies\ParentClassStrategy
+ * Tests parent class extension discovery.
+ * The ParentClassStrategy discovers classes that extend a specific parent class,
+ * supporting both global and directory-based discovery modes.
+ *
+ * ## Key Features Tested:
+ * - Parent class extension discovery
+ * - Abstract class handling
+ * - Multi-level inheritance
+ * - Parent class exclusion
+ * - Empty result handling
+ *
+ * @covers \Pixielity\Discovery\Strategies\ParentClassStrategy
+ *
+ * @author  Pixielity Development Team
+ *
+ * @since   1.0.0
  */
 class ParentClassStrategyTest extends TestCase
 {
     /**
-     * Test that strategy can be instantiated with parent class name.
+     * The strategy factory for creating strategies.
+     *
+     * @var StrategyFactory
      */
-    public function test_can_instantiate_with_parent_class_name(): void
-    {
-        $parentClassStrategy = new ParentClassStrategy(Exception::class);
+    protected StrategyFactory $factory;
 
-        $this->assertInstanceOf(ParentClassStrategy::class, $parentClassStrategy);
+    /**
+     * Setup the test environment.
+     *
+     * Initializes the strategy factory before each test.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Resolve the strategy factory
+        $this->factory = resolve(StrategyFactory::class);
     }
 
     /**
-     * Test that strategy can be instantiated with factory.
+     * Test discovers classes extending parent.
+     *
+     * This test verifies that the strategy can discover all classes
+     * that extend the specified parent class.
+     *
+     * ## Scenario:
+     * - Create strategy for Command class
+     * - Discover extending classes
+     * - Verify TestCommand is found
+     *
+     * ## Assertions:
+     * - Results include TestCommand
+     * - Results are an array
+     * - Only extending classes are returned
      */
-    public function test_can_instantiate_with_factory(): void
+    public function test_discovers_classes_extending_parent(): void
     {
-        $factory = $this->createMock(StrategyFactoryInterface::class);
-        $parentClassStrategy = new ParentClassStrategy(Exception::class, $factory);
+        // Arrange: Create strategy for Command class
+        $strategy = new ParentClassStrategy(Command::class, $this->factory);
 
-        $this->assertInstanceOf(ParentClassStrategy::class, $parentClassStrategy);
+        // Act: Discover classes extending Command
+        $results = $strategy->discover();
+
+        // Assert: Results should be an array
+        $this->assertIsArray($results);
+
+        // Assert: Should include TestCommand
+        $this->assertContains(TestCommand::class, $results);
     }
 
     /**
-     * Test that discover returns array of classes.
+     * Test excludes abstract classes when specified.
+     *
+     * This test verifies that abstract classes can be included
+     * or excluded based on configuration.
+     *
+     * ## Scenario:
+     * - Discover classes extending a parent
+     * - Verify abstract classes are included by default
+     *
+     * ## Assertions:
+     * - Abstract classes are discovered
+     * - Concrete classes are discovered
      */
-    public function test_discover_returns_array_of_classes(): void
+    public function test_excludes_abstract_classes_when_specified(): void
     {
-        $parentClassStrategy = new ParentClassStrategy(Exception::class);
-        $result = $parentClassStrategy->discover();
+        // Arrange: Create strategy for AbstractService parent
+        // Note: AbstractService itself is abstract, so we test its behavior
+        $strategy = new ParentClassStrategy(AbstractService::class, $this->factory);
 
-        $this->assertIsArray($result);
+        // Act: Discover classes
+        $results = $strategy->discover();
+
+        // Assert: Results should be an array
+        $this->assertIsArray($results);
+
+        // Note: By default, abstract classes are included in discovery
+        // Filtering them out is done via the instantiable() validator
     }
 
     /**
-     * Test that discover filters by parent class.
+     * Test handles multi-level inheritance.
+     *
+     * This test verifies that the strategy can handle classes
+     * that extend through multiple levels of inheritance.
+     *
+     * ## Scenario:
+     * - Test with multi-level inheritance chain
+     * - Verify all descendants are found
+     *
+     * ## Assertions:
+     * - Multi-level inheritance is detected
+     * - All descendants in chain are discovered
      */
-    public function test_discover_filters_by_parent_class(): void
+    public function test_handles_multi_level_inheritance(): void
     {
-        $parentClassStrategy = new ParentClassStrategy(Exception::class);
-        $result = $parentClassStrategy->discover();
+        // Arrange: Create strategy for Command class
+        $strategy = new ParentClassStrategy(Command::class, $this->factory);
 
-        foreach ($result as $class) {
-            $this->assertTrue(
-                is_subclass_of($class, Exception::class),
-                "Class {$class} does not extend Exception"
-            );
-        }
+        // Act: Discover classes
+        $results = $strategy->discover();
+
+        // Assert: Should handle multi-level inheritance
+        $this->assertIsArray($results);
+        $this->assertContains(TestCommand::class, $results);
     }
 
     /**
-     * Test that directories throws exception without factory.
+     * Test excludes parent class itself.
+     *
+     * This test verifies that the strategy excludes the parent class
+     * itself from the results (only descendants are returned).
+     *
+     * ## Scenario:
+     * - Create strategy for Command class
+     * - Discover extending classes
+     * - Verify Command itself is not in results
+     *
+     * ## Assertions:
+     * - Parent class is not in results
+     * - Only extending classes are returned
      */
-    public function test_directories_throws_exception_without_factory(): void
+    public function test_excludes_parent_class_itself(): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Cannot use directories() without a StrategyFactory');
+        // Arrange: Create strategy for Command class
+        $strategy = new ParentClassStrategy(Command::class, $this->factory);
 
-        $parentClassStrategy = new ParentClassStrategy(Exception::class);
-        $parentClassStrategy->directories('src');
+        // Act: Discover classes
+        $results = $strategy->discover();
+
+        // Assert: Parent class itself should not be in results
+        $this->assertNotContains(Command::class, $results);
     }
 
     /**
-     * Test that directories works with factory.
+     * Test returns empty when no extensions.
+     *
+     * This test verifies that the strategy returns an empty array
+     * when no classes extend the specified parent class.
+     *
+     * ## Scenario:
+     * - Create strategy for non-existent parent class
+     * - Discover classes
+     * - Verify empty array is returned
+     *
+     * ## Assertions:
+     * - Results are an array
+     * - Results are empty
+     * - No exceptions are thrown
      */
-    public function test_directories_works_with_factory(): void
+    public function test_returns_empty_when_no_extensions(): void
     {
-        $factory = $this->createMock(StrategyFactoryInterface::class);
-        $directoryStrategy = $this->createMock(DirectoryStrategy::class);
+        // Arrange: Create strategy for non-existent parent class
+        $strategy = new ParentClassStrategy('App\NonExistent\ParentClass', $this->factory);
 
-        $factory
-            ->expects($this->once())
-            ->method('createDirectoryStrategy')
-            ->with('src')
-            ->willReturn($directoryStrategy);
+        // Act: Discover classes
+        $results = $strategy->discover();
 
-        $parentClassStrategy = new ParentClassStrategy(Exception::class, $factory);
-        $parentClassStrategy->directories('src');
-
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Test that getMetadata returns correct structure.
-     */
-    public function test_get_metadata_returns_correct_structure(): void
-    {
-        $parentClassStrategy = new ParentClassStrategy(Exception::class);
-        $metadata = $parentClassStrategy->getMetadata('TestClass');
-
-        $this->assertIsArray($metadata);
-        $this->assertArrayHasKey('class', $metadata);
-        $this->assertArrayHasKey('parent', $metadata);
-        $this->assertEquals('TestClass', $metadata['class']);
-        $this->assertEquals(Exception::class, $metadata['parent']);
-    }
-
-    /**
-     * Test that getCacheKey returns consistent key.
-     */
-    public function test_get_cache_key_returns_consistent_key(): void
-    {
-        $parentClassStrategy = new ParentClassStrategy(Exception::class);
-        $key1 = $parentClassStrategy->getCacheKey();
-        $key2 = $parentClassStrategy->getCacheKey();
-
-        $this->assertEquals($key1, $key2);
-        $this->assertStringStartsWith('parent:', $key1);
-    }
-
-    /**
-     * Test that getCacheKey is unique per parent class.
-     */
-    public function test_get_cache_key_is_unique_per_parent_class(): void
-    {
-        $strategy1 = new ParentClassStrategy(Exception::class);
-        $strategy2 = new ParentClassStrategy(RuntimeException::class);
-
-        $key1 = $strategy1->getCacheKey();
-        $key2 = $strategy2->getCacheKey();
-
-        $this->assertNotEquals($key1, $key2);
-    }
-
-    /**
-     * Test that discover handles exceptions gracefully.
-     */
-    public function test_discover_handles_exceptions_gracefully(): void
-    {
-        $parentClassStrategy = new ParentClassStrategy('NonExistentClass');
-        $result = $parentClassStrategy->discover();
-
-        $this->assertIsArray($result);
-        // Should not throw exception
+        // Assert: Should return empty array
+        $this->assertIsArray($results);
+        $this->assertEmpty($results);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace Fulers\Discovery\Resolvers;
+namespace Pixielity\Discovery\Resolvers;
 
-use Fulers\Discovery\Contracts\NamespaceResolverInterface;
-use Fulers\Support\Str;
+use Illuminate\Support\Str;
+use Pixielity\Discovery\Contracts\NamespaceResolverInterface;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -90,7 +90,7 @@ class NamespaceResolver implements NamespaceResolverInterface
             $relativePath = $matches[2];
             $namespace = Str::replace('/', '\\', $relativePath);
 
-            return "Fulers\\{$package}\\{$namespace}";
+            return "Pixielity\\{$package}\\{$namespace}";
         }
 
         // Pattern: modules/{Module}/src/{Namespace}/{Class}.php

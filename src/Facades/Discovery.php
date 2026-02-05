@@ -1,10 +1,10 @@
 <?php
 
-namespace Fulers\Discovery\Facades;
+namespace Pixielity\Discovery\Facades;
 
-use Fulers\Discovery\Contracts\DiscoveryManagerInterface;
-use Fulers\Discovery\DiscoveryBuilder;
 use Illuminate\Support\Facades\Facade;
+use Pixielity\Discovery\Contracts\DiscoveryManagerInterface;
+use Pixielity\Discovery\DiscoveryBuilder;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -21,7 +21,7 @@ use Symfony\Component\Finder\Finder;
  * @method static Finder           finder((string|array) $directories)    Get Symfony Finder for advanced file discovery
  * @method static void             clearCache(?string $key = null)        Clear discovery caches
  *
- * @see \Fulers\Discovery\DiscoveryManager
+ * @see \Pixielity\Discovery\DiscoveryManager
  */
 class Discovery extends Facade
 {

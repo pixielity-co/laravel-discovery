@@ -1,11 +1,11 @@
 <?php
 
-namespace Fulers\Discovery\Contracts;
+namespace Pixielity\Discovery\Contracts;
 
-use Fulers\Discovery\DiscoveryBuilder;
-use Fulers\Discovery\DiscoveryManager;
 use Illuminate\Container\Attributes\Bind;
 use Illuminate\Container\Attributes\Singleton;
+use Pixielity\Discovery\DiscoveryBuilder;
+use Pixielity\Discovery\DiscoveryManager;
 use Symfony\Component\Finder\Finder;
 
 /**

@@ -42,6 +42,7 @@ php artisan tinker
 ### What is Discovery?
 
 Discovery helps you find classes, methods, and properties in your application based on:
+
 - PHP 8 Attributes
 - Directory locations
 - Interface implementations
@@ -50,6 +51,7 @@ Discovery helps you find classes, methods, and properties in your application ba
 ### Why Use Discovery?
 
 **Without Discovery:**
+
 ```php
 // Manual registration - tedious
 $this->app->singleton(SettingA::class);
@@ -59,6 +61,7 @@ $this->app->singleton(SettingC::class);
 ```
 
 **With Discovery:**
+
 ```php
 // Automatic discovery - clean
 $settings = Discovery::attribute(AsSetting::class)->get();
@@ -113,7 +116,7 @@ class DashboardCard
 ### Step 3: Discover the Class
 
 ```php
-use Fulers\Discovery\Facades\Discovery;
+use Pixielity\Discovery\Facades\Discovery;
 
 $cards = Discovery::attribute(AsCard::class)->get();
 
@@ -125,6 +128,7 @@ foreach ($cards as $class => $metadata) {
 ```
 
 **Output:**
+
 ```
 Found: App\Cards\DashboardCard
 Title: Dashboard Overview
@@ -183,7 +187,7 @@ public function boot(): void
     foreach ($routes as $identifier => $metadata) {
         [$class, $method] = explode('::', $identifier);
         $route = $metadata['attribute'];
-        
+
         Route::{strtolower($route->method)}($route->path, [$class, $method])
             ->name($route->name);
     }
@@ -242,43 +246,49 @@ public function runHealthChecks(): array
 ### Best Practices
 
 1. **Always cache in production**
-   ```php
-   ->cached('my-cache-key')
-   ```
+
+    ```php
+    ->cached('my-cache-key')
+    ```
 
 2. **Use specific discovery methods**
-   ```php
-   // ✅ Fast
-   Discovery::attribute(AsCard::class)
-   
-   // ⚠️ Slower
-   Discovery::directories('app')
-   ```
+
+    ```php
+    // ✅ Fast
+    Discovery::attribute(AsCard::class)
+
+    // ⚠️ Slower
+    Discovery::directories('app')
+    ```
 
 3. **Filter early**
-   ```php
-   ->where('enabled', true)
-   ->instantiable()
-   ```
+
+    ```php
+    ->where('enabled', true)
+    ->instantiable()
+    ```
 
 4. **Clear cache after deployment**
-   ```bash
-   php artisan cache:clear
-   ```
+    ```bash
+    php artisan cache:clear
+    ```
 
 ### Common Issues
 
 **Issue: Classes not discovered**
+
 - Run `composer dump-autoload`
 - Check attribute is properly defined
 - Verify class is in autoload paths
 
 **Issue: Slow performance**
+
 - Enable caching with `->cached('key')`
 - Use attribute discovery instead of directory scanning
 - Scope directory scans to specific paths
 
 **Issue: Cache not clearing**
+
 - Run `php artisan cache:clear`
 - Check cache path permissions
 - Verify `DISCOVERY_CACHE_ENABLED` is set correctly

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fulers\Discovery\Contracts;
+namespace Pixielity\Discovery\Contracts;
 
 /**
  * Filter Interface.

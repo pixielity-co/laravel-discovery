@@ -6,11 +6,13 @@ Thank you for considering contributing to the Discovery package! This document p
 
 1. Clone the repository
 2. Install dependencies:
+
 ```bash
 composer install
 ```
 
 3. Run tests:
+
 ```bash
 composer test
 ```

@@ -1,9 +1,9 @@
 <?php
 
-namespace Fulers\Discovery\Validators;
+namespace Pixielity\Discovery\Validators;
 
-use Fulers\Discovery\Contracts\ValidatorInterface;
-use Fulers\Support\Reflection;
+use Pixielity\Discovery\Contracts\ValidatorInterface;
+use Pixielity\Discovery\Support\Reflection;
 use Throwable;
 
 /**

@@ -1,9 +1,10 @@
 <?php
 
-namespace Fulers\Discovery\Console\Commands;
+namespace Pixielity\Discovery\Console\Commands;
 
-use Fulers\Discovery\Contracts\CacheManagerInterface;
-use Fulers\Foundation\Console\Commands\BaseCommand;
+use Illuminate\Console\Command;
+use Pixielity\Discovery\Concerns\InteractsWithPrompts;
+use Pixielity\Discovery\Contracts\CacheManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 
 /**
@@ -17,8 +18,10 @@ use Symfony\Component\Console\Attribute\AsCommand;
     name: 'discovery:clear',
     description: 'Clear discovery caches'
 )]
-class ClearDiscoveryCommand extends BaseCommand
+class ClearDiscoveryCommand extends Command
 {
+    use InteractsWithPrompts;
+
     /**
      * The name and signature of the console command.
      *
@@ -77,7 +80,7 @@ class ClearDiscoveryCommand extends BaseCommand
         // Display helpful tip
         $this->newLine();
         $this->divider('Tip');
-        $this->info('💡 Run <fg=cyan>discovery:cache</> to rebuild the cache.');
+        $this->informational('💡 Run <fg=cyan>discovery:cache</> to rebuild the cache.');
 
         return self::SUCCESS;
     }

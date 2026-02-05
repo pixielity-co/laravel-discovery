@@ -1,10 +1,10 @@
 <?php
 
-namespace Fulers\Discovery\Strategies;
+namespace Pixielity\Discovery\Strategies;
 
-use Fulers\Discovery\Contracts\DiscoveryStrategyInterface;
-use Fulers\Support\Reflection;
 use Olvlvl\ComposerAttributeCollector\Attributes;
+use Pixielity\Discovery\Contracts\DiscoveryStrategyInterface;
+use Pixielity\Discovery\Support\Reflection;
 use RuntimeException;
 use Throwable;
 
@@ -81,7 +81,7 @@ class PropertyStrategy implements DiscoveryStrategyInterface
     {
         // Check if composer-attribute-collector is available
         throw_unless(Reflection::exists(Attributes::class), RuntimeException::class, 'The composer-attribute-collector package is required for property discovery. '
-        . 'Install it with: composer require olvlvl/composer-attribute-collector');
+            . 'Install it with: composer require olvlvl/composer-attribute-collector');
 
         try {
             // Get all properties decorated with this attribute

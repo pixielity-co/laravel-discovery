@@ -1,14 +1,14 @@
 <?php
 
-namespace Fulers\Discovery\Strategies;
+namespace Pixielity\Discovery\Strategies;
 
-use Fulers\Discovery\Contracts\DiscoveryStrategyInterface;
-use Fulers\Discovery\Resolvers\NamespaceResolver;
-use Fulers\Support\Arr;
-use Fulers\Support\Reflection;
-use Fulers\Support\Str;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Pixielity\Discovery\Contracts\DiscoveryStrategyInterface;
+use Pixielity\Discovery\Resolvers\NamespaceResolver;
+use Pixielity\Discovery\Support\Arr;
+use Pixielity\Discovery\Support\Reflection;
 use Symfony\Component\Finder\Finder;
 use Throwable;
 
@@ -89,7 +89,7 @@ class DirectoryStrategy implements DiscoveryStrategyInterface
      * - {class}: The class name (filename without .php)
      * - {namespace}: The remaining namespace path after src/
      *
-     * Example: 'Fulers\{package}\{namespace}\{class}'
+     * Example: 'Pixielity\{package}\{namespace}\{class}'
      *
      * @param string $pattern Namespace pattern with placeholders
      */
@@ -227,7 +227,7 @@ class DirectoryStrategy implements DiscoveryStrategyInterface
         foreach ($directories as $directory) {
             // Convert relative paths to absolute paths using the app's base path
             // This ensures consistent path handling across different environments
-            if (! Str::startsWith($directory, '/')) {
+            if (!Str::startsWith($directory, '/')) {
                 $directory = $this->app->basePath($directory);
             }
 
@@ -247,6 +247,6 @@ class DirectoryStrategy implements DiscoveryStrategyInterface
 
         // Filter out any paths that aren't actually directories
         // This handles cases where paths don't exist or are files
-        return Arr::filter($expanded, fn ($path) => File::isDirectory($path));
+        return Arr::filter($expanded, fn($path) => File::isDirectory($path));
     }
 }

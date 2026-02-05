@@ -1,10 +1,10 @@
 <?php
 
-namespace Fulers\Discovery\Contracts;
+namespace Pixielity\Discovery\Contracts;
 
-use Fulers\Discovery\Factories\StrategyFactory;
 use Illuminate\Container\Attributes\Bind;
 use Illuminate\Container\Attributes\Scoped;
+use Pixielity\Discovery\Factories\StrategyFactory;
 
 /**
  * StrategyFactoryInterface - Contract for creating discovery strategies.
