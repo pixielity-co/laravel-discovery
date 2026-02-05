@@ -1,11 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
 use Illuminate\Console\Command;
+use Pixielity\Discovery\DiscoveryManager;
+use Pixielity\Discovery\Support\Reflection;
 use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * DirectoryDiscovery Feature Tests.
@@ -20,20 +23,16 @@ class DirectoryDiscoveryTest extends TestCase
 {
     /**
      * Discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
     /**
      * Set up the test environment.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->discovery = app(DiscoveryManager::class);
+        $this->discovery = resolve(DiscoveryManager::class);
     }
 
     /**
@@ -41,8 +40,6 @@ class DirectoryDiscoveryTest extends TestCase
      *
      * Verifies that all PHP classes in a specific directory
      * are discovered and returned with proper metadata.
-     *
-     * @return void
      */
     public function test_discovers_classes_in_directory(): void
     {
@@ -50,7 +47,8 @@ class DirectoryDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Cards')
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should find classes
         $this->assertIsArray($results);
@@ -62,8 +60,6 @@ class DirectoryDiscoveryTest extends TestCase
      *
      * Verifies that glob patterns (e.g., packages/*\/src)
      * are properly expanded and all matching directories are scanned.
-     *
-     * @return void
      */
     public function test_discovers_with_glob_patterns(): void
     {
@@ -71,7 +67,8 @@ class DirectoryDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/*')
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should find classes from multiple subdirectories
         $this->assertIsArray($results);
@@ -82,8 +79,6 @@ class DirectoryDiscoveryTest extends TestCase
      *
      * Verifies that multiple directory paths can be provided
      * and classes from all directories are discovered.
-     *
-     * @return void
      */
     public function test_discovers_in_multiple_directories(): void
     {
@@ -94,7 +89,8 @@ class DirectoryDiscoveryTest extends TestCase
                 __DIR__ . '/../Fixtures/Classes/Cards',
                 __DIR__ . '/../Fixtures/Classes/Services',
             ])
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should find classes from both directories
         $this->assertIsArray($results);
@@ -106,8 +102,6 @@ class DirectoryDiscoveryTest extends TestCase
      *
      * Verifies that discovered classes can be filtered to only
      * include those implementing a specific interface.
-     *
-     * @return void
      */
     public function test_filters_by_interface(): void
     {
@@ -116,13 +110,14 @@ class DirectoryDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Services')
             ->implementing(ServiceInterface::class)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should find service implementations
         $this->assertIsArray($results);
 
         // Verify all results implement the interface
-        foreach ($results as $class => $metadata) {
+        foreach (array_keys($results) as $class) {
             if (class_exists($class)) {
                 $this->assertTrue(in_array(ServiceInterface::class, class_implements($class) ?: []));
             }
@@ -134,8 +129,6 @@ class DirectoryDiscoveryTest extends TestCase
      *
      * Verifies that discovered classes can be filtered to only
      * include those extending a specific parent class.
-     *
-     * @return void
      */
     public function test_filters_by_parent_class(): void
     {
@@ -144,7 +137,8 @@ class DirectoryDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Commands')
             ->extending(Command::class)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should find command classes
         $this->assertIsArray($results);
@@ -155,8 +149,6 @@ class DirectoryDiscoveryTest extends TestCase
      *
      * Verifies that the instantiable validator excludes
      * abstract classes and interfaces from results.
-     *
-     * @return void
      */
     public function test_validates_instantiable(): void
     {
@@ -165,15 +157,16 @@ class DirectoryDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Services')
             ->instantiable()
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should only include concrete classes
         $this->assertIsArray($results);
 
         // Verify all results are instantiable
-        foreach ($results as $class => $metadata) {
+        foreach (array_keys($results) as $class) {
             if (class_exists($class)) {
-                $reflection = new \ReflectionClass($class);
+                $reflection = Reflection::getClass($class);
                 $this->assertFalse($reflection->isAbstract());
                 $this->assertFalse($reflection->isInterface());
             }

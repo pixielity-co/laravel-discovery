@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
-use Pixielity\Discovery\Tests\TestCase;
 use Pixielity\Discovery\DiscoveryManager;
+use Pixielity\Discovery\Tests\TestCase;
 
 /**
  * MonorepoDiscovery Feature Tests.
@@ -24,8 +26,6 @@ class MonorepoDiscoveryTest extends TestCase
 {
     /**
      * The discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
@@ -149,7 +149,7 @@ class MonorepoDiscoveryTest extends TestCase
         $this->assertIsArray($results);
 
         // Verify each discovered class has a valid namespace
-        foreach ($results as $className => $metadata) {
+        foreach (array_keys($results) as $className) {
             // Each class should be a fully qualified class name
             $this->assertIsString($className);
             $this->assertStringContainsString('\\', $className);
@@ -187,7 +187,7 @@ class MonorepoDiscoveryTest extends TestCase
         $this->assertIsArray($results);
 
         // Verify each discovered class has a valid namespace
-        foreach ($results as $className => $metadata) {
+        foreach (array_keys($results) as $className) {
             // Each class should be a fully qualified class name
             $this->assertIsString($className);
             $this->assertStringContainsString('\\', $className);

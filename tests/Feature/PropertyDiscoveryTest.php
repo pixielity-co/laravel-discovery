@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Support\Arr;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestValidateAttribute;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * PropertyDiscovery Feature Tests.
@@ -20,20 +22,16 @@ class PropertyDiscoveryTest extends TestCase
 {
     /**
      * Discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
     /**
      * Set up the test environment.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->discovery = app(DiscoveryManager::class);
+        $this->discovery = resolve(DiscoveryManager::class);
     }
 
     /**
@@ -41,8 +39,6 @@ class PropertyDiscoveryTest extends TestCase
      *
      * Verifies that class properties decorated with a specific
      * attribute are discovered across all classes.
-     *
-     * @return void
      */
     public function test_discovers_properties_with_attribute(): void
     {
@@ -61,8 +57,6 @@ class PropertyDiscoveryTest extends TestCase
      *
      * Verifies that discovered properties can be filtered based on
      * their attribute property values (e.g., required = true).
-     *
-     * @return void
      */
     public function test_filters_by_property_attribute_properties(): void
     {
@@ -77,9 +71,9 @@ class PropertyDiscoveryTest extends TestCase
         $this->assertIsArray($results);
 
         // Verify all results have required = true
-        foreach ($results as $metadata) {
-            if (isset($metadata['attribute'])) {
-                $this->assertTrue($metadata['attribute']->required);
+        foreach ($results as $result) {
+            if (isset($result['attribute'])) {
+                $this->assertTrue($result['attribute']->required);
             }
         }
     }
@@ -89,8 +83,6 @@ class PropertyDiscoveryTest extends TestCase
      *
      * Verifies that property discovery works across multiple
      * classes and aggregates all results.
-     *
-     * @return void
      */
     public function test_discovers_across_multiple_classes(): void
     {
@@ -105,9 +97,9 @@ class PropertyDiscoveryTest extends TestCase
 
         // Verify results contain properties from different classes
         $classes = [];
-        foreach ($results as $identifier => $metadata) {
-            if (isset($metadata['class'])) {
-                $classes[] = $metadata['class'];
+        foreach ($results as $result) {
+            if (isset($result['class'])) {
+                $classes[] = $result['class'];
             }
         }
 
@@ -121,8 +113,6 @@ class PropertyDiscoveryTest extends TestCase
      *
      * Verifies that discovered properties include all necessary
      * metadata: class name, property name, file path.
-     *
-     * @return void
      */
     public function test_includes_correct_metadata(): void
     {
@@ -133,7 +123,7 @@ class PropertyDiscoveryTest extends TestCase
             ->get()->all();
 
         // Assert: Metadata should be complete
-        if (!empty($results)) {
+        if (! empty($results)) {
             $first = reset($results);
 
             // Verify required metadata fields
@@ -148,8 +138,6 @@ class PropertyDiscoveryTest extends TestCase
      *
      * Verifies that properties with type declarations
      * are discovered correctly.
-     *
-     * @return void
      */
     public function test_handles_typed_properties(): void
     {

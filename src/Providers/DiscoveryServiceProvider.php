@@ -1,16 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Override;
 use Pixielity\Discovery\Cache\CacheManager;
 use Pixielity\Discovery\Contracts\CacheManagerInterface;
 use Pixielity\Discovery\Contracts\DiscoveryManagerInterface;
 use Pixielity\Discovery\Contracts\NamespaceResolverInterface;
 use Pixielity\Discovery\Contracts\StrategyFactoryInterface;
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Factories\StrategyFactory;
 use Pixielity\Discovery\Resolvers\NamespaceResolver;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * DiscoveryServiceProvider - Registers discovery services in the container.
@@ -48,6 +51,7 @@ class DiscoveryServiceProvider extends ServiceProvider
      * 3. StrategyFactory - Depends on NamespaceResolver
      * 4. DiscoveryManager - Depends on CacheManager and StrategyFactory
      */
+    #[Override]
     public function register(): void
     {
         // Bind NamespaceResolver as singleton
@@ -105,6 +109,7 @@ class DiscoveryServiceProvider extends ServiceProvider
      *
      * @return array<int, string> Array of service identifiers
      */
+    #[Override]
     public function provides(): array
     {
         return [

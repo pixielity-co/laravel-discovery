@@ -12,7 +12,7 @@
     "php8",
     "dependency-injection"
   ],
-  "homepage": "https://github.com/pixielity/laravel-discovery",
+  "homepage": "https://github.com/pixielity-co/laravel-discovery",
   "type": "library",
   "license": "MIT",
   "authors": [

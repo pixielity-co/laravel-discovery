@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Validators;
 
 use Pixielity\Discovery\Tests\Fixtures\Classes\Cards\DashboardCard;
+use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Services\AbstractService;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Services\TestService;
-use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\TestCase;
 use Pixielity\Discovery\Validators\ImplementsValidator;
 
@@ -42,13 +44,13 @@ class ImplementsValidatorTest extends TestCase
     public function test_validates_classes_implementing_interface(): void
     {
         // Arrange: Create validator for ServiceInterface
-        $validator = new ImplementsValidator(ServiceInterface::class);
+        $implementsValidator = new ImplementsValidator(ServiceInterface::class);
 
         // Act: Validate TestService (implements ServiceInterface)
-        $result1 = $validator->validate(TestService::class);
+        $result1 = $implementsValidator->validate(TestService::class);
 
         // Act: Validate AbstractService (also implements ServiceInterface)
-        $result2 = $validator->validate(AbstractService::class);
+        $result2 = $implementsValidator->validate(AbstractService::class);
 
         // Assert: Both should pass validation
         $this->assertTrue($result1);
@@ -72,10 +74,10 @@ class ImplementsValidatorTest extends TestCase
     public function test_rejects_classes_not_implementing_interface(): void
     {
         // Arrange: Create validator for ServiceInterface
-        $validator = new ImplementsValidator(ServiceInterface::class);
+        $implementsValidator = new ImplementsValidator(ServiceInterface::class);
 
         // Act: Validate DashboardCard (does not implement ServiceInterface)
-        $result = $validator->validate(DashboardCard::class);
+        $result = $implementsValidator->validate(DashboardCard::class);
 
         // Assert: Validation should fail
         $this->assertFalse($result);
@@ -99,10 +101,10 @@ class ImplementsValidatorTest extends TestCase
     public function test_handles_multiple_interfaces(): void
     {
         // Arrange: Create validator for ServiceInterface
-        $validator = new ImplementsValidator(ServiceInterface::class);
+        $implementsValidator = new ImplementsValidator(ServiceInterface::class);
 
         // Act: Validate TestService (may implement multiple interfaces)
-        $result = $validator->validate(TestService::class);
+        $result = $implementsValidator->validate(TestService::class);
 
         // Assert: Validation should pass
         $this->assertTrue($result);
@@ -126,10 +128,10 @@ class ImplementsValidatorTest extends TestCase
     public function test_handles_non_existent_interface(): void
     {
         // Arrange: Create validator for non-existent interface
-        $validator = new ImplementsValidator('App\NonExistent\Interface');
+        $implementsValidator = new ImplementsValidator('App\NonExistent\Interface');
 
         // Act: Validate TestService
-        $result = $validator->validate(TestService::class);
+        $result = $implementsValidator->validate(TestService::class);
 
         // Assert: Validation should fail gracefully
         $this->assertFalse($result);

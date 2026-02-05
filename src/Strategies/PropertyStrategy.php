@@ -123,7 +123,8 @@ class PropertyStrategy implements DiscoveryStrategyInterface
             'property' => $property,
             'class' => $class,
             'name' => $propertyName,
-            'attribute' => $this->attributeClass,
+            'attribute' => null,
+            'attributeClass' => $this->attributeClass,
         ];
 
         // Try to get attribute instance
@@ -133,7 +134,7 @@ class PropertyStrategy implements DiscoveryStrategyInterface
 
                 foreach ($targetProperties as $targetProperty) {
                     if ($targetProperty->class === $class && $targetProperty->name === $propertyName) {
-                        $metadata['instance'] = $targetProperty->attribute;
+                        $metadata['attribute'] = $targetProperty->attribute;
 
                         break;
                     }

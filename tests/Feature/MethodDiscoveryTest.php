@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Support\Arr;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestRouteAttribute;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * MethodDiscovery Feature Tests.
@@ -20,20 +22,16 @@ class MethodDiscoveryTest extends TestCase
 {
     /**
      * Discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
     /**
      * Set up the test environment.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->discovery = app(DiscoveryManager::class);
+        $this->discovery = resolve(DiscoveryManager::class);
     }
 
     /**
@@ -41,8 +39,6 @@ class MethodDiscoveryTest extends TestCase
      *
      * Verifies that methods decorated with a specific attribute
      * are discovered across all classes.
-     *
-     * @return void
      */
     public function test_discovers_methods_with_attribute(): void
     {
@@ -61,8 +57,6 @@ class MethodDiscoveryTest extends TestCase
      *
      * Verifies that discovered methods can be filtered based on
      * their attribute property values (e.g., HTTP method = GET).
-     *
-     * @return void
      */
     public function test_filters_by_method_attribute_properties(): void
     {
@@ -77,9 +71,9 @@ class MethodDiscoveryTest extends TestCase
         $this->assertIsArray($results);
 
         // Verify all results have method = GET
-        foreach ($results as $metadata) {
-            if (isset($metadata['attribute'])) {
-                $this->assertEquals('GET', $metadata['attribute']->method);
+        foreach ($results as $result) {
+            if (isset($result['attribute'])) {
+                $this->assertEquals('GET', $result['attribute']->method);
             }
         }
     }
@@ -89,8 +83,6 @@ class MethodDiscoveryTest extends TestCase
      *
      * Verifies that method discovery works across multiple
      * controller classes and aggregates all results.
-     *
-     * @return void
      */
     public function test_discovers_across_multiple_classes(): void
     {
@@ -105,9 +97,9 @@ class MethodDiscoveryTest extends TestCase
 
         // Verify results contain methods from different classes
         $classes = [];
-        foreach ($results as $identifier => $metadata) {
-            if (isset($metadata['class'])) {
-                $classes[] = $metadata['class'];
+        foreach ($results as $result) {
+            if (isset($result['class'])) {
+                $classes[] = $result['class'];
             }
         }
 
@@ -121,8 +113,6 @@ class MethodDiscoveryTest extends TestCase
      *
      * Verifies that discovered methods include all necessary
      * metadata: class name, method name, file path, line number.
-     *
-     * @return void
      */
     public function test_includes_correct_metadata(): void
     {
@@ -133,7 +123,7 @@ class MethodDiscoveryTest extends TestCase
             ->get()->all();
 
         // Assert: Metadata should be complete
-        if (!empty($results)) {
+        if (! empty($results)) {
             $first = reset($results);
 
             // Verify required metadata fields
@@ -148,8 +138,6 @@ class MethodDiscoveryTest extends TestCase
      *
      * Verifies that both static and instance methods with
      * attributes are discovered correctly.
-     *
-     * @return void
      */
     public function test_handles_static_and_instance_methods(): void
     {

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
@@ -247,8 +249,9 @@ class AttributeStrategyTest extends TestCase
         // Act: Filter by enabled = true using metadata
         $filtered = Arr::filter(
             $results,
-            function (string $class) use ($attributeStrategy) {
+            function (string $class) use ($attributeStrategy): bool {
                 $metadata = $attributeStrategy->getMetadata($class);
+
                 return isset($metadata['attribute']) && $metadata['attribute']->enabled === true;
             }
         );

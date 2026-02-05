@@ -9,10 +9,10 @@ use Pixielity\Discovery\Filters\CallbackFilter;
 use Pixielity\Discovery\Filters\PropertyFilter;
 use Pixielity\Discovery\Strategies\DirectoryStrategy;
 use Pixielity\Discovery\Support\Arr;
+use Pixielity\Discovery\Support\Reflection;
 use Pixielity\Discovery\Validators\ExtendsValidator;
 use Pixielity\Discovery\Validators\ImplementsValidator;
 use Pixielity\Discovery\Validators\InstantiableValidator;
-use ReflectionClass;
 use ReflectionException;
 
 /**
@@ -162,6 +162,105 @@ class DiscoveryBuilder
         $this->filters[] = new CallbackFilter($callback);
 
         return $this;
+    }
+
+    /**
+     * Filter classes that have a specific attribute.
+     *
+     * Filters discovered classes to only include those that have the specified
+     * attribute on the class itself. This is useful when discovering by directory
+     * and you want to further filter by attribute presence.
+     *
+     * @param  class-string $attributeClass Fully qualified attribute class name
+     * @return $this        Fluent interface
+     *
+     * @example
+     * ```php
+     * Discovery::directories('packages/*\/src/Commands')
+     *     ->hasAttribute(AsCommand::class)
+     *     ->get();
+     * ```
+     */
+    public function hasAttribute(string $attributeClass): self
+    {
+        return $this->filter(function (string $class) use ($attributeClass): bool {
+            try {
+                // Check if attribute class exists first
+                if (!Reflection::exists($attributeClass)) {
+                    return false;
+                }
+
+                return Reflection::getAttributes($class, $attributeClass) !== [];
+            } catch (ReflectionException) {
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Filter classes that have methods with a specific attribute.
+     *
+     * Filters discovered classes to only include those that have at least one
+     * method decorated with the specified attribute. This is useful for finding
+     * classes that contain route handlers, event listeners, etc.
+     *
+     * @param  class-string $attributeClass Fully qualified attribute class name
+     * @return $this        Fluent interface
+     *
+     * @example
+     * ```php
+     * Discovery::directories('packages/*\/src/Controllers')
+     *     ->hasMethodWith(Route::class)
+     *     ->get();
+     * ```
+     */
+    public function hasMethodWith(string $attributeClass): self
+    {
+        return $this->filter(function (string $class) use ($attributeClass): bool {
+            try {
+                // Check if attribute class exists first
+                if (!Reflection::exists($attributeClass)) {
+                    return false;
+                }
+
+                return array_any(Reflection::getMethods($class), fn($method): bool => count($method->getAttributes($attributeClass)) > 0);
+            } catch (ReflectionException) {
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Filter classes that have properties with a specific attribute.
+     *
+     * Filters discovered classes to only include those that have at least one
+     * property decorated with the specified attribute. This is useful for finding
+     * classes with validation rules, serialization hints, etc.
+     *
+     * @param  class-string $attributeClass Fully qualified attribute class name
+     * @return $this        Fluent interface
+     *
+     * @example
+     * ```php
+     * Discovery::directories('packages/*\/src/Models')
+     *     ->hasPropertyWith(Validate::class)
+     *     ->get();
+     * ```
+     */
+    public function hasPropertyWith(string $attributeClass): self
+    {
+        return $this->filter(function (string $class) use ($attributeClass): bool {
+            try {
+                // Check if attribute class exists first
+                if (!Reflection::exists($attributeClass)) {
+                    return false;
+                }
+
+                return array_any(Reflection::getProperties($class), fn($property): bool => count($property->getAttributes($attributeClass)) > 0);
+            } catch (ReflectionException) {
+                return false;
+            }
+        });
     }
 
     /**
@@ -432,8 +531,7 @@ class DiscoveryBuilder
         $paths = collect();
         foreach ($classes as $class) {
             try {
-                $reflection = new ReflectionClass($class);
-                $filename = $reflection->getFileName();
+                $filename = Reflection::getFileName($class);
                 if ($filename !== false) {
                     $paths->push($filename);
                 }

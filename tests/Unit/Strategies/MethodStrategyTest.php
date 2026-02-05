@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
@@ -47,10 +49,10 @@ class MethodStrategyTest extends TestCase
     public function test_discovers_methods_with_attribute(): void
     {
         // Arrange: Create strategy for TestRouteAttribute
-        $strategy = new MethodStrategy(TestRouteAttribute::class);
+        $methodStrategy = new MethodStrategy(TestRouteAttribute::class);
 
         // Act: Discover methods with the attribute
-        $results = $strategy->discover();
+        $results = $methodStrategy->discover();
 
         // Assert: Results should be an array
         $this->assertIsArray($results);
@@ -75,15 +77,15 @@ class MethodStrategyTest extends TestCase
     public function test_returns_method_metadata(): void
     {
         // Arrange: Create strategy
-        $strategy = new MethodStrategy(TestRouteAttribute::class);
+        $methodStrategy = new MethodStrategy(TestRouteAttribute::class);
 
         // Act: Discover methods
-        $results = $strategy->discover();
+        $results = $methodStrategy->discover();
 
         // Assert: If methods found, verify metadata
-        if (!empty($results)) {
+        if ($results !== []) {
             $firstMethod = $results[0];
-            $metadata = $strategy->getMetadata($firstMethod);
+            $metadata = $methodStrategy->getMetadata($firstMethod);
 
             $this->assertIsArray($metadata);
             $this->assertArrayHasKey('method', $metadata);
@@ -113,18 +115,18 @@ class MethodStrategyTest extends TestCase
     public function test_includes_class_and_method_name(): void
     {
         // Arrange: Create strategy
-        $strategy = new MethodStrategy(TestRouteAttribute::class);
+        $methodStrategy = new MethodStrategy(TestRouteAttribute::class);
 
         // Act: Discover methods
-        $results = $strategy->discover();
+        $results = $methodStrategy->discover();
 
         // Assert: Verify method identifier format
-        foreach ($results as $method) {
-            $this->assertIsString($method);
-            $this->assertStringContainsString('::', $method);
+        foreach ($results as $result) {
+            $this->assertIsString($result);
+            $this->assertStringContainsString('::', $result);
 
             // Verify we can parse class and method name
-            [$class, $methodName] = explode('::', $method, 2);
+            [$class, $methodName] = explode('::', $result, 2);
             $this->assertNotEmpty($class);
             $this->assertNotEmpty($methodName);
         }
@@ -148,14 +150,14 @@ class MethodStrategyTest extends TestCase
     public function test_includes_file_and_line_number(): void
     {
         // Arrange: Create strategy
-        $strategy = new MethodStrategy(TestRouteAttribute::class);
+        $methodStrategy = new MethodStrategy(TestRouteAttribute::class);
 
         // Act: Discover methods
-        $results = $strategy->discover();
+        $results = $methodStrategy->discover();
 
         // Assert: Metadata should be retrievable
-        if (!empty($results)) {
-            $metadata = $strategy->getMetadata($results[0]);
+        if ($results !== []) {
+            $metadata = $methodStrategy->getMetadata($results[0]);
             $this->assertIsArray($metadata);
         } else {
             $this->markTestSkipped('No methods found');
@@ -179,29 +181,21 @@ class MethodStrategyTest extends TestCase
     public function test_handles_multiple_methods_in_same_class(): void
     {
         // Arrange: Create strategy
-        $strategy = new MethodStrategy(TestRouteAttribute::class);
+        $methodStrategy = new MethodStrategy(TestRouteAttribute::class);
 
         // Act: Discover methods
-        $results = $strategy->discover();
+        $results = $methodStrategy->discover();
 
         // Assert: Should handle multiple methods
         $this->assertIsArray($results);
 
         // Group by class to check for multiple methods per class
         $methodsByClass = [];
-        foreach ($results as $method) {
-            [$class] = explode('::', $method, 2);
+        foreach ($results as $result) {
+            [$class] = explode('::', $result, 2);
             $methodsByClass[$class] = ($methodsByClass[$class] ?? 0) + 1;
         }
-
-        // At least one class should have multiple methods
-        $hasMultipleMethods = false;
-        foreach ($methodsByClass as $count) {
-            if ($count > 1) {
-                $hasMultipleMethods = true;
-                break;
-            }
-        }
+        array_any($methodsByClass, fn ($count): bool => $count > 1);
 
         // This assertion may vary based on fixtures
         $this->assertIsArray($methodsByClass);
@@ -224,10 +218,10 @@ class MethodStrategyTest extends TestCase
     public function test_handles_static_methods(): void
     {
         // Arrange: Create strategy
-        $strategy = new MethodStrategy(TestRouteAttribute::class);
+        $methodStrategy = new MethodStrategy(TestRouteAttribute::class);
 
         // Act: Discover methods
-        $results = $strategy->discover();
+        $results = $methodStrategy->discover();
 
         // Assert: Should discover methods regardless of static modifier
         $this->assertIsArray($results);
@@ -250,10 +244,10 @@ class MethodStrategyTest extends TestCase
     public function test_handles_private_protected_public_methods(): void
     {
         // Arrange: Create strategy
-        $strategy = new MethodStrategy(TestRouteAttribute::class);
+        $methodStrategy = new MethodStrategy(TestRouteAttribute::class);
 
         // Act: Discover methods
-        $results = $strategy->discover();
+        $results = $methodStrategy->discover();
 
         // Assert: Should discover methods regardless of visibility
         $this->assertIsArray($results);

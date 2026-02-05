@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Filters;
 
@@ -8,6 +10,7 @@ use Pixielity\Discovery\Tests\Fixtures\Attributes\TestCardAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Cards\AnalyticsCard;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Cards\DashboardCard;
 use Pixielity\Discovery\Tests\TestCase;
+use RuntimeException;
 
 /**
  * CallbackFilter Unit Tests.
@@ -26,8 +29,6 @@ class CallbackFilterTest extends TestCase
 {
     /**
      * The attribute strategy instance for testing.
-     *
-     * @var AttributeStrategy
      */
     protected AttributeStrategy $strategy;
 
@@ -63,10 +64,10 @@ class CallbackFilterTest extends TestCase
     public function test_applies_callback_filter(): void
     {
         // Arrange: Create a callback that filters by class name containing 'Dashboard'
-        $callback = fn(string $class, array $metadata): bool => str_contains($class, 'Dashboard');
+        $callback = fn (string $class, array $metadata): bool => str_contains($class, 'Dashboard');
 
         // Arrange: Create the filter
-        $filter = new CallbackFilter($callback);
+        $callbackFilter = new CallbackFilter($callback);
 
         // Arrange: Get all classes with the attribute
         $allClasses = [
@@ -75,7 +76,7 @@ class CallbackFilterTest extends TestCase
         ];
 
         // Act: Apply the filter
-        $filtered = $filter->apply($allClasses, $this->strategy);
+        $filtered = $callbackFilter->apply($allClasses, $this->strategy);
 
         // Assert: Only DashboardCard should remain
         $this->assertContains(DashboardCard::class, $filtered);
@@ -114,7 +115,7 @@ class CallbackFilterTest extends TestCase
         };
 
         // Arrange: Create the filter
-        $filter = new CallbackFilter($callback);
+        $callbackFilter = new CallbackFilter($callback);
 
         // Arrange: Get all classes with the attribute
         $allClasses = [
@@ -122,7 +123,7 @@ class CallbackFilterTest extends TestCase
         ];
 
         // Act: Apply the filter
-        $filter->apply($allClasses, $this->strategy);
+        $callbackFilter->apply($allClasses, $this->strategy);
 
         // Assert: Callback was invoked
         $this->assertNotEmpty($invocations);
@@ -153,10 +154,10 @@ class CallbackFilterTest extends TestCase
     public function test_handles_multiple_callbacks(): void
     {
         // Arrange: Create first callback (filter by name)
-        $callback1 = fn(string $class, array $metadata): bool => str_contains($class, 'Card');
+        $callback1 = fn (string $class, array $metadata): bool => str_contains($class, 'Card');
 
         // Arrange: Create second callback (filter by class name containing 'Dashboard')
-        $callback2 = fn(string $class, array $metadata): bool => str_contains($class, 'Dashboard');
+        $callback2 = fn (string $class, array $metadata): bool => str_contains($class, 'Dashboard');
 
         // Arrange: Create filters
         $filter1 = new CallbackFilter($callback1);
@@ -196,11 +197,11 @@ class CallbackFilterTest extends TestCase
     {
         // Arrange: Create a callback that throws an exception
         $callback = function (string $class, array $metadata): bool {
-            throw new \RuntimeException('Test exception');
+            throw new RuntimeException('Test exception');
         };
 
         // Arrange: Create the filter
-        $filter = new CallbackFilter($callback);
+        $callbackFilter = new CallbackFilter($callback);
 
         // Arrange: Get all classes with the attribute
         $allClasses = [
@@ -208,10 +209,10 @@ class CallbackFilterTest extends TestCase
         ];
 
         // Assert: Exception is thrown
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Test exception');
 
         // Act: Apply the filter (should throw exception)
-        $filter->apply($allClasses, $this->strategy);
+        $callbackFilter->apply($allClasses, $this->strategy);
     }
 }

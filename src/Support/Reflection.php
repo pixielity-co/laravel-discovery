@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Support;
 
-use Illuminate\Support\Reflector as BaseReflector;
-use Illuminate\Support\Str;
 use Closure;
 use Exception;
+use Illuminate\Support\Reflector as BaseReflector;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -60,8 +62,8 @@ class Reflection extends BaseReflector
      */
     public static function getFunction(Closure|string $function): ReflectionFunction
     {
-        if (is_string($function) && !function_exists($function)) {
-            throw new InvalidArgumentException(Str::format("Function '%s' does not exist.", $function));
+        if (is_string($function) && ! function_exists($function)) {
+            throw new InvalidArgumentException(sprintf("Function '%s' does not exist.", $function));
         }
 
         return new ReflectionFunction($function);
@@ -741,13 +743,13 @@ class Reflection extends BaseReflector
         $reflectionClass = static::getClass($classOrObject);
 
         return collect($reflectionClass->getTraitNames())  // Start with the base traits.
-            ->mapWithKeys(fn($trait): array => [$trait => $trait])  // Map traits into a keyed array for uniqueness.
+            ->mapWithKeys(fn ($trait): array => [$trait => $trait])  // Map traits into a keyed array for uniqueness.
             ->flatMap(function (string|object $trait): array {
                 // Get sub-traits for the current trait.
                 $subTraits = static::getClass($trait)->getTraitNames();
 
                 return [$trait => $trait] + collect($subTraits)  // Recursively process sub-traits.
-                    ->mapWithKeys(fn($subTrait): array => [$subTrait => $subTrait])
+                    ->mapWithKeys(fn ($subTrait): array => [$subTrait => $subTrait])
                     ->all();
             })
             ->keys()  // Extract only the keys (trait names).
@@ -848,7 +850,7 @@ class Reflection extends BaseReflector
         }
 
         // For class name strings, validate it's a valid class before using reflection
-        if (!class_exists($classOrObject) && !interface_exists($classOrObject) && !trait_exists($classOrObject)) {
+        if (! class_exists($classOrObject) && ! interface_exists($classOrObject) && ! trait_exists($classOrObject)) {
             return false;
         }
 
@@ -954,7 +956,7 @@ class Reflection extends BaseReflector
         // PHP does not provide ReflectionClassConstant, so this example assumes creating such objects.
         // Convert constants to ReflectionClassConstant objects (requires custom implementation if needed).
         return Arr::each(
-            fn(string $name): ReflectionClassConstant => new ReflectionClassConstant($reflectionClass->getName(), $name),
+            fn (string $name): ReflectionClassConstant => new ReflectionClassConstant($reflectionClass->getName(), $name),
             Arr::keys($constants),
         );
     }
@@ -1045,7 +1047,7 @@ class Reflection extends BaseReflector
             return null;
         } catch (ReflectionException) {
             throw new InvalidArgumentException(
-                Str::format("Method '%s' does not exist in class '", $methodName) . static::getClassName($classOrObject) . "'."
+                sprintf("Method '%s' does not exist in class '", $methodName) . static::getClassName($classOrObject) . "'."
             );
         }
     }
@@ -1080,7 +1082,7 @@ class Reflection extends BaseReflector
             return $mappedParameters;
         } catch (ReflectionException) {
             throw new InvalidArgumentException(
-                Str::format("Method '%s' does not exist in class '", $methodName) . static::getClassName($classOrObject) . "'."
+                sprintf("Method '%s' does not exist in class '", $methodName) . static::getClassName($classOrObject) . "'."
             );
         }
     }
@@ -1100,7 +1102,7 @@ class Reflection extends BaseReflector
         $attributes = static::getClass($classOrObject)->getAttributes($attributeName);
 
         // Return the attributes, filtering by name if specified
-        return $attributeName ? Arr::filter($attributes, fn(ReflectionAttribute $reflectionAttribute): bool => $reflectionAttribute->getName() === $attributeName) : $attributes;
+        return $attributeName ? Arr::filter($attributes, fn (ReflectionAttribute $reflectionAttribute): bool => $reflectionAttribute->getName() === $attributeName) : $attributes;
     }
 
     /**
@@ -1170,8 +1172,8 @@ class Reflection extends BaseReflector
         }
 
         // Validate that the class exists before creating ReflectionClass
-        if (!class_exists($className) && !interface_exists($className) && !trait_exists($className)) {
-            throw new InvalidArgumentException(Str::format("Class, interface, or trait '%s' does not exist.", $className));
+        if (! class_exists($className) && ! interface_exists($className) && ! trait_exists($className)) {
+            throw new InvalidArgumentException(sprintf("Class, interface, or trait '%s' does not exist.", $className));
         }
 
         // Otherwise, retrieve and cache the ReflectionClass instance

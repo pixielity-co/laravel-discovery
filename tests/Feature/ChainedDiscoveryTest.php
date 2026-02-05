@@ -1,17 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
 use Illuminate\Console\Command;
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestRouteAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestServiceAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestValidateAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Cards\AnalyticsCard;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Cards\DashboardCard;
-use Pixielity\Discovery\Tests\Fixtures\Classes\Services\TestService;
 use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
+use Pixielity\Discovery\Tests\Fixtures\Classes\Services\TestService;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * ChainedDiscovery Feature Tests.
@@ -47,8 +49,6 @@ class ChainedDiscoveryTest extends TestCase
 {
     /**
      * The discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
@@ -274,7 +274,7 @@ class ChainedDiscoveryTest extends TestCase
             ->directories([$servicesDirectory])
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->filter(fn($class): bool => !str_contains($class, 'Abstract'))
+            ->filter(fn ($class): bool => ! str_contains($class, 'Abstract'))
             ->get()->all();
 
         // Assert: Verify TestService was discovered

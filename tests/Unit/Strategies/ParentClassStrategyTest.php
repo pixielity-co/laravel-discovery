@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
@@ -33,8 +35,6 @@ class ParentClassStrategyTest extends TestCase
 {
     /**
      * The strategy factory for creating strategies.
-     *
-     * @var StrategyFactory
      */
     protected StrategyFactory $factory;
 
@@ -70,10 +70,10 @@ class ParentClassStrategyTest extends TestCase
     public function test_discovers_classes_extending_parent(): void
     {
         // Arrange: Create strategy for Command class
-        $strategy = new ParentClassStrategy(Command::class, $this->factory);
+        $parentClassStrategy = new ParentClassStrategy(Command::class, $this->factory);
 
         // Act: Discover classes extending Command
-        $results = $strategy->discover();
+        $results = $parentClassStrategy->discover();
 
         // Assert: Results should be an array
         $this->assertIsArray($results);
@@ -100,10 +100,10 @@ class ParentClassStrategyTest extends TestCase
     {
         // Arrange: Create strategy for AbstractService parent
         // Note: AbstractService itself is abstract, so we test its behavior
-        $strategy = new ParentClassStrategy(AbstractService::class, $this->factory);
+        $parentClassStrategy = new ParentClassStrategy(AbstractService::class, $this->factory);
 
         // Act: Discover classes
-        $results = $strategy->discover();
+        $results = $parentClassStrategy->discover();
 
         // Assert: Results should be an array
         $this->assertIsArray($results);
@@ -129,10 +129,10 @@ class ParentClassStrategyTest extends TestCase
     public function test_handles_multi_level_inheritance(): void
     {
         // Arrange: Create strategy for Command class
-        $strategy = new ParentClassStrategy(Command::class, $this->factory);
+        $parentClassStrategy = new ParentClassStrategy(Command::class, $this->factory);
 
         // Act: Discover classes
-        $results = $strategy->discover();
+        $results = $parentClassStrategy->discover();
 
         // Assert: Should handle multi-level inheritance
         $this->assertIsArray($results);
@@ -157,10 +157,10 @@ class ParentClassStrategyTest extends TestCase
     public function test_excludes_parent_class_itself(): void
     {
         // Arrange: Create strategy for Command class
-        $strategy = new ParentClassStrategy(Command::class, $this->factory);
+        $parentClassStrategy = new ParentClassStrategy(Command::class, $this->factory);
 
         // Act: Discover classes
-        $results = $strategy->discover();
+        $results = $parentClassStrategy->discover();
 
         // Assert: Parent class itself should not be in results
         $this->assertNotContains(Command::class, $results);
@@ -185,10 +185,10 @@ class ParentClassStrategyTest extends TestCase
     public function test_returns_empty_when_no_extensions(): void
     {
         // Arrange: Create strategy for non-existent parent class
-        $strategy = new ParentClassStrategy('App\NonExistent\ParentClass', $this->factory);
+        $parentClassStrategy = new ParentClassStrategy('App\NonExistent\ParentClass', $this->factory);
 
         // Act: Discover classes
-        $results = $strategy->discover();
+        $results = $parentClassStrategy->discover();
 
         // Assert: Should return empty array
         $this->assertIsArray($results);

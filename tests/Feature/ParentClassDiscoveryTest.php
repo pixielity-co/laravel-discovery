@@ -1,10 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
 use Illuminate\Console\Command;
-use Pixielity\Discovery\Tests\TestCase;
 use Pixielity\Discovery\DiscoveryManager;
+use Pixielity\Discovery\Support\Reflection;
+use Pixielity\Discovery\Tests\TestCase;
 
 /**
  * ParentClassDiscovery Feature Tests.
@@ -19,20 +22,16 @@ class ParentClassDiscoveryTest extends TestCase
 {
     /**
      * Discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
     /**
      * Set up the test environment.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->discovery = app(DiscoveryManager::class);
+        $this->discovery = resolve(DiscoveryManager::class);
     }
 
     /**
@@ -40,8 +39,6 @@ class ParentClassDiscoveryTest extends TestCase
      *
      * Verifies that all classes extending a specific parent class
      * are discovered and returned.
-     *
-     * @return void
      */
     public function test_discovers_class_extensions(): void
     {
@@ -49,13 +46,14 @@ class ParentClassDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->extending(Command::class)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should find extensions
         $this->assertIsArray($results);
 
         // Verify all results extend the parent class
-        foreach ($results as $class => $metadata) {
+        foreach (array_keys($results) as $class) {
             if (class_exists($class)) {
                 $this->assertTrue(is_subclass_of($class, Command::class));
             }
@@ -67,8 +65,6 @@ class ParentClassDiscoveryTest extends TestCase
      *
      * Verifies that parent class discovery can be combined with
      * directory filtering to narrow down search scope.
-     *
-     * @return void
      */
     public function test_combines_with_directory_filter(): void
     {
@@ -77,7 +73,8 @@ class ParentClassDiscoveryTest extends TestCase
             ->discovery
             ->directories(__DIR__ . '/../Fixtures/Classes/Commands')
             ->extending(Command::class)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should find extensions in directory
         $this->assertIsArray($results);
@@ -88,8 +85,6 @@ class ParentClassDiscoveryTest extends TestCase
      *
      * Verifies that when combined with instantiable validator,
      * only concrete extensions are returned (no abstracts).
-     *
-     * @return void
      */
     public function test_validates_instantiable(): void
     {
@@ -98,16 +93,16 @@ class ParentClassDiscoveryTest extends TestCase
             ->discovery
             ->extending(Command::class)
             ->instantiable()
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should only include concrete classes
         $this->assertIsArray($results);
 
         // Verify all results are instantiable
-        foreach ($results as $class => $metadata) {
+        foreach (array_keys($results) as $class) {
             if (class_exists($class)) {
-                $reflection = new \ReflectionClass($class);
-                $this->assertFalse($reflection->isAbstract());
+                $this->assertFalse(Reflection::isAbstract($class));
             }
         }
     }
@@ -117,8 +112,6 @@ class ParentClassDiscoveryTest extends TestCase
      *
      * Verifies that classes extending a parent through multiple
      * levels of inheritance are discovered correctly.
-     *
-     * @return void
      */
     public function test_handles_multi_level_inheritance(): void
     {
@@ -126,7 +119,8 @@ class ParentClassDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->extending(Command::class)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Should handle multi-level inheritance
         $this->assertIsArray($results);

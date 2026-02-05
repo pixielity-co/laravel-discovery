@@ -1,9 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
 use Illuminate\Console\Command;
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Support\Arr;
+use Pixielity\Discovery\Support\Reflection;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestCardAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestRouteAttribute;
@@ -14,12 +18,11 @@ use Pixielity\Discovery\Tests\Fixtures\Classes\Cards\DashboardCard;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Commands\TestCommand;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Controllers\AdminController;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Controllers\TestController;
+use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Services\TestService;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Settings\AppSettings;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Settings\UserSettings;
-use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * RealWorldScenarios Feature Tests.
@@ -43,8 +46,6 @@ class RealWorldScenariosTest extends TestCase
 {
     /**
      * The discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
@@ -159,14 +160,14 @@ class RealWorldScenariosTest extends TestCase
         // Verify we found routes from TestController
         $testControllerRoutes = Arr::filter(
             $routes,
-            fn($method) => str_contains($method, TestController::class)
+            fn ($method): bool => str_contains((string) $method, TestController::class)
         );
         $this->assertNotEmpty($testControllerRoutes);
 
         // Verify we found routes from AdminController
         $adminControllerRoutes = Arr::filter(
             $routes,
-            fn($method) => str_contains($method, AdminController::class)
+            fn ($method): bool => str_contains((string) $method, AdminController::class)
         );
         $this->assertNotEmpty($adminControllerRoutes);
 
@@ -285,9 +286,9 @@ class RealWorldScenariosTest extends TestCase
         $this->assertIsArray($enabledHealthChecks);
 
         // Verify metadata includes priority information
-        foreach ($healthChecks as $className => $metadata) {
-            $this->assertIsArray($metadata);
-            $this->assertArrayHasKey('attributes', $metadata);
+        foreach ($healthChecks as $healthCheck) {
+            $this->assertIsArray($healthCheck);
+            $this->assertArrayHasKey('attributes', $healthCheck);
         }
     }
 
@@ -336,8 +337,7 @@ class RealWorldScenariosTest extends TestCase
             $this->assertIsArray($metadata);
 
             // Verify the class actually extends Command
-            $reflection = new \ReflectionClass($className);
-            $this->assertTrue($reflection->isSubclassOf(Command::class));
+            $this->assertTrue(Reflection::isSubclassOf($className, Command::class));
         }
     }
 
@@ -444,8 +444,7 @@ class RealWorldScenariosTest extends TestCase
             $this->assertIsArray($metadata);
 
             // Verify the class actually implements the interface
-            $reflection = new \ReflectionClass($className);
-            $this->assertTrue($reflection->implementsInterface(ServiceInterface::class));
+            $this->assertTrue(Reflection::implements($className, ServiceInterface::class));
         }
     }
 }

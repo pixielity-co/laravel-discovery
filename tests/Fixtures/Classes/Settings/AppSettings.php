@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Fixtures\Classes\Settings;
 
@@ -35,8 +37,6 @@ class AppSettings
      *
      * Required field with length constraints (3-50 characters).
      * Used to test min/max validation rule extraction.
-     *
-     * @var string
      */
     #[TestValidateAttribute(required: true, min: 3, max: 50)]
     public string $name;
@@ -46,8 +46,6 @@ class AppSettings
      *
      * Required field with email validation.
      * Used to test email validation rule detection.
-     *
-     * @var string
      */
     #[TestValidateAttribute(required: true, email: true)]
     public string $email;
@@ -57,8 +55,6 @@ class AppSettings
      *
      * Optional field with no additional validation.
      * Used to test optional property handling.
-     *
-     * @var string|null
      */
     #[TestValidateAttribute(required: false)]
     public ?string $url = null;
@@ -68,8 +64,6 @@ class AppSettings
      *
      * Boolean property with no validation attribute.
      * Used to test properties without attributes.
-     *
-     * @var bool
      */
     public bool $debug = false;
 }

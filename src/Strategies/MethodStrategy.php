@@ -122,7 +122,8 @@ class MethodStrategy implements DiscoveryStrategyInterface
             'method' => $method,
             'class' => $class,
             'name' => $methodName,
-            'attribute' => $this->attributeClass,
+            'attribute' => null,
+            'attributeClass' => $this->attributeClass,
         ];
 
         // Try to get attribute instance
@@ -132,7 +133,7 @@ class MethodStrategy implements DiscoveryStrategyInterface
 
                 foreach ($targetMethods as $targetMethod) {
                     if ($targetMethod->class === $class && $targetMethod->name === $methodName) {
-                        $metadata['instance'] = $targetMethod->attribute;
+                        $metadata['attribute'] = $targetMethod->attribute;
 
                         break;
                     }

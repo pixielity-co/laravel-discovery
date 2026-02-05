@@ -295,8 +295,8 @@ public function runHealthChecks(): array
 
 ### Get Help
 
-- 💬 [GitHub Discussions](https://github.com/pixielity/laravel-discovery/discussions)
-- 🐛 [Report Issues](https://github.com/pixielity/laravel-discovery/issues)
+- 💬 [GitHub Discussions](https://github.com/pixielity-co/laravel-discovery/discussions)
+- 🐛 [Report Issues](https://github.com/pixielity-co/laravel-discovery/issues)
 - 📧 [Email Support](mailto:support@pixielity.com)
 
 ---

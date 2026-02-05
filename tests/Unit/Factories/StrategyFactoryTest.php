@@ -1,7 +1,10 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Factories;
 
+use Illuminate\Console\Command;
 use Illuminate\Contracts\Foundation\Application;
 use Pixielity\Discovery\Contracts\NamespaceResolverInterface;
 use Pixielity\Discovery\Factories\StrategyFactory;
@@ -38,15 +41,11 @@ class StrategyFactoryTest extends TestCase
 {
     /**
      * The strategy factory instance being tested.
-     *
-     * @var StrategyFactory
      */
     protected StrategyFactory $factory;
 
     /**
      * The namespace resolver mock.
-     *
-     * @var NamespaceResolverInterface
      */
     protected NamespaceResolverInterface $namespaceResolver;
 
@@ -93,13 +92,13 @@ class StrategyFactoryTest extends TestCase
         $attributeClass = TestAttribute::class;
 
         // Act: Create the attribute strategy
-        $strategy = $this->factory->createAttributeStrategy($attributeClass);
+        $discoveryStrategy = $this->factory->createAttributeStrategy($attributeClass);
 
         // Assert: Should return AttributeStrategy instance
-        $this->assertInstanceOf(AttributeStrategy::class, $strategy);
+        $this->assertInstanceOf(AttributeStrategy::class, $discoveryStrategy);
 
         // Assert: Strategy should be usable
-        $results = $strategy->discover();
+        $results = $discoveryStrategy->discover();
         $this->assertIsArray($results);
     }
 
@@ -125,13 +124,13 @@ class StrategyFactoryTest extends TestCase
         $directory = __DIR__ . '/../../Fixtures/Classes/Cards';
 
         // Act: Create the directory strategy
-        $strategy = $this->factory->createDirectoryStrategy($directory);
+        $discoveryStrategy = $this->factory->createDirectoryStrategy($directory);
 
         // Assert: Should return DirectoryStrategy instance
-        $this->assertInstanceOf(DirectoryStrategy::class, $strategy);
+        $this->assertInstanceOf(DirectoryStrategy::class, $discoveryStrategy);
 
         // Assert: Strategy should be usable
-        $results = $strategy->discover();
+        $results = $discoveryStrategy->discover();
         $this->assertIsArray($results);
     }
 
@@ -157,13 +156,13 @@ class StrategyFactoryTest extends TestCase
         $interface = ServiceInterface::class;
 
         // Act: Create the interface strategy
-        $strategy = $this->factory->createInterfaceStrategy($interface);
+        $discoveryStrategy = $this->factory->createInterfaceStrategy($interface);
 
         // Assert: Should return InterfaceStrategy instance
-        $this->assertInstanceOf(InterfaceStrategy::class, $strategy);
+        $this->assertInstanceOf(InterfaceStrategy::class, $discoveryStrategy);
 
         // Assert: Strategy should be usable
-        $results = $strategy->discover();
+        $results = $discoveryStrategy->discover();
         $this->assertIsArray($results);
     }
 
@@ -186,16 +185,16 @@ class StrategyFactoryTest extends TestCase
     public function test_creates_parent_class_strategy(): void
     {
         // Arrange: Define the parent class to discover
-        $parentClass = \Illuminate\Console\Command::class;
+        $parentClass = Command::class;
 
         // Act: Create the parent class strategy
-        $strategy = $this->factory->createParentClassStrategy($parentClass);
+        $discoveryStrategy = $this->factory->createParentClassStrategy($parentClass);
 
         // Assert: Should return ParentClassStrategy instance
-        $this->assertInstanceOf(ParentClassStrategy::class, $strategy);
+        $this->assertInstanceOf(ParentClassStrategy::class, $discoveryStrategy);
 
         // Assert: Strategy should be usable
-        $results = $strategy->discover();
+        $results = $discoveryStrategy->discover();
         $this->assertIsArray($results);
     }
 
@@ -220,13 +219,13 @@ class StrategyFactoryTest extends TestCase
         $attributeClass = TestAttribute::class;
 
         // Act: Create the method strategy
-        $strategy = $this->factory->createMethodStrategy($attributeClass);
+        $discoveryStrategy = $this->factory->createMethodStrategy($attributeClass);
 
         // Assert: Should return MethodStrategy instance
-        $this->assertInstanceOf(MethodStrategy::class, $strategy);
+        $this->assertInstanceOf(MethodStrategy::class, $discoveryStrategy);
 
         // Assert: Strategy should be usable
-        $results = $strategy->discover();
+        $results = $discoveryStrategy->discover();
         $this->assertIsArray($results);
     }
 
@@ -251,13 +250,13 @@ class StrategyFactoryTest extends TestCase
         $attributeClass = TestAttribute::class;
 
         // Act: Create the property strategy
-        $strategy = $this->factory->createPropertyStrategy($attributeClass);
+        $discoveryStrategy = $this->factory->createPropertyStrategy($attributeClass);
 
         // Assert: Should return PropertyStrategy instance
-        $this->assertInstanceOf(PropertyStrategy::class, $strategy);
+        $this->assertInstanceOf(PropertyStrategy::class, $discoveryStrategy);
 
         // Assert: Strategy should be usable
-        $results = $strategy->discover();
+        $results = $discoveryStrategy->discover();
         $this->assertIsArray($results);
     }
 
@@ -283,19 +282,19 @@ class StrategyFactoryTest extends TestCase
         $directory = __DIR__ . '/../../Fixtures/Classes/Services';
 
         // Act: Create the directory strategy (requires dependencies)
-        $strategy = $this->factory->createDirectoryStrategy($directory);
+        $discoveryStrategy = $this->factory->createDirectoryStrategy($directory);
 
         // Assert: Strategy should be created successfully
-        $this->assertInstanceOf(DirectoryStrategy::class, $strategy);
+        $this->assertInstanceOf(DirectoryStrategy::class, $discoveryStrategy);
 
         // Act: Use the strategy to discover classes
-        $results = $strategy->discover();
+        $results = $discoveryStrategy->discover();
 
         // Assert: Discovery should work (proving dependencies are injected)
         $this->assertIsArray($results);
 
         // Assert: If classes are found, they should have proper metadata
-        if (!empty($results)) {
+        if ($results !== []) {
             $firstResult = reset($results);
             $this->assertIsArray($firstResult);
         }

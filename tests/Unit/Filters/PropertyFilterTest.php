@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Filters;
 
@@ -27,8 +29,6 @@ class PropertyFilterTest extends TestCase
 {
     /**
      * The attribute strategy instance for testing.
-     *
-     * @var AttributeStrategy
      */
     protected AttributeStrategy $strategy;
 
@@ -63,13 +63,13 @@ class PropertyFilterTest extends TestCase
     public function test_filters_by_exact_match(): void
     {
         // Arrange: Create filter for enabled = true
-        $filter = new PropertyFilter('enabled', true);
+        $propertyFilter = new PropertyFilter('enabled', true);
 
         // Arrange: Discover all classes with the attribute
         $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
-        $filtered = $filter->apply($allClasses, $this->strategy);
+        $filtered = $propertyFilter->apply($allClasses, $this->strategy);
 
         // Assert: Only enabled cards should remain
         $this->assertContains(DashboardCard::class, $filtered);
@@ -94,13 +94,13 @@ class PropertyFilterTest extends TestCase
     public function test_filters_by_not_equal(): void
     {
         // Arrange: Create filter for enabled = false
-        $filter = new PropertyFilter('enabled', false);
+        $propertyFilter = new PropertyFilter('enabled', false);
 
         // Arrange: Discover all classes with the attribute
         $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
-        $filtered = $filter->apply($allClasses, $this->strategy);
+        $filtered = $propertyFilter->apply($allClasses, $this->strategy);
 
         // Assert: Only disabled cards should remain
         $this->assertNotContains(DashboardCard::class, $filtered);
@@ -125,13 +125,13 @@ class PropertyFilterTest extends TestCase
     public function test_filters_by_greater_than(): void
     {
         // Arrange: Create filter for priority = 10 (high priority)
-        $filter = new PropertyFilter('priority', 10);
+        $propertyFilter = new PropertyFilter('priority', 10);
 
         // Arrange: Discover all classes with the attribute
         $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
-        $filtered = $filter->apply($allClasses, $this->strategy);
+        $filtered = $propertyFilter->apply($allClasses, $this->strategy);
 
         // Assert: Only high priority cards should remain
         $this->assertContains(DashboardCard::class, $filtered);
@@ -156,13 +156,13 @@ class PropertyFilterTest extends TestCase
     public function test_filters_by_less_than(): void
     {
         // Arrange: Create filter for priority = 5 (lower priority)
-        $filter = new PropertyFilter('priority', 5);
+        $propertyFilter = new PropertyFilter('priority', 5);
 
         // Arrange: Discover all classes with the attribute
         $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
-        $filtered = $filter->apply($allClasses, $this->strategy);
+        $filtered = $propertyFilter->apply($allClasses, $this->strategy);
 
         // Assert: Only lower priority cards should remain
         $this->assertNotContains(DashboardCard::class, $filtered);
@@ -187,13 +187,13 @@ class PropertyFilterTest extends TestCase
     public function test_filters_by_contains(): void
     {
         // Arrange: Create filter for group = 'main'
-        $filter = new PropertyFilter('group', 'main');
+        $propertyFilter = new PropertyFilter('group', 'main');
 
         // Arrange: Discover all classes with the attribute
         $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
-        $filtered = $filter->apply($allClasses, $this->strategy);
+        $filtered = $propertyFilter->apply($allClasses, $this->strategy);
 
         // Assert: Only main group cards should remain
         $this->assertContains(DashboardCard::class, $filtered);
@@ -217,13 +217,6 @@ class PropertyFilterTest extends TestCase
      */
     public function test_filters_by_in_array(): void
     {
-        // Arrange: We can't directly filter by array contains with PropertyFilter
-        // But we can test that the filter works with array properties
-        $allClasses = [
-            DashboardCard::class,
-            AnalyticsCard::class,
-        ];
-
         // Act: Get metadata to verify tags are arrays
         $dashboardMetadata = $this->strategy->getMetadata(DashboardCard::class);
         $analyticsMetadata = $this->strategy->getMetadata(AnalyticsCard::class);
@@ -252,13 +245,13 @@ class PropertyFilterTest extends TestCase
     public function test_handles_nested_properties(): void
     {
         // Arrange: Create filter for non-existent property
-        $filter = new PropertyFilter('nonExistentProperty', 'value');
+        $propertyFilter = new PropertyFilter('nonExistentProperty', 'value');
 
         // Arrange: Discover all classes with the attribute
         $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
-        $filtered = $filter->apply($allClasses, $this->strategy);
+        $filtered = $propertyFilter->apply($allClasses, $this->strategy);
 
         // Assert: No classes should match
         $this->assertEmpty($filtered);
@@ -281,13 +274,13 @@ class PropertyFilterTest extends TestCase
     public function test_handles_null_values(): void
     {
         // Arrange: Create filter for null value
-        $filter = new PropertyFilter('group', null);
+        $propertyFilter = new PropertyFilter('group', null);
 
         // Arrange: Discover all classes with the attribute
         $allClasses = $this->strategy->discover();
 
         // Act: Apply the filter
-        $filtered = $filter->apply($allClasses, $this->strategy);
+        $filtered = $propertyFilter->apply($allClasses, $this->strategy);
 
         // Assert: No classes should match (both have non-null groups)
         $this->assertEmpty($filtered);

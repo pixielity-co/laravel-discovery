@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Support;
 
@@ -129,7 +131,7 @@ class Arr extends BaseArr
     public static function flip(array $array): array
     {
         // Filter the array to include only string or integer values.
-        $filteredArray = array_filter($array, fn($value): bool => is_string($value) || is_int($value));
+        $filteredArray = array_filter($array, fn ($value): bool => is_string($value) || is_int($value));
 
         // Perform the flip operation on the filtered array.
         return array_flip($filteredArray);
@@ -478,7 +480,7 @@ class Arr extends BaseArr
      */
     public static function any(array $array, callable $callback): bool
     {
-        return array_any($array, fn($value, $key) => $callback($value, $key));
+        return array_any($array, fn ($value, $key) => $callback($value, $key));
     }
 
     /**
@@ -490,7 +492,7 @@ class Arr extends BaseArr
      */
     public static function all(array $array, callable $callback): bool
     {
-        return array_all($array, fn($value, $key) => $callback($value, $key));
+        return array_all($array, fn ($value, $key) => $callback($value, $key));
     }
 
     /**

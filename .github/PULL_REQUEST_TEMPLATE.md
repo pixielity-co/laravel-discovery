@@ -25,9 +25,9 @@ Related to #
 
 <!-- List the specific changes made in this PR -->
 
-- 
-- 
-- 
+-
+-
+-
 
 ## Testing
 
@@ -43,7 +43,7 @@ Related to #
 
 <!-- If applicable, mention test coverage changes -->
 
-- Added tests for: 
+- Added tests for:
 - Coverage: X%
 
 ## Breaking Changes

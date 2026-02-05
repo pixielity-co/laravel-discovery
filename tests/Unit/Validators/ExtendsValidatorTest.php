@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Validators;
 
@@ -43,10 +45,10 @@ class ExtendsValidatorTest extends TestCase
     public function test_validates_classes_extending_parent(): void
     {
         // Arrange: Create validator for Command class
-        $validator = new ExtendsValidator(Command::class);
+        $extendsValidator = new ExtendsValidator(Command::class);
 
         // Act: Validate TestCommand (extends Command)
-        $result = $validator->validate(TestCommand::class);
+        $result = $extendsValidator->validate(TestCommand::class);
 
         // Assert: Validation should pass
         $this->assertTrue($result);
@@ -69,10 +71,10 @@ class ExtendsValidatorTest extends TestCase
     public function test_rejects_classes_not_extending_parent(): void
     {
         // Arrange: Create validator for Command class
-        $validator = new ExtendsValidator(Command::class);
+        $extendsValidator = new ExtendsValidator(Command::class);
 
         // Act: Validate DashboardCard (does not extend Command)
-        $result = $validator->validate(DashboardCard::class);
+        $result = $extendsValidator->validate(DashboardCard::class);
 
         // Assert: Validation should fail
         $this->assertFalse($result);
@@ -133,10 +135,10 @@ class ExtendsValidatorTest extends TestCase
     public function test_handles_non_existent_parent_class(): void
     {
         // Arrange: Create validator for non-existent parent class
-        $validator = new ExtendsValidator('App\NonExistent\ParentClass');
+        $extendsValidator = new ExtendsValidator('App\NonExistent\ParentClass');
 
         // Act: Validate TestCommand
-        $result = $validator->validate(TestCommand::class);
+        $result = $extendsValidator->validate(TestCommand::class);
 
         // Assert: Validation should fail gracefully
         $this->assertFalse($result);

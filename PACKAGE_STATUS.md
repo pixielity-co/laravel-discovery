@@ -117,7 +117,7 @@ git push origin v1.0.0
 ### 3. Submit to Packagist
 
 1. Go to https://packagist.org/packages/submit
-2. Enter: `https://github.com/pixielity/laravel-discovery`
+2. Enter: `https://github.com/pixielity-co/laravel-discovery`
 3. Click "Check" then "Submit"
 
 ### 4. Configure Auto-Update

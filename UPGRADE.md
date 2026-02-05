@@ -74,5 +74,5 @@ This package follows [Semantic Versioning](https://semver.org/):
 ## Getting Help
 
 - 📧 Email: support@pixielity.com
-- 🐛 Issues: [GitHub Issues](https://github.com/pixielity/laravel-discovery/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/pixielity/laravel-discovery/discussions)
+- 🐛 Issues: [GitHub Issues](https://github.com/pixielity-co/laravel-discovery/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/pixielity-co/laravel-discovery/discussions)

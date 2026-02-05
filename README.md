@@ -8,7 +8,7 @@
 
 [![Latest Version](https://img.shields.io/packagist/v/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
 [![Total Downloads](https://img.shields.io/packagist/dt/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
-[![Tests](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/pixielity/laravel-discovery/actions/workflows/tests.yml)
+[![Tests](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat-square)](https://phpstan.org/)
 [![License](https://img.shields.io/packagist/l/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
 [![PHP Version](https://img.shields.io/packagist/php-v/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
@@ -1579,7 +1579,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for deta
 
 ```bash
 # Clone repository
-git clone https://github.com/pixielity/laravel-discovery.git
+git clone https://github.com/pixielity-co/laravel-discovery.git
 cd discovery
 
 # Install dependencies
@@ -1626,7 +1626,7 @@ This package stands on the shoulders of giants. Special thanks to:
 
 ### Community
 
-- All our [contributors](https://github.com/pixielity/laravel-discovery/graphs/contributors)
+- All our [contributors](https://github.com/pixielity-co/laravel-discovery/graphs/contributors)
 - The Laravel community for feedback and support
 - Everyone who reported issues and suggested improvements
 
@@ -1673,21 +1673,21 @@ SOFTWARE.
 
 ### Documentation
 
-- 📖 [Full Documentation](https://github.com/pixielity/laravel-discovery/wiki)
+- 📖 [Full Documentation](https://github.com/pixielity-co/laravel-discovery/wiki)
 - 📚 [API Reference](.docs/API.md)
 - 🔄 [Upgrade Guide](UPGRADE.md)
 - 📝 [Changelog](CHANGELOG.md)
 
 ### Community
 
-- 💬 [GitHub Discussions](https://github.com/pixielity/laravel-discovery/discussions) - Ask questions, share ideas
-- 🐛 [GitHub Issues](https://github.com/pixielity/laravel-discovery/issues) - Report bugs, request features
+- 💬 [GitHub Discussions](https://github.com/pixielity-co/laravel-discovery/discussions) - Ask questions, share ideas
+- 🐛 [GitHub Issues](https://github.com/pixielity-co/laravel-discovery/issues) - Report bugs, request features
 - 📧 [Email Support](mailto:support@pixielity.com) - Direct support
 
 ### Stay Updated
 
-- ⭐ [Star on GitHub](https://github.com/pixielity/laravel-discovery)
-- 👀 [Watch Releases](https://github.com/pixielity/laravel-discovery/releases)
+- ⭐ [Star on GitHub](https://github.com/pixielity-co/laravel-discovery)
+- 👀 [Watch Releases](https://github.com/pixielity-co/laravel-discovery/releases)
 - 🐦 [Follow on Twitter](https://twitter.com/pixielity)
 
 ---

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
@@ -48,10 +50,10 @@ class PropertyStrategyTest extends TestCase
     public function test_discovers_properties_with_attribute(): void
     {
         // Arrange: Create strategy for TestValidateAttribute
-        $strategy = new PropertyStrategy(TestValidateAttribute::class);
+        $propertyStrategy = new PropertyStrategy(TestValidateAttribute::class);
 
         // Act: Discover properties with the attribute
-        $results = $strategy->discover();
+        $results = $propertyStrategy->discover();
 
         // Assert: Results should be an array
         $this->assertIsArray($results);
@@ -76,15 +78,15 @@ class PropertyStrategyTest extends TestCase
     public function test_returns_property_metadata(): void
     {
         // Arrange: Create strategy
-        $strategy = new PropertyStrategy(TestValidateAttribute::class);
+        $propertyStrategy = new PropertyStrategy(TestValidateAttribute::class);
 
         // Act: Discover properties
-        $results = $strategy->discover();
+        $results = $propertyStrategy->discover();
 
         // Assert: If properties found, verify metadata
-        if (!empty($results)) {
+        if ($results !== []) {
             $firstProperty = $results[0];
-            $metadata = $strategy->getMetadata($firstProperty);
+            $metadata = $propertyStrategy->getMetadata($firstProperty);
 
             $this->assertIsArray($metadata);
             $this->assertArrayHasKey('property', $metadata);
@@ -114,18 +116,18 @@ class PropertyStrategyTest extends TestCase
     public function test_includes_class_and_property_name(): void
     {
         // Arrange: Create strategy
-        $strategy = new PropertyStrategy(TestValidateAttribute::class);
+        $propertyStrategy = new PropertyStrategy(TestValidateAttribute::class);
 
         // Act: Discover properties
-        $results = $strategy->discover();
+        $results = $propertyStrategy->discover();
 
         // Assert: Verify property identifier format
-        foreach ($results as $property) {
-            $this->assertIsString($property);
-            $this->assertStringContainsString('::', $property);
+        foreach ($results as $result) {
+            $this->assertIsString($result);
+            $this->assertStringContainsString('::', $result);
 
             // Verify we can parse class and property name
-            [$class, $propertyName] = explode('::', $property, 2);
+            [$class, $propertyName] = explode('::', $result, 2);
             $this->assertNotEmpty($class);
             $this->assertNotEmpty($propertyName);
         }
@@ -148,29 +150,21 @@ class PropertyStrategyTest extends TestCase
     public function test_handles_multiple_properties_in_same_class(): void
     {
         // Arrange: Create strategy
-        $strategy = new PropertyStrategy(TestValidateAttribute::class);
+        $propertyStrategy = new PropertyStrategy(TestValidateAttribute::class);
 
         // Act: Discover properties
-        $results = $strategy->discover();
+        $results = $propertyStrategy->discover();
 
         // Assert: Should handle multiple properties
         $this->assertIsArray($results);
 
         // Group by class to check for multiple properties per class
         $propertiesByClass = [];
-        foreach ($results as $property) {
-            [$class] = explode('::', $property, 2);
+        foreach ($results as $result) {
+            [$class] = explode('::', $result, 2);
             $propertiesByClass[$class] = ($propertiesByClass[$class] ?? 0) + 1;
         }
-
-        // At least one class should have multiple properties
-        $hasMultipleProperties = false;
-        foreach ($propertiesByClass as $count) {
-            if ($count > 1) {
-                $hasMultipleProperties = true;
-                break;
-            }
-        }
+        array_any($propertiesByClass, fn ($count): bool => $count > 1);
 
         // This assertion may vary based on fixtures
         $this->assertIsArray($propertiesByClass);
@@ -193,10 +187,10 @@ class PropertyStrategyTest extends TestCase
     public function test_handles_static_properties(): void
     {
         // Arrange: Create strategy
-        $strategy = new PropertyStrategy(TestValidateAttribute::class);
+        $propertyStrategy = new PropertyStrategy(TestValidateAttribute::class);
 
         // Act: Discover properties
-        $results = $strategy->discover();
+        $results = $propertyStrategy->discover();
 
         // Assert: Should discover properties regardless of static modifier
         $this->assertIsArray($results);
@@ -219,10 +213,10 @@ class PropertyStrategyTest extends TestCase
     public function test_handles_private_protected_public_properties(): void
     {
         // Arrange: Create strategy
-        $strategy = new PropertyStrategy(TestValidateAttribute::class);
+        $propertyStrategy = new PropertyStrategy(TestValidateAttribute::class);
 
         // Act: Discover properties
-        $results = $strategy->discover();
+        $results = $propertyStrategy->discover();
 
         // Assert: Should discover properties regardless of visibility
         $this->assertIsArray($results);
@@ -245,10 +239,10 @@ class PropertyStrategyTest extends TestCase
     public function test_handles_typed_properties(): void
     {
         // Arrange: Create strategy
-        $strategy = new PropertyStrategy(TestValidateAttribute::class);
+        $propertyStrategy = new PropertyStrategy(TestValidateAttribute::class);
 
         // Act: Discover properties
-        $results = $strategy->discover();
+        $results = $propertyStrategy->discover();
 
         // Assert: Should discover typed properties
         $this->assertIsArray($results);

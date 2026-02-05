@@ -102,6 +102,7 @@ Follow the [Conventional Commits](https://www.conventionalcommits.org/) specific
 ```
 
 **Types:**
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -170,9 +171,9 @@ class DiscoveryBuilderTest extends TestCase
     public function it_can_discover_classes_by_attribute(): void
     {
         $builder = new DiscoveryBuilder();
-        
+
         $result = $builder->attribute(MyAttribute::class)->get();
-        
+
         $this->assertIsArray($result);
         $this->assertNotEmpty($result);
     }
@@ -233,19 +234,19 @@ git push origin your-branch
 ```
 
 3. **Create a Pull Request** on GitHub
-   - Use a clear, descriptive title
-   - Fill out the PR template completely
-   - Link related issues
-   - Add screenshots if applicable
+    - Use a clear, descriptive title
+    - Fill out the PR template completely
+    - Link related issues
+    - Add screenshots if applicable
 
 4. **Address review feedback**
-   - Respond to all comments
-   - Make requested changes
-   - Push updates to your branch
+    - Respond to all comments
+    - Make requested changes
+    - Push updates to your branch
 
 5. **Wait for approval**
-   - At least one maintainer approval required
-   - All CI checks must pass
+    - At least one maintainer approval required
+    - All CI checks must pass
 
 ### PR Requirements
 
@@ -279,13 +280,14 @@ We follow [Semantic Versioning](https://semver.org/):
 ## Questions?
 
 - **Documentation**: Check the [docs](./docs) folder
-- **Issues**: Search [existing issues](https://github.com/pixielity/laravel-discovery/issues)
-- **Discussions**: Start a [discussion](https://github.com/pixielity/laravel-discovery/discussions)
+- **Issues**: Search [existing issues](https://github.com/pixielity-co/laravel-discovery/issues)
+- **Discussions**: Start a [discussion](https://github.com/pixielity-co/laravel-discovery/discussions)
 - **Email**: dev@pixielity.com
 
 ## Recognition
 
 Contributors will be recognized in:
+
 - `CHANGELOG.md` for their contributions
 - GitHub contributors page
 - Release notes

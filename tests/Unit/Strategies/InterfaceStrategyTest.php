@@ -1,12 +1,14 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
 use Pixielity\Discovery\Factories\StrategyFactory;
 use Pixielity\Discovery\Strategies\InterfaceStrategy;
+use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Services\AbstractService;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Services\TestService;
-use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\TestCase;
 
 /**
@@ -33,8 +35,6 @@ class InterfaceStrategyTest extends TestCase
 {
     /**
      * The strategy factory for creating strategies.
-     *
-     * @var StrategyFactory
      */
     protected StrategyFactory $factory;
 
@@ -70,10 +70,10 @@ class InterfaceStrategyTest extends TestCase
     public function test_discovers_classes_implementing_interface(): void
     {
         // Arrange: Create strategy for ServiceInterface
-        $strategy = new InterfaceStrategy(ServiceInterface::class, $this->factory);
+        $interfaceStrategy = new InterfaceStrategy(ServiceInterface::class, $this->factory);
 
         // Act: Discover classes implementing the interface
-        $results = $strategy->discover();
+        $results = $interfaceStrategy->discover();
 
         // Assert: Results should be an array
         $this->assertIsArray($results);
@@ -101,10 +101,10 @@ class InterfaceStrategyTest extends TestCase
     public function test_excludes_interfaces_themselves(): void
     {
         // Arrange: Create strategy for ServiceInterface
-        $strategy = new InterfaceStrategy(ServiceInterface::class, $this->factory);
+        $interfaceStrategy = new InterfaceStrategy(ServiceInterface::class, $this->factory);
 
         // Act: Discover classes
-        $results = $strategy->discover();
+        $results = $interfaceStrategy->discover();
 
         // Assert: Interface itself should not be in results
         $this->assertNotContains(ServiceInterface::class, $results);
@@ -127,10 +127,10 @@ class InterfaceStrategyTest extends TestCase
     public function test_handles_multiple_interfaces(): void
     {
         // Arrange: Create strategy for ServiceInterface
-        $strategy = new InterfaceStrategy(ServiceInterface::class, $this->factory);
+        $interfaceStrategy = new InterfaceStrategy(ServiceInterface::class, $this->factory);
 
         // Act: Discover classes
-        $results = $strategy->discover();
+        $results = $interfaceStrategy->discover();
 
         // Assert: Should find classes even if they implement multiple interfaces
         $this->assertIsArray($results);
@@ -154,10 +154,10 @@ class InterfaceStrategyTest extends TestCase
     public function test_handles_nested_interface_inheritance(): void
     {
         // Arrange: Create strategy for ServiceInterface
-        $strategy = new InterfaceStrategy(ServiceInterface::class, $this->factory);
+        $interfaceStrategy = new InterfaceStrategy(ServiceInterface::class, $this->factory);
 
         // Act: Discover classes
-        $results = $strategy->discover();
+        $results = $interfaceStrategy->discover();
 
         // Assert: Should handle nested inheritance
         $this->assertIsArray($results);
@@ -183,10 +183,10 @@ class InterfaceStrategyTest extends TestCase
     public function test_returns_empty_when_no_implementations(): void
     {
         // Arrange: Create strategy for non-existent interface
-        $strategy = new InterfaceStrategy('App\NonExistent\Interface', $this->factory);
+        $interfaceStrategy = new InterfaceStrategy('App\NonExistent\Interface', $this->factory);
 
         // Act: Discover classes
-        $results = $strategy->discover();
+        $results = $interfaceStrategy->discover();
 
         // Assert: Should return empty array
         $this->assertIsArray($results);

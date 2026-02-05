@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
@@ -32,8 +34,6 @@ class DirectoryStrategyTest extends TestCase
 {
     /**
      * The path to test fixtures.
-     *
-     * @var string
      */
     protected string $fixturesPath;
 
@@ -327,7 +327,7 @@ class DirectoryStrategyTest extends TestCase
     {
         // Arrange: Create a temporary empty directory
         $emptyDir = sys_get_temp_dir() . '/empty_test_dir';
-        if (!is_dir($emptyDir)) {
+        if (! is_dir($emptyDir)) {
             mkdir($emptyDir);
         }
 

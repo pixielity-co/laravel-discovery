@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Validators;
 
+use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Services\AbstractService;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Services\TestService;
-use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\TestCase;
 use Pixielity\Discovery\Validators\InstantiableValidator;
 
@@ -25,8 +27,6 @@ class InstantiableValidatorTest extends TestCase
 {
     /**
      * The instantiable validator instance.
-     *
-     * @var InstantiableValidator
      */
     protected InstantiableValidator $validator;
 

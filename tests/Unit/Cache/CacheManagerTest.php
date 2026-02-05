@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Cache;
 
+use Override;
 use Pixielity\Discovery\Cache\CacheManager;
 use Pixielity\Discovery\Tests\TestCase;
-use Override;
 
 /**
  * CacheManager Unit Tests.
@@ -30,15 +32,11 @@ class CacheManagerTest extends TestCase
 {
     /**
      * The cache manager instance being tested.
-     *
-     * @var CacheManager
      */
     protected CacheManager $cacheManager;
 
     /**
      * The temporary cache directory path.
-     *
-     * @var string
      */
     protected string $cachePath;
 
@@ -289,7 +287,7 @@ class CacheManagerTest extends TestCase
     public function test_handles_invalid_cache_data_gracefully(): void
     {
         // Arrange: Ensure cache directory exists
-        if (!is_dir($this->cachePath)) {
+        if (! is_dir($this->cachePath)) {
             mkdir($this->cachePath, 0777, true);
         }
 

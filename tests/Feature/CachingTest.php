@@ -1,10 +1,12 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestCardAttribute;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * Caching Feature Tests.
@@ -19,20 +21,16 @@ class CachingTest extends TestCase
 {
     /**
      * Discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
     /**
      * Set up the test environment.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->discovery = app(DiscoveryManager::class);
+        $this->discovery = resolve(DiscoveryManager::class);
 
         // Enable caching for tests
         config()->set('discovery.cache.enabled', true);
@@ -43,8 +41,6 @@ class CachingTest extends TestCase
      *
      * Verifies that when caching is enabled, discovery results
      * are stored in the cache for future retrieval.
-     *
-     * @return void
      */
     public function test_caches_discovery_results(): void
     {
@@ -64,8 +60,6 @@ class CachingTest extends TestCase
      *
      * Verifies that subsequent calls with the same cache key
      * return the cached results instead of re-discovering.
-     *
-     * @return void
      */
     public function test_returns_cached_results_on_second_call(): void
     {
@@ -92,8 +86,6 @@ class CachingTest extends TestCase
      *
      * Verifies that different cache keys store separate results
      * and don't interfere with each other.
-     *
-     * @return void
      */
     public function test_cache_key_uniqueness(): void
     {
@@ -123,8 +115,6 @@ class CachingTest extends TestCase
      *
      * Verifies that calling clearCache() removes cached results
      * and forces fresh discovery on next call.
-     *
-     * @return void
      */
     public function test_clear_cache_invalidates_results(): void
     {
@@ -147,8 +137,6 @@ class CachingTest extends TestCase
      *
      * Verifies that when caching is disabled in config,
      * results are not cached even when cached() is called.
-     *
-     * @return void
      */
     public function test_cache_respects_config(): void
     {
@@ -171,13 +159,11 @@ class CachingTest extends TestCase
      *
      * Verifies that caching is automatically disabled in
      * local development environment.
-     *
-     * @return void
      */
     public function test_cache_disabled_in_local_environment(): void
     {
         // Arrange: Set environment to local
-        app()->detectEnvironment(fn() => 'local');
+        app()->detectEnvironment(fn (): string => 'local');
 
         // Act: Perform discovery
         $results = $this

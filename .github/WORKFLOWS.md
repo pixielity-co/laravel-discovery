@@ -31,12 +31,14 @@ This directory contains all GitHub-specific configuration for the Laravel Discov
 **Triggers:** Push to main/develop, PRs, weekly schedule
 
 **Matrix:**
+
 - OS: Ubuntu, Windows, macOS
 - PHP: 8.3, 8.4
-- Laravel: 11.*, 12.*
+- Laravel: 11._, 12._
 - Stability: prefer-lowest, prefer-stable
 
 **Features:**
+
 - Multi-platform testing
 - Code coverage with Codecov
 - PHPStan level 8 analysis
@@ -47,15 +49,17 @@ This directory contains all GitHub-specific configuration for the Laravel Discov
 **Triggers:** Push to main/develop, PRs
 
 **Jobs:**
+
 - Laravel Pint code style check
 - Security audit with `composer audit`
 - Dependency review for PRs
 
 ### release.yml - Automated Releases
 
-**Triggers:** Version tags (v*.*.*)
+**Triggers:** Version tags (v*.*.\*)
 
 **Process:**
+
 1. Run full test suite
 2. Run PHPStan analysis
 3. Extract changelog for version
@@ -63,6 +67,7 @@ This directory contains all GitHub-specific configuration for the Laravel Discov
 5. Trigger Packagist update
 
 **Required Secrets:**
+
 - `PACKAGIST_USERNAME`
 - `PACKAGIST_TOKEN`
 
@@ -83,6 +88,7 @@ This directory contains all GitHub-specific configuration for the Laravel Discov
 **Triggers:** Daily schedule
 
 **Configuration:**
+
 - Issues: 60 days stale, 7 days to close
 - PRs: 30 days stale, 14 days to close
 - Exempt labels: pinned, security, bug, enhancement
@@ -92,6 +98,7 @@ This directory contains all GitHub-specific configuration for the Laravel Discov
 **Triggers:** PR opened/updated
 
 **Labels:**
+
 - `documentation` - Docs changes
 - `tests` - Test changes
 - `source` - Source code changes
@@ -110,6 +117,7 @@ This directory contains all GitHub-specific configuration for the Laravel Discov
 ### Bug Report (bug_report.yml)
 
 Structured form for bug reports including:
+
 - Bug description
 - Reproduction steps
 - Expected vs actual behavior
@@ -119,6 +127,7 @@ Structured form for bug reports including:
 ### Feature Request (feature_request.yml)
 
 Structured form for feature requests including:
+
 - Problem statement
 - Proposed solution
 - Alternatives considered
@@ -128,6 +137,7 @@ Structured form for feature requests including:
 ## 📝 Pull Request Template
 
 Comprehensive PR template covering:
+
 - Description and type of change
 - Related issues
 - Changes made
@@ -138,6 +148,7 @@ Comprehensive PR template covering:
 ## 🤖 Dependabot
 
 **Configuration:**
+
 - Weekly updates on Monday at 9 AM
 - Composer dependencies
 - GitHub Actions
@@ -147,15 +158,16 @@ Comprehensive PR template covering:
 ## 🏷️ Labels
 
 Auto-applied based on file changes:
-- `documentation` - *.md, docs/**
-- `tests` - tests/**, phpunit.xml
-- `source` - src/**
-- `ci` - .github/**
+
+- `documentation` - \*.md, docs/\*\*
+- `tests` - tests/\*\*, phpunit.xml
+- `source` - src/\*\*
+- `ci` - .github/\*\*
 - `dependencies` - composer.json/lock
-- `cache` - src/Cache/**
-- `strategies` - src/Strategies/**
-- `filters` - src/Filters/**
-- `validators` - src/Validators/**
+- `cache` - src/Cache/\*\*
+- `strategies` - src/Strategies/\*\*
+- `filters` - src/Filters/\*\*
+- `validators` - src/Validators/\*\*
 
 ## 🔐 Required Secrets
 
@@ -181,8 +193,8 @@ PACKAGIST_TOKEN        # Packagist API token
 Add these to your README:
 
 ```markdown
-[![Tests](https://github.com/pixielity/laravel-discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/pixielity/laravel-discovery/actions/workflows/tests.yml)
-[![Code Quality](https://github.com/pixielity/laravel-discovery/actions/workflows/code-quality.yml/badge.svg)](https://github.com/pixielity/laravel-discovery/actions/workflows/code-quality.yml)
+[![Tests](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml)
+[![Code Quality](https://github.com/pixielity-co/laravel-discovery/actions/workflows/code-quality.yml/badge.svg)](https://github.com/pixielity-co/laravel-discovery/actions/workflows/code-quality.yml)
 [![codecov](https://codecov.io/gh/pixielity/laravel-discovery/branch/main/graph/badge.svg)](https://codecov.io/gh/pixielity/laravel-discovery)
 ```
 

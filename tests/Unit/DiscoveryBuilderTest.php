@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit;
 
 use Illuminate\Console\Command;
+use Pixielity\Discovery\DiscoveryBuilder;
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryBuilder;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * DiscoveryBuilder Unit Tests.
@@ -33,8 +35,6 @@ class DiscoveryBuilderTest extends TestCase
 {
     /**
      * The discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $manager;
 
@@ -100,7 +100,7 @@ class DiscoveryBuilderTest extends TestCase
         $discoveryBuilder = $this->manager->attribute(TestAttribute::class);
 
         // Act: Add a callback filter using filter()
-        $result = $discoveryBuilder->filter(fn($class): bool => true);
+        $result = $discoveryBuilder->filter(fn ($class): bool => true);
 
         // Assert: Should return the same builder instance
         $this->assertInstanceOf(DiscoveryBuilder::class, $result);
@@ -270,7 +270,7 @@ class DiscoveryBuilderTest extends TestCase
         // Act: Chain multiple methods together
         $result = $discoveryBuilder
             ->where('enabled', true)
-            ->filter(fn($class): bool => true)
+            ->filter(fn ($class): bool => true)
             ->instantiable()
             ->cached('test');
 

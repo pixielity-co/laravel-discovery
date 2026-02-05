@@ -41,7 +41,7 @@ class AttributeStrategy implements DiscoveryStrategyInterface
     public function discover(): array
     {
         // Check if composer-attribute-collector is available
-        if (!Reflection::exists(Attributes::class)) {
+        if (! Reflection::exists(Attributes::class)) {
             return [];
         }
 
@@ -49,7 +49,7 @@ class AttributeStrategy implements DiscoveryStrategyInterface
             $this->targets = Attributes::findTargetClasses($this->attributeClass);
 
             return Arr::mapValues(
-                fn(TargetClass $targetClass): string => $targetClass->name,
+                fn (TargetClass $targetClass): string => $targetClass->name,
                 $this->targets
             );
         } catch (Throwable) {
@@ -68,8 +68,9 @@ class AttributeStrategy implements DiscoveryStrategyInterface
         $target = collect($this->targets)->firstWhere('name', $class);
 
         return [
-            'attribute' => $target?->attribute,
             'class' => $class,
+            'attribute' => $target?->attribute,
+            'attributeClass' => $this->attributeClass,
         ];
     }
 

@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestCardAttribute;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * AttributeDiscovery Feature Tests.
@@ -20,22 +22,18 @@ class AttributeDiscoveryTest extends TestCase
 {
     /**
      * Discovery manager instance.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $discovery;
 
     /**
      * Set up the test environment.
-     *
-     * @return void
      */
     protected function setUp(): void
     {
         parent::setUp();
 
         // Resolve the discovery manager from the container
-        $this->discovery = app(DiscoveryManager::class);
+        $this->discovery = resolve(DiscoveryManager::class);
     }
 
     /**
@@ -43,8 +41,6 @@ class AttributeDiscoveryTest extends TestCase
      *
      * Verifies that the discovery system can find classes decorated
      * with a simple attribute that has no properties.
-     *
-     * @return void
      */
     public function test_discovers_classes_with_simple_attribute(): void
     {
@@ -63,8 +59,6 @@ class AttributeDiscoveryTest extends TestCase
      *
      * Verifies that attributes with properties (enabled, priority, etc.)
      * are correctly discovered and their properties are accessible.
-     *
-     * @return void
      */
     public function test_discovers_classes_with_attribute_properties(): void
     {
@@ -78,7 +72,7 @@ class AttributeDiscoveryTest extends TestCase
         $this->assertIsArray($results);
 
         // If results found, verify attribute properties exist
-        if (!empty($results)) {
+        if ($results !== []) {
             $first = reset($results);
 
             // Verify attribute metadata is present
@@ -95,8 +89,6 @@ class AttributeDiscoveryTest extends TestCase
      *
      * Verifies that discovered classes can be filtered based on
      * their attribute property values using the where() method.
-     *
-     * @return void
      */
     public function test_filters_by_attribute_property(): void
     {
@@ -111,9 +103,9 @@ class AttributeDiscoveryTest extends TestCase
         $this->assertIsArray($results);
 
         // Verify all results have enabled = true
-        foreach ($results as $metadata) {
-            if (isset($metadata['attribute'])) {
-                $this->assertTrue($metadata['attribute']->enabled);
+        foreach ($results as $result) {
+            if (isset($result['attribute'])) {
+                $this->assertTrue($result['attribute']->enabled);
             }
         }
     }
@@ -123,8 +115,6 @@ class AttributeDiscoveryTest extends TestCase
      *
      * Verifies that attribute discovery can be combined with
      * directory filtering to narrow down results.
-     *
-     * @return void
      */
     public function test_combines_with_directory_filter(): void
     {
@@ -144,8 +134,6 @@ class AttributeDiscoveryTest extends TestCase
      *
      * Verifies that discovery results can be cached and subsequent
      * calls with the same cache key return identical results.
-     *
-     * @return void
      */
     public function test_caches_results(): void
     {
@@ -172,8 +160,6 @@ class AttributeDiscoveryTest extends TestCase
      *
      * Verifies that when no classes match the attribute,
      * an empty array is returned instead of null or exception.
-     *
-     * @return void
      */
     public function test_handles_no_results(): void
     {

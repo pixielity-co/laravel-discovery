@@ -1,13 +1,15 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit;
 
 use Illuminate\Console\Command;
+use Pixielity\Discovery\DiscoveryBuilder;
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestAttribute;
 use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryBuilder;
-use Pixielity\Discovery\DiscoveryManager;
 use Symfony\Component\Finder\Finder;
 
 /**
@@ -33,8 +35,6 @@ class DiscoveryManagerTest extends TestCase
 {
     /**
      * The discovery manager instance being tested.
-     *
-     * @var DiscoveryManager
      */
     protected DiscoveryManager $manager;
 

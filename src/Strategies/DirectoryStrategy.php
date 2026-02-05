@@ -227,7 +227,7 @@ class DirectoryStrategy implements DiscoveryStrategyInterface
         foreach ($directories as $directory) {
             // Convert relative paths to absolute paths using the app's base path
             // This ensures consistent path handling across different environments
-            if (!Str::startsWith($directory, '/')) {
+            if (! Str::startsWith($directory, '/')) {
                 $directory = $this->app->basePath($directory);
             }
 
@@ -247,6 +247,6 @@ class DirectoryStrategy implements DiscoveryStrategyInterface
 
         // Filter out any paths that aren't actually directories
         // This handles cases where paths don't exist or are files
-        return Arr::filter($expanded, fn($path) => File::isDirectory($path));
+        return Arr::filter($expanded, fn ($path) => File::isDirectory($path));
     }
 }

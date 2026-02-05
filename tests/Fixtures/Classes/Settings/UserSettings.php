@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Fixtures\Classes\Settings;
 
@@ -33,8 +35,6 @@ class UserSettings
      *
      * Required field with custom timezone validation rule.
      * Used to test custom rule array extraction.
-     *
-     * @var string
      */
     #[TestValidateAttribute(required: true, rules: ['timezone'])]
     public string $timezone;
@@ -44,8 +44,6 @@ class UserSettings
      *
      * Required field with custom locale validation rule.
      * Used to test custom rule array extraction.
-     *
-     * @var string
      */
     #[TestValidateAttribute(required: true, rules: ['locale'])]
     public string $locale;
@@ -55,8 +53,6 @@ class UserSettings
      *
      * Boolean property with no validation attribute.
      * Used to test properties without attributes.
-     *
-     * @var bool
      */
     public bool $notifications = true;
 }
