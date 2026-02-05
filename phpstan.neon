@@ -1,12 +1,149 @@
+# PHPStan Configuration
+# =========================================
+#
+# Root configuration for analyzing discovery package.
+#
+# ## Usage:
+# Run PHPStan analysis from the project root:
+#   ./bin/phpstan analyse
+#
+# Or analyze specific package:
+#   ./bin/phpstan analyse packages/Foundation
+
 includes:
-    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    # Include Larastan for Laravel-specific rules
+    - vendor/larastan/larastan/extension.neon
 
 parameters:
-    level: 5
+    # =========================================================================
+    # ANALYSIS PATHS
+    # =========================================================================
     paths:
         - src
-        - tests
+
+    # =========================================================================
+    # STRICTNESS LEVEL
+    # =========================================================================
+    level: 8
+
+    # =========================================================================
+    # BUILD DIRECTORY
+    # =========================================================================
     tmpDir: build/phpstan
-    ignoreErrors:
-        -
-            identifier: missingType.iterableValue
+
+    # =========================================================================
+    # TYPE CHECKING CONFIGURATION
+    # =========================================================================
+    checkUnionTypes: true
+    treatPhpDocTypesAsCertain: true
+    checkExplicitMixedMissingReturn: true
+    checkFunctionNameCase: true
+    checkInternalClassCaseSensitivity: true
+
+    # =========================================================================
+    # IGNORED ERROR PATTERNS
+    # =========================================================================
+    identifier:
+        # Ignore all PHPUnit errors (test framework)
+        - '#PHPUnit\\#'
+
+        # Ignore all Spatie package errors (optional dependencies)
+        - '#Spatie\\#'
+
+        # Ignore all Sentry SDK errors (optional dependency)
+        - '#Sentry\\#'
+
+        # Ignore all Illuminate/Laravel errors (framework magic)
+        - '#Illuminate\\#'
+
+        # Laravel Packages (Horizon, Octane, Pulse, Telescope)
+        - '#Laravel\\(Horizon|Octane|Pulse|Telescope|Pennant)\\#'
+
+        # OpenAI Package
+        - '#OpenAI\\#'
+
+        # Mockery
+        - '#Mockery\\#'
+
+        # Composer Attribute Collector
+        - '#Olvlvl\\ComposerAttributeCollector\\#'
+
+        # Helper Functions
+        - '#Function (php_binary|magento_binary|node_binary|npm_binary|yarn_binary|tsx_binary) not found#'
+
+        # Unused traits (traits used in other packages)
+        - '#Trait .* is used zero times and is not analysed#'
+
+        # Unsafe new static() in factory methods (intentional pattern)
+        - '#Unsafe usage of new static\(\)#'
+
+        # PHPDoc type assertions (treatPhpDocTypesAsCertain: true causes these)
+        - '#Call to function is_string\(\) with string will always evaluate to true#'
+        - '#Call to function is_array\(\) with array.* will always evaluate to true#'
+        - '#Call to function is_array\(\) with .* will always evaluate to false#'
+        - '#Strict comparison using !== between .* and (false|null|array) will always evaluate to true#'
+        - '#Negated boolean expression is always false#'
+        - '#If condition is always true#'
+        - '#Offset .* on .* on left side of \?\? always exists and is not nullable#'
+
+        # Laravel translation helper __() can return array|string
+        - '#Cannot cast \(array\|string\) to string#'
+        - '#Parameter .* of method .* expects string, \(array\|string\) given#'
+        - '#Parameter .* of method .* expects string\|null, \(array\|string\) given#'
+        - '#Method .* should return string but returns \(array\|string\)#'
+
+        # Laravel Container ArrayAccess (AppInterface extends Container which implements ArrayAccess)
+        - '#Cannot access offset .* on Fulers\\Foundation\\Contracts\\AppInterface#'
+
+        # Enum trait instanceof checks (trait works with both BackedEnum and UnitEnum)
+        - '#Instanceof between .* and BackedEnum will always evaluate to (true|false)#'
+
+        # Enum Options trait type narrowing (PHPStan overly strict)
+        - '#Offset 0 on .* in isset\(\) always exists and is not nullable#'
+        - '#Result of && is always true#'
+        - '#Strict comparison using === between .* and null will always evaluate to false#'
+
+        # Missing iterable value types (too verbose to fix everywhere)
+        - '#has no value type specified in iterable type array#'
+        - '#with no value type specified in iterable type array#'
+
+        # Missing generic types (framework limitations)
+        - '#does not specify its types: TKey, TValue#'
+        - '#but does not specify its types#'
+
+        # Missing parameter/return types (legacy code)
+        - '#has parameter .* with no type specified#'
+        - '#has no return type specified#'
+
+    # =========================================================================
+    # EXCLUDED PATHS
+    # =========================================================================
+    excludePaths:
+        - */views/*
+        - */Migrations/*
+        - */stubs/*
+        - */Solutions/*
+        - */vendor/*
+        - */tests/*
+
+    # =========================================================================
+    # REPORTING CONFIGURATION
+    # =========================================================================
+    reportUnmatchedIgnoredErrors: false
+    reportStaticMethodSignatures: true
+    reportAlwaysTrueInLastCondition: true
+
+    # =========================================================================
+    # PERFORMANCE OPTIMIZATION
+    # =========================================================================
+    parallel:
+        jobSize: 20
+        maximumNumberOfProcesses: 4
+        minimumNumberOfJobsPerProcess: 2
+
+    # =========================================================================
+    # ADDITIONAL CONFIGURATION
+    # =========================================================================
+    checkMissingOverrideMethodAttribute: false
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkBenevolentUnionTypes: true

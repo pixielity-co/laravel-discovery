@@ -1,23 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<!-- PHPUnit configuration file -->
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
     bootstrap="vendor/autoload.php"
     colors="true"
+    cacheDirectory=".phpunit.cache"
     failOnRisky="true"
     failOnWarning="true"
-    stopOnFailure="false"
-    cacheDirectory=".phpunit.cache">
+    failOnDeprecation="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    executionOrder="depends,defects"
+    stopOnFailure="false">
+
+    <!-- Define available test suites -->
     <testsuites>
+        <!-- Unit test suite -->
         <testsuite name="Unit">
+            <!-- Directory containing unit tests -->
             <directory>tests/Unit</directory>
         </testsuite>
+
+        <!-- Feature test suite -->
         <testsuite name="Feature">
+            <!-- Directory containing feature tests -->
             <directory>tests/Feature</directory>
         </testsuite>
     </testsuites>
+
+    <!-- Configure source code scope -->
     <source>
+        <!-- Include main source directory -->
         <include>
             <directory>src</directory>
         </include>
     </source>
+
+    <!-- Configure coverage behaviour -->
+    <coverage includeUncoveredFiles="true" pathCoverage="false" />
 </phpunit>

@@ -1,6 +1,4 @@
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
@@ -266,7 +264,7 @@ class DirectoryStrategyTest extends TestCase
         $results = $directoryStrategy->discover();
 
         // Assert: All classes should have proper namespaces
-        foreach (Arr::keys($results) as $class) {
+        foreach ($results as $class) {
             $this->assertStringContainsString('Pixielity\Discovery\Tests\Fixtures', $class);
         }
     }
@@ -327,7 +325,7 @@ class DirectoryStrategyTest extends TestCase
     {
         // Arrange: Create a temporary empty directory
         $emptyDir = sys_get_temp_dir() . '/empty_test_dir';
-        if (! is_dir($emptyDir)) {
+        if (!is_dir($emptyDir)) {
             mkdir($emptyDir);
         }
 
