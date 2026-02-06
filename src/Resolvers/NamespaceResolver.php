@@ -171,7 +171,7 @@ class NamespaceResolver implements NamespaceResolverInterface
                     }
 
                     // Sort by path length descending
-                    uasort($sortedPrefixes, fn ($a, $b): int => strlen((string) $b) - strlen((string) $a));
+                    uasort($sortedPrefixes, fn ($a, $b): int => strlen($b) - strlen($a));
 
                     // Find matching namespace
                     foreach ($sortedPrefixes as $namespace => $prefixPath) {
