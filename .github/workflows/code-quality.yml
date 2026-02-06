@@ -26,7 +26,17 @@ jobs:
         run: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
 
       - name: Run Laravel Pint
-        run: vendor/bin/pint --test --config=pint.json
+        run: |
+          vendor/bin/pint --test --config=pint.json 2>&1 | tee pint-output.txt
+          exit ${PIPESTATUS[0]}
+
+      - name: Upload Pint output on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pint-output
+          path: pint-output.txt
+          retention-days: 5
 
   security:
     runs-on: ubuntu-latest
