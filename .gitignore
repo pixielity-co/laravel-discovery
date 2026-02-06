@@ -25,6 +25,7 @@ coverage/
 
 # Cache
 bootstrap/cache/
+@testbench/
 storage/
 var/
 

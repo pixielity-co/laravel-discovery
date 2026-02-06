@@ -2,11 +2,11 @@ name: Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
   schedule:
-    - cron: '0 0 * * 0' # Weekly on Sunday
+    - cron: "0 0 * * 0" # Weekly on Sunday
 
 jobs:
   test:
@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        php: [8.5]
+        php: [8.3, 8.4, 8.5]
         laravel: [11.*, 12.*]
         stability: [prefer-lowest, prefer-stable]
         include:
@@ -38,8 +38,10 @@ jobs:
           coverage: xdebug
           ini-values: error_reporting=E_ALL
 
-      - name: Create bootstrap cache directory
-        run: mkdir -p bootstrap/cache
+      - name: Create bootstrap cache directories
+        run: |
+          mkdir -p bootstrap/cache
+          mkdir -p @testbench/bootstrap/cache
 
       - name: Validate composer.json
         run: composer validate --strict

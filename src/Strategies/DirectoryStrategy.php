@@ -47,6 +47,14 @@ class DirectoryStrategy implements DiscoveryStrategyInterface
     protected ?string $namespacePattern = null;
 
     /**
+     * Symfony Finder instance for file searching.
+     *
+     * Used to efficiently locate PHP files within the specified directories.
+     * Initialized with a new instance in the constructor.
+     */
+    protected Finder $finder;
+
+    /**
      * Create a new DirectoryStrategy instance.
      *
      * This constructor uses dependency injection to receive all required services.
@@ -63,6 +71,9 @@ class DirectoryStrategy implements DiscoveryStrategyInterface
     ) {
         // Normalize directories to always be an array
         $this->directories = is_array($directories) ? $directories : [$directories];
+
+        // Initialize Symfony Finder for efficient file searching
+        $this->finder = new Finder();
     }
 
     /**
@@ -129,7 +140,7 @@ class DirectoryStrategy implements DiscoveryStrategyInterface
 
         // Create a Symfony Finder instance to scan for PHP files
         // Finder is more efficient than glob() for recursive directory scanning
-        $finder = new Finder()
+        $finder = $this->finder
             ->files()  // Only find files, not directories
             ->name('*.php')  // Only PHP files
             ->in($expandedDirs);  // In the expanded directories

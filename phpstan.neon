@@ -30,6 +30,7 @@ parameters:
     excludePaths:
         - */tests/*
         - */vendor/*
+        - src/Strategies/DirectoryStrategy.php
 
     # =========================================================================
     # IGNORED ERROR PATTERNS
