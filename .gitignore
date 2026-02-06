@@ -26,6 +26,7 @@ coverage/
 # Cache
 bootstrap/cache/
 storage/
+var/
 
 # Environment
 .env
