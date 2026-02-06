@@ -79,11 +79,22 @@ class NamespaceResolver implements NamespaceResolverInterface
     /**
      * Resolve using monorepo patterns.
      *
+     * Check patterns from most specific to least specific to avoid false matches.
+     *
      * @param  string      $path File path
      * @return string|null Resolved class name
      */
     protected function resolveMonorepoPattern(string $path): ?string
     {
+        // Pattern: packages/{Package}/tests/{Namespace}/{Class}.php (check before generic tests pattern)
+        if (preg_match('#/packages/([^/]+)/tests/(.+)\.php$#', $path, $matches)) {
+            $package = $matches[1];
+            $relativePath = $matches[2];
+            $namespace = Str::replace('/', '\\', $relativePath);
+
+            return "Pixielity\\{$package}\\Tests\\{$namespace}";
+        }
+
         // Pattern: packages/{Package}/src/{Namespace}/{Class}.php
         if (preg_match('#/packages/([^/]+)/src/(.+)\.php$#', $path, $matches)) {
             $package = $matches[1];
@@ -110,27 +121,10 @@ class NamespaceResolver implements NamespaceResolverInterface
             return "App\\{$namespace}";
         }
 
-        // Pattern: packages/{Package}/tests/{Namespace}/{Class}.php
-        if (preg_match('#/packages/([^/]+)/tests/(.+)\.php$#', $path, $matches)) {
-            $package = $matches[1];
-            $relativePath = $matches[2];
-            $namespace = Str::replace('/', '\\', $relativePath);
-
-            return "Pixielity\\{$package}\\Tests\\{$namespace}";
-        }
-
-        // Pattern: tests/{Namespace}/{Class}.php (standalone package)
+        // Pattern: tests/{Namespace}/{Class}.php (standalone package - least specific, check last)
         if (preg_match('#/tests/(.+)\.php$#', $path, $matches)) {
             $relativePath = $matches[1];
             $namespace = Str::replace('/', '\\', $relativePath);
-
-            // Try to determine the base namespace from composer.json or use a default
-            // For now, we'll check if this is in a package directory
-            if (preg_match('#/packages/([^/]+)/#', $path, $packageMatches)) {
-                $package = $packageMatches[1];
-
-                return "Pixielity\\{$package}\\Tests\\{$namespace}";
-            }
 
             // Fallback for standalone tests
             return "Tests\\{$namespace}";
