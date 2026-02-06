@@ -85,6 +85,10 @@ foreach ($cards as $class => $metadata) {
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## ✨ Features
 
 ### 🎯 Discovery Strategies
@@ -126,11 +130,19 @@ foreach ($cards as $class => $metadata) {
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## 📋 Requirements
 
 - **PHP:** 8.3 or higher
 - **Laravel:** 11.0 or 12.0
 - **Composer:** 2.0 or higher
+
+---
+
+**[⬆ Back to Top](#-table-of-contents)**
 
 ---
 
@@ -141,6 +153,10 @@ Install via Composer:
 ```bash
 composer require pixielity/laravel-discovery
 ```
+
+---
+
+**[⬆ Back to Top](#-table-of-contents)**
 
 ---
 
@@ -186,6 +202,10 @@ class SettingsService
     }
 }
 ```
+
+---
+
+**[⬆ Back to Top](#-table-of-contents)**
 
 ---
 
@@ -238,6 +258,10 @@ All discovery methods return an associative array:
     ]
 ]
 ```
+
+---
+
+**[⬆ Back to Top](#-table-of-contents)**
 
 ---
 
@@ -551,6 +575,10 @@ $validations = Discovery::properties(Validate::class)->get();
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## 🎨 Filters & Validators
 
 ### Property Filters
@@ -666,6 +694,10 @@ $cards = Discovery::attribute(AsCard::class)
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## 💾 Caching
 
 Discovery includes a powerful file-based caching system for optimal performance.
@@ -752,6 +784,10 @@ Discovery::directories('app')->get();
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## ⚙️ Configuration
 
 ### Publishing Configuration
@@ -829,6 +865,10 @@ packages/
 ├── Billing/src/Settings/BillingSettings.php → Pixielity\Billing\Settings\BillingSettings
 └── Users/src/Settings/UserSettings.php     → Pixielity\Users\Settings\UserSettings
 ```
+
+---
+
+**[⬆ Back to Top](#-table-of-contents)**
 
 ---
 
@@ -1331,6 +1371,10 @@ public function registerMiddleware(): void
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## 📚 API Reference
 
 ### DiscoveryManager
@@ -1472,6 +1516,10 @@ Execute discovery and return results.
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## ⚡ Performance
 
 ### Benchmarks
@@ -1504,6 +1552,10 @@ Discovery::attribute(AsCard::class)
 Discovery::directories('.')   // Scans everything
     ->get();                  // No caching
 ```
+
+---
+
+**[⬆ Back to Top](#-table-of-contents)**
 
 ---
 
@@ -1541,6 +1593,10 @@ class MyDiscoveryTest extends TestCase
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## 🔒 Security
 
 ### Security Considerations
@@ -1568,6 +1624,10 @@ $classes = Discovery::directories($_GET['path'])->get();
 Please report security vulnerabilities to: **security@pixielity.com**
 
 See [SECURITY.md](SECURITY.md) for our security policy.
+
+---
+
+**[⬆ Back to Top](#-table-of-contents)**
 
 ---
 
@@ -1599,6 +1659,10 @@ composer analyse
 - Add PHPDoc blocks
 - Write tests for new features
 - Update documentation
+
+---
+
+**[⬆ Back to Top](#-table-of-contents)**
 
 ---
 
@@ -1639,6 +1703,10 @@ This package stands on the shoulders of giants. Special thanks to:
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## 📄 License
 
 The MIT License (MIT). Please see [LICENSE](LICENSE) for more information.
@@ -1669,6 +1737,10 @@ SOFTWARE.
 
 ---
 
+**[⬆ Back to Top](#-table-of-contents)**
+
+---
+
 ## 🆘 Support & Resources
 
 ### Documentation
@@ -1694,7 +1766,7 @@ SOFTWARE.
 
 <div align="center">
 
-**[⬆ Back to Top](#-features)**
+**[⬆ Back to Top](#-table-of-contents)**
 
 Made with ❤️ by the [Pixielity Team](https://github.com/pixielity-co)
 
