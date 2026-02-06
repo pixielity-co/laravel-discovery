@@ -26,7 +26,7 @@ jobs:
         run: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
 
       - name: Run Laravel Pint
-        run: vendor/bin/pint --test
+        run: vendor/bin/pint --test --config=pint.json
 
   security:
     runs-on: ubuntu-latest
