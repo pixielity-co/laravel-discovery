@@ -22,21 +22,12 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
 
-      - name: Install dependencies
-        run: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
-
       - name: Run Laravel Pint
-        run: |
-          vendor/bin/pint --test --config=pint.json 2>&1 | tee pint-output.txt
-          exit ${PIPESTATUS[0]}
-
-      - name: Upload Pint output on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
+        uses: aglipanci/laravel-pint-action@2.4
         with:
-          name: pint-output
-          path: pint-output.txt
-          retention-days: 5
+          preset: laravel
+          configPath: pint.json
+          testMode: true
 
   security:
     runs-on: ubuntu-latest
