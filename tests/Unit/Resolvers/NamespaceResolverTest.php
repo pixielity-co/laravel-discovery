@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Resolvers;
 
@@ -134,7 +136,7 @@ class NamespaceResolverTest extends TestCase
         $moduleDir = $tempDir . '/modules/TestModule/src';
 
         // Arrange: Create directory structure
-        if (!is_dir($moduleDir)) {
+        if (! is_dir($moduleDir)) {
             mkdir($moduleDir, 0777, true);
         }
 
@@ -166,9 +168,9 @@ class NamespaceResolverTest extends TestCase
         }
         if (is_dir($tempDir)) {
             // Use recursive removal if directory is not empty
-            array_map('unlink', glob("$tempDir/*/*/*") ?: []);
-            array_map('rmdir', glob("$tempDir/*/*") ?: []);
-            array_map('rmdir', glob("$tempDir/*") ?: []);
+            array_map(unlink(...), glob("{$tempDir}/*/*/*") ?: []);
+            array_map(rmdir(...), glob("{$tempDir}/*/*") ?: []);
+            array_map(rmdir(...), glob("{$tempDir}/*") ?: []);
             @rmdir($tempDir);
         }
     }
@@ -195,7 +197,7 @@ class NamespaceResolverTest extends TestCase
         $appDir = $tempDir . '/app/Http/Controllers';
 
         // Arrange: Create directory structure
-        if (!is_dir($appDir)) {
+        if (! is_dir($appDir)) {
             mkdir($appDir, 0777, true);
         }
 
@@ -247,7 +249,7 @@ class NamespaceResolverTest extends TestCase
         $packageDir = $tempDir . '/packages/MyPackage/src/Services';
 
         // Arrange: Create directory structure
-        if (!is_dir($packageDir)) {
+        if (! is_dir($packageDir)) {
             mkdir($packageDir, 0777, true);
         }
 
@@ -299,7 +301,7 @@ class NamespaceResolverTest extends TestCase
     {
         // Arrange: Create a temporary file in non-standard location
         $tempDir = sys_get_temp_dir() . '/test_invalid';
-        if (!is_dir($tempDir)) {
+        if (! is_dir($tempDir)) {
             mkdir($tempDir, 0777, true);
         }
 

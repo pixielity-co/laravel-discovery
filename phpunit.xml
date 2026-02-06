@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- PHPUnit configuration file -->
 <phpunit
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd"
-    bootstrap="vendor/autoload.php"
     colors="true"
-    cacheDirectory=".phpunit.cache"
     failOnRisky="true"
     failOnWarning="true"
+    stopOnFailure="false"
     failOnDeprecation="true"
-    beStrictAboutTestsThatDoNotTestAnything="true"
+    cacheDirectory="build/phpunit"
+    bootstrap="tests/bootstrap.php"
     executionOrder="depends,defects"
-    stopOnFailure="false">
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.0/phpunit.xsd">
 
     <!-- Define available test suites -->
     <testsuites>

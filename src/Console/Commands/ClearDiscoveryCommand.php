@@ -44,6 +44,9 @@ class ClearDiscoveryCommand extends Command
 
         $key = $this->argument('key');
 
+        // Ensure key is a string or null
+        $key = is_string($key) ? $key : null;
+
         if ($key) {
             // Clear specific cache key
             $this->note("Clearing discovery cache: <fg=cyan>{$key}</>");

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Filters;
 
@@ -219,7 +221,7 @@ class PropertyFilterTest extends TestCase
         $classes = $this->strategy->discover();
 
         // Skip if no classes found
-        if (empty($classes)) {
+        if ($classes === []) {
             $this->markTestSkipped('No classes with TestCardAttribute found');
         }
 

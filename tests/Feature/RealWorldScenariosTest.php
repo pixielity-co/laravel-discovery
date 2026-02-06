@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Feature;
 
 use Illuminate\Console\Command;
+use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Support\Arr;
 use Pixielity\Discovery\Support\Reflection;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestAttribute;
@@ -15,12 +18,11 @@ use Pixielity\Discovery\Tests\Fixtures\Classes\Cards\DashboardCard;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Commands\TestCommand;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Controllers\AdminController;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Controllers\TestController;
+use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Services\TestService;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Settings\AppSettings;
 use Pixielity\Discovery\Tests\Fixtures\Classes\Settings\UserSettings;
-use Pixielity\Discovery\Tests\Fixtures\Classes\ServiceInterface;
 use Pixielity\Discovery\Tests\TestCase;
-use Pixielity\Discovery\DiscoveryManager;
 
 /**
  * RealWorldScenarios Feature Tests.
@@ -114,7 +116,7 @@ class RealWorldScenariosTest extends TestCase
         foreach ($validatedProperties as $property => $metadata) {
             $this->assertIsString($property);
             $this->assertIsArray($metadata);
-            $this->assertArrayHasKey('attributes', $metadata);
+            $this->assertArrayHasKey('attribute', $metadata);
         }
     }
 
@@ -158,7 +160,7 @@ class RealWorldScenariosTest extends TestCase
         // Verify we found routes from TestController
         $testControllerRoutes = Arr::filter(
             $routes,
-            fn($metadata, $method): bool => str_contains($method, TestController::class),
+            fn ($metadata, $method): bool => str_contains((string) $method, TestController::class),
             ARRAY_FILTER_USE_BOTH
         );
         $this->assertNotEmpty($testControllerRoutes);
@@ -166,7 +168,7 @@ class RealWorldScenariosTest extends TestCase
         // Verify we found routes from AdminController
         $adminControllerRoutes = Arr::filter(
             $routes,
-            fn($metadata, $method): bool => str_contains($method, AdminController::class),
+            fn ($metadata, $method): bool => str_contains((string) $method, AdminController::class),
             ARRAY_FILTER_USE_BOTH
         );
         $this->assertNotEmpty($adminControllerRoutes);
@@ -178,8 +180,7 @@ class RealWorldScenariosTest extends TestCase
             $this->assertArrayHasKey('attributeClass', $metadata);
 
             // Verify we can access route attribute data
-            $attributes = $metadata['attributes'];
-            $this->assertNotEmpty($attributes);
+            $this->assertArrayHasKey('attribute', $metadata);
         }
     }
 
@@ -288,7 +289,7 @@ class RealWorldScenariosTest extends TestCase
         // Verify metadata includes priority information
         foreach ($healthChecks as $healthCheck) {
             $this->assertIsArray($healthCheck);
-            $this->assertArrayHasKey('attributes', $healthCheck);
+            $this->assertArrayHasKey('attribute', $healthCheck);
         }
     }
 

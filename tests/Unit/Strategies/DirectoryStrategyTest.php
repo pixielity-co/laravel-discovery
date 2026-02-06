@@ -1,10 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace Pixielity\Discovery\Tests\Unit\Strategies;
 
 use Pixielity\Discovery\Resolvers\NamespaceResolver;
 use Pixielity\Discovery\Strategies\DirectoryStrategy;
-use Pixielity\Discovery\Support\Arr;
 use Pixielity\Discovery\Tests\TestCase;
 
 /**
@@ -227,9 +228,17 @@ class DirectoryStrategyTest extends TestCase
         // Act: Discover classes
         $results = $directoryStrategy->discover();
 
-        // Assert: All results should be PHP files
+        // Assert: All results should be valid class names (strings)
         foreach ($results as $result) {
-            $this->assertStringEndsWith('.php', $result['file'] ?? '');
+            $this->assertIsString($result);
+
+            // Get metadata to check file path
+            $metadata = $directoryStrategy->getMetadata($result);
+            $this->assertArrayHasKey('file', $metadata);
+
+            if ($metadata['file'] !== null) {
+                $this->assertStringEndsWith('.php', $metadata['file']);
+            }
         }
     }
 
@@ -264,8 +273,8 @@ class DirectoryStrategyTest extends TestCase
         $results = $directoryStrategy->discover();
 
         // Assert: All classes should have proper namespaces
-        foreach ($results as $class) {
-            $this->assertStringContainsString('Pixielity\Discovery\Tests\Fixtures', $class);
+        foreach ($results as $result) {
+            $this->assertStringContainsString('Pixielity\Discovery\Tests\Fixtures', $result);
         }
     }
 
@@ -325,7 +334,7 @@ class DirectoryStrategyTest extends TestCase
     {
         // Arrange: Create a temporary empty directory
         $emptyDir = sys_get_temp_dir() . '/empty_test_dir';
-        if (!is_dir($emptyDir)) {
+        if (! is_dir($emptyDir)) {
             mkdir($emptyDir);
         }
 

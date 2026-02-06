@@ -90,7 +90,8 @@ class ChainedDiscoveryTest extends TestCase
         $results = $this
             ->discovery
             ->directories($cardsDirectory)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify both card classes were discovered
         $this->assertNotEmpty($results);
@@ -128,7 +129,8 @@ class ChainedDiscoveryTest extends TestCase
             ->attribute(TestServiceAttribute::class)
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify TestService was discovered
         $this->assertNotEmpty($results);
@@ -160,7 +162,8 @@ class ChainedDiscoveryTest extends TestCase
             ->discovery
             ->directories($commandsDirectory)
             ->extending(Command::class)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify commands were discovered
         $this->assertNotEmpty($results);
@@ -187,7 +190,7 @@ class ChainedDiscoveryTest extends TestCase
     public function test_methods_then_filter_then_cached(): void
     {
         // Arrange: Define cache key for this discovery
-        $cacheKey = 'test_routes';
+        $cacheKey = 'test_routes_' . uniqid();  // Use unique key to avoid cache conflicts
 
         // Act: Discover methods with route attributes, filter by GET method
         $results = $this
@@ -195,10 +198,11 @@ class ChainedDiscoveryTest extends TestCase
             ->methods(TestRouteAttribute::class)
             ->where('method', 'GET')
             ->cached($cacheKey)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify results were found
-        $this->assertNotEmpty($results);
+        $this->assertNotEmpty($results, 'Expected to find GET methods but got none');
 
         // Act: Perform the same discovery again (should use cache)
         $cachedResults = $this
@@ -206,7 +210,8 @@ class ChainedDiscoveryTest extends TestCase
             ->methods(TestRouteAttribute::class)
             ->where('method', 'GET')
             ->cached($cacheKey)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify cached results match original results
         $this->assertEquals($results, $cachedResults);
@@ -231,7 +236,7 @@ class ChainedDiscoveryTest extends TestCase
     public function test_properties_then_where_then_cached(): void
     {
         // Arrange: Define cache key for this discovery
-        $cacheKey = 'test_validations';
+        $cacheKey = 'test_validations_' . uniqid();  // Use unique key to avoid cache conflicts
 
         // Act: Discover properties with validation attributes, filter by required
         $results = $this
@@ -239,10 +244,11 @@ class ChainedDiscoveryTest extends TestCase
             ->properties(TestValidateAttribute::class)
             ->where('required', true)
             ->cached($cacheKey)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify results were found
-        $this->assertNotEmpty($results);
+        $this->assertNotEmpty($results, 'Expected to find required properties but got none');
     }
 
     /**
@@ -275,7 +281,8 @@ class ChainedDiscoveryTest extends TestCase
             ->implementing(ServiceInterface::class)
             ->instantiable()
             ->filter(fn ($class): bool => ! str_contains($class, 'Abstract'))
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify TestService was discovered
         $this->assertNotEmpty($results);
@@ -314,7 +321,8 @@ class ChainedDiscoveryTest extends TestCase
             ->directories($servicesDirectory)
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify results were found
         $this->assertNotEmpty($results);
@@ -346,7 +354,8 @@ class ChainedDiscoveryTest extends TestCase
             ->directories($servicesDirectory)
             ->implementing(ServiceInterface::class)
             ->instantiable()
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Act: Discover with validators in order B (reversed)
         $results2 = $this
@@ -354,7 +363,8 @@ class ChainedDiscoveryTest extends TestCase
             ->directories($servicesDirectory)
             ->instantiable()
             ->implementing(ServiceInterface::class)
-            ->get()->all();
+            ->get()
+            ->all();
 
         // Assert: Verify both result sets are identical
         $this->assertEquals($results1, $results2);

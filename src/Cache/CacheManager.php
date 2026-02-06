@@ -165,7 +165,7 @@ class CacheManager implements CacheManagerInterface
                 if (File::exists($file) && ! File::delete($file)) {
                     logger()->warning("Failed to delete discovery cache file: {$file}");
                 }
-            } elseif (File::isDirectory($this->cachePath)) {
+            } elseif ($this->cachePath !== null && File::isDirectory($this->cachePath)) {
                 // Clear all cache files in the cache directory
                 // Find all PHP files in the cache directory
                 $files = File::glob("{$this->cachePath}/*.php");

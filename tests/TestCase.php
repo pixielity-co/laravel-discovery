@@ -35,12 +35,6 @@ abstract class TestCase extends Orchestra
     protected function setUp(): void
     {
         parent::setUp();
-
-        // Load the attributes file for composer-attribute-collector
-        $attributesFile = __DIR__ . '/../vendor/attributes.php';
-        if (file_exists($attributesFile)) {
-            require_once $attributesFile;
-        }
     }
 
     /**
@@ -51,6 +45,23 @@ abstract class TestCase extends Orchestra
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    /**
+     * Setup the test environment before the application is created.
+     *
+     * This is called before the Laravel application is bootstrapped,
+     * ensuring the attributes file is loaded early enough.
+     */
+    protected function resolveApplicationCore($app): void
+    {
+        parent::resolveApplicationCore($app);
+
+        // Load the attributes file for composer-attribute-collector
+        $attributesFile = __DIR__ . '/../vendor/attributes.php';
+        if (file_exists($attributesFile)) {
+            require_once $attributesFile;
+        }
     }
 
     /**

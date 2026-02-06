@@ -293,10 +293,10 @@ class StrategyFactoryTest extends TestCase
         // Assert: Discovery should work (proving dependencies are injected)
         $this->assertIsArray($results);
 
-        // Assert: If classes are found, they should have proper metadata
+        // Assert: Results should be class names (strings)
         if ($results !== []) {
             $firstResult = reset($results);
-            $this->assertIsArray($firstResult);
+            $this->assertIsString($firstResult);
         }
     }
 }

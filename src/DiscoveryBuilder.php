@@ -13,6 +13,7 @@ use Pixielity\Discovery\Support\Reflection;
 use Pixielity\Discovery\Validators\ExtendsValidator;
 use Pixielity\Discovery\Validators\ImplementsValidator;
 use Pixielity\Discovery\Validators\InstantiableValidator;
+use ReflectionClass;
 use ReflectionException;
 
 /**
@@ -186,7 +187,7 @@ class DiscoveryBuilder
         return $this->filter(function (string $class) use ($attributeClass): bool {
             try {
                 // Check if attribute class exists first
-                if (!Reflection::exists($attributeClass)) {
+                if (! Reflection::exists($attributeClass)) {
                     return false;
                 }
 
@@ -219,11 +220,11 @@ class DiscoveryBuilder
         return $this->filter(function (string $class) use ($attributeClass): bool {
             try {
                 // Check if attribute class exists first
-                if (!Reflection::exists($attributeClass)) {
+                if (! Reflection::exists($attributeClass)) {
                     return false;
                 }
 
-                return array_any(Reflection::getMethods($class), fn($method): bool => count($method->getAttributes($attributeClass)) > 0);
+                return array_any(Reflection::getMethods($class), fn ($method): bool => count($method->getAttributes($attributeClass)) > 0);
             } catch (ReflectionException) {
                 return false;
             }
@@ -252,11 +253,11 @@ class DiscoveryBuilder
         return $this->filter(function (string $class) use ($attributeClass): bool {
             try {
                 // Check if attribute class exists first
-                if (!Reflection::exists($attributeClass)) {
+                if (! Reflection::exists($attributeClass)) {
                     return false;
                 }
 
-                return array_any(Reflection::getProperties($class), fn($property): bool => count($property->getAttributes($attributeClass)) > 0);
+                return array_any(Reflection::getProperties($class), fn ($property): bool => count($property->getAttributes($attributeClass)) > 0);
             } catch (ReflectionException) {
                 return false;
             }
@@ -399,7 +400,7 @@ class DiscoveryBuilder
      * Enable caching with optional key.
      *
      * Enables caching of discovery results. If no key is provided, a key
-     * is generated from the strategy's cache key.
+     * is generated from the strategy's cache key and the applied filters.
      *
      * @param  string|null $key Cache key (auto-generated if null)
      * @return $this       Fluent interface
@@ -413,7 +414,12 @@ class DiscoveryBuilder
      */
     public function cached(?string $key = null): self
     {
-        $this->cacheKey = $key ?? $this->strategy->getCacheKey();
+        if ($key === null) {
+            // Auto-generate cache key from strategy and filters
+            $key = $this->generateCacheKey();
+        }
+
+        $this->cacheKey = $key;
 
         return $this;
     }
@@ -453,30 +459,20 @@ class DiscoveryBuilder
      * If caching is enabled, results are retrieved from cache or stored
      * in cache after discovery.
      *
+     * Note: We always call discover() even when cache exists to ensure the strategy's
+     * internal state (like attribute instances) is properly initialized for metadata retrieval.
+     *
      * @return Collection<class-string, array<string, mixed>> Collection of classes with metadata
      */
     public function get(): Collection
     {
-        // Check cache first
-        if ($this->cacheKey !== null) {
-            $cached = $this->cacheManager->get($this->cacheKey);
-            if ($cached !== null) {
-                $classes = $this->applyFiltersAndValidators($cached);
-
-                return $this->buildMetadataCollection($classes);
-            }
-        }
-
-        // Discover classes
+        // Always discover to populate strategy's internal state
+        // This is necessary for strategies like AttributeStrategy that store
+        // attribute instances in memory for metadata retrieval
         $classes = $this->strategy->discover();
 
         // Apply filters and validators
         $classes = $this->applyFiltersAndValidators($classes);
-
-        // Cache results
-        if ($this->cacheKey !== null) {
-            $this->cacheManager->put($this->cacheKey, $classes);
-        }
 
         return $this->buildMetadataCollection($classes);
     }
@@ -523,7 +519,7 @@ class DiscoveryBuilder
         // If using DirectoryStrategy, return the directories being scanned
         if ($this->strategy instanceof DirectoryStrategy) {
             return collect($this->strategy->getDirectories())
-                ->filter(fn($dir): bool => is_dir($dir))
+                ->filter(fn ($dir): bool => is_dir($dir))
                 ->values();
         }
 
@@ -562,6 +558,42 @@ class DiscoveryBuilder
     public function toArray(): array
     {
         return $this->get()->all();
+    }
+
+    /**
+     * Generate a cache key based on strategy and filters.
+     *
+     * Creates a unique cache key that includes information about the strategy
+     * and all applied filters/validators to prevent cache collisions.
+     *
+     * @return string Generated cache key
+     */
+    protected function generateCacheKey(): string
+    {
+        $parts = [
+            $this->strategy->getCacheKey(),
+        ];
+
+        // Include filter information in cache key
+        foreach ($this->filters as $filter) {
+            $parts[] = $filter::class;
+            if ($filter instanceof PropertyFilter) {
+                // Include property name and value for PropertyFilter
+                // In PHP 8.1+, private properties are automatically accessible via reflection
+                $reflection = new ReflectionClass($filter);
+                $propertyProp = $reflection->getProperty('property');
+                $valueProp = $reflection->getProperty('value');
+                $parts[] = $propertyProp->getValue($filter);
+                $parts[] = serialize($valueProp->getValue($filter));
+            }
+        }
+
+        // Include validator information in cache key
+        foreach ($this->validators as $validator) {
+            $parts[] = $validator::class;
+        }
+
+        return md5(implode(':', $parts));
     }
 
     /**

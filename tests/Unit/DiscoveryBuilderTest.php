@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pixielity\Discovery\Tests\Unit;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Pixielity\Discovery\DiscoveryBuilder;
 use Pixielity\Discovery\DiscoveryManager;
 use Pixielity\Discovery\Tests\Fixtures\Attributes\TestAttribute;
@@ -242,8 +243,9 @@ class DiscoveryBuilderTest extends TestCase
         // Act: Execute discovery
         $results = $discoveryBuilder->get();
 
-        // Assert: Should return an array of results
-        $this->assertIsArray($results);
+        // Assert: Should return a Collection of results
+        $this->assertInstanceOf(Collection::class, $results);
+        $this->assertNotEmpty($results);
     }
 
     /**
