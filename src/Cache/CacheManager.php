@@ -3,7 +3,7 @@
 namespace Pixielity\Discovery\Cache;
 
 use Illuminate\Container\Attributes\Config;
-use Illuminate\Container\Attributes\Scoped;
+use Illuminate\Container\Attributes\Singleton;
 use Illuminate\Support\Facades\File;
 use Pixielity\Discovery\Contracts\CacheManagerInterface;
 use Throwable;
@@ -19,7 +19,7 @@ use Throwable;
  * through configuration. Cache files are stored with MD5-hashed keys to ensure
  * unique filenames.
  */
-#[Scoped]
+#[Singleton]
 class CacheManager implements CacheManagerInterface
 {
     /**

@@ -77,7 +77,7 @@ class NamespaceResolver implements NamespaceResolverInterface
     }
 
     /**
-     * Resolve using monorepo patterns.
+     * Resolve using monorepo patterns and Composer autoload.
      *
      * Check patterns from most specific to least specific to avoid false matches.
      *
@@ -86,6 +86,12 @@ class NamespaceResolver implements NamespaceResolverInterface
      */
     protected function resolveMonorepoPattern(string $path): ?string
     {
+        // First, try to resolve using Composer's autoload map
+        $composerResolved = $this->resolveFromComposerAutoload($path);
+        if ($composerResolved !== null) {
+            return $composerResolved;
+        }
+
         // Pattern: packages/{Package}/tests/{Namespace}/{Class}.php (check before generic tests pattern)
         if (preg_match('#/packages/([^/]+)/tests/(.+)\.php$#', $path, $matches)) {
             $package = $matches[1];
@@ -121,13 +127,63 @@ class NamespaceResolver implements NamespaceResolverInterface
             return "App\\{$namespace}";
         }
 
-        // Pattern: tests/{Namespace}/{Class}.php (standalone package - least specific, check last)
-        if (preg_match('#/tests/(.+)\.php$#', $path, $matches)) {
-            $relativePath = $matches[1];
-            $namespace = Str::replace('/', '\\', $relativePath);
+        return null;
+    }
 
-            // Fallback for standalone tests
-            return "Tests\\{$namespace}";
+    /**
+     * Resolve namespace from Composer's autoload configuration.
+     *
+     * @param  string      $path File path
+     * @return string|null Resolved class name
+     */
+    protected function resolveFromComposerAutoload(string $path): ?string
+    {
+        // Get Composer's autoload classmap
+        $autoloadFiles = [
+            dirname(__DIR__, 2) . '/vendor/autoload.php',
+            dirname(__DIR__, 4) . '/autoload.php', // For when this package is installed as a dependency
+        ];
+
+        foreach ($autoloadFiles as $autoloadFile) {
+            if (file_exists($autoloadFile)) {
+                $loader = require $autoloadFile;
+                if (method_exists($loader, 'getPrefixesPsr4')) {
+                    $prefixes = $loader->getPrefixesPsr4();
+
+                    // Normalize path for comparison
+                    $normalizedPath = str_replace('\\', '/', realpath($path));
+
+                    // Sort by path length (longest first) to match most specific namespace
+                    $sortedPrefixes = [];
+                    foreach ($prefixes as $namespace => $paths) {
+                        foreach ($paths as $prefixPath) {
+                            $normalizedPrefixPath = str_replace('\\', '/', realpath($prefixPath));
+                            if ($normalizedPrefixPath) {
+                                $sortedPrefixes[$namespace] = $normalizedPrefixPath;
+                            }
+                        }
+                    }
+
+                    // Sort by path length descending
+                    uasort($sortedPrefixes, function ($a, $b) {
+                        return strlen($b) - strlen($a);
+                    });
+
+                    // Find matching namespace
+                    foreach ($sortedPrefixes as $namespace => $prefixPath) {
+                        if (str_starts_with($normalizedPath, $prefixPath)) {
+                            // Calculate relative path
+                            $relativePath = substr($normalizedPath, strlen($prefixPath) + 1);
+                            $relativePath = str_replace('.php', '', $relativePath);
+                            $relativeNamespace = str_replace('/', '\\', $relativePath);
+
+                            return rtrim($namespace, '\\') . '\\' . $relativeNamespace;
+                        }
+                    }
+                }
+
+                break;
+            }
         }
 
         return null;

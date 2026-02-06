@@ -3,7 +3,7 @@
 namespace Pixielity\Discovery\Contracts;
 
 use Illuminate\Container\Attributes\Bind;
-use Illuminate\Container\Attributes\Scoped;
+use Illuminate\Container\Attributes\Singleton;
 use Pixielity\Discovery\Cache\CacheManager;
 
 /**
@@ -21,7 +21,7 @@ use Pixielity\Discovery\Cache\CacheManager;
  * throughout the application, maintaining consistent cache state and avoiding
  * duplicate cache operations.
  */
-#[Scoped]
+#[Singleton]
 #[Bind(CacheManager::class)]
 interface CacheManagerInterface
 {

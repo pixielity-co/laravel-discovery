@@ -3,7 +3,7 @@
 namespace Pixielity\Discovery\Contracts;
 
 use Illuminate\Container\Attributes\Bind;
-use Illuminate\Container\Attributes\Scoped;
+use Illuminate\Container\Attributes\Singleton;
 use Pixielity\Discovery\Factories\StrategyFactory;
 
 /**
@@ -19,7 +19,7 @@ use Pixielity\Discovery\Factories\StrategyFactory;
  * The #[Singleton] attribute ensures a single strategy factory instance is used
  * throughout the application, maintaining consistent strategy creation.
  */
-#[Scoped]
+#[Singleton]
 #[Bind(StrategyFactory::class)]
 interface StrategyFactoryInterface
 {
