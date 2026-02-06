@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pixielity\Discovery\Tests\Concerns;
 
 use Illuminate\Contracts\Foundation\Application;
+use Pixielity\Discovery\Support\Reflection;
 
 /**
  * LoadsApplicationWithAttributes Trait.
@@ -198,6 +199,12 @@ trait LoadsApplicationWithAttributes
      */
     protected function setupEnvironmentResolver(Application $app): void
     {
+        // The resolveEnvironmentUsing() method only exists in Laravel 12+
+        // In Laravel 11, container attributes work differently and don't require this setup
+        if (! Reflection::methodExists($app, 'resolveEnvironmentUsing')) {
+            return;
+        }
+
         // Set the environment resolver callback
         // This callback is called by the container when checking if a #[Bind]
         // attribute should be applied based on the current environment

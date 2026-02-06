@@ -1,4 +1,4 @@
-<div align="center">
+<div align="center" id="top">
 
 <img src=".github/banner.svg" alt="Laravel Discovery" width="100%">
 
@@ -85,7 +85,7 @@ foreach ($cards as $class => $metadata) {
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -130,7 +130,7 @@ foreach ($cards as $class => $metadata) {
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -142,7 +142,7 @@ foreach ($cards as $class => $metadata) {
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -156,7 +156,7 @@ composer require pixielity/laravel-discovery
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -205,7 +205,7 @@ class SettingsService
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -261,7 +261,7 @@ All discovery methods return an associative array:
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -575,7 +575,7 @@ $validations = Discovery::properties(Validate::class)->get();
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -694,7 +694,7 @@ $cards = Discovery::attribute(AsCard::class)
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -784,7 +784,7 @@ Discovery::directories('app')->get();
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -868,7 +868,7 @@ packages/
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1371,7 +1371,7 @@ public function registerMiddleware(): void
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1516,7 +1516,7 @@ Execute discovery and return results.
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1555,7 +1555,7 @@ Discovery::directories('.')   // Scans everything
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1593,7 +1593,7 @@ class MyDiscoveryTest extends TestCase
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1627,7 +1627,7 @@ See [SECURITY.md](SECURITY.md) for our security policy.
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1662,7 +1662,7 @@ composer analyse
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1703,7 +1703,7 @@ This package stands on the shoulders of giants. Special thanks to:
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1737,7 +1737,7 @@ SOFTWARE.
 
 ---
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 ---
 
@@ -1766,7 +1766,7 @@ SOFTWARE.
 
 <div align="center">
 
-**[⬆ Back to Top](#-table-of-contents)**
+**[⬆ Back to Top](#top)**
 
 Made with ❤️ by the [Pixielity Team](https://github.com/pixielity-co)
 

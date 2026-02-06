@@ -94,8 +94,8 @@ class NamespaceResolver implements NamespaceResolverInterface
 
         // Pattern: packages/{Package}/tests/{Namespace}/{Class}.php (check before generic tests pattern)
         if (preg_match('#/packages/([^/]+)/tests/(.+)\.php$#', $path, $matches)) {
-            $package = $matches[1];
-            $relativePath = $matches[2];
+            $package = (string) $matches[1];
+            $relativePath = (string) $matches[2];
             $namespace = Str::replace('/', '\\', $relativePath);
 
             return "Pixielity\\{$package}\\Tests\\{$namespace}";
@@ -103,8 +103,8 @@ class NamespaceResolver implements NamespaceResolverInterface
 
         // Pattern: packages/{Package}/src/{Namespace}/{Class}.php
         if (preg_match('#/packages/([^/]+)/src/(.+)\.php$#', $path, $matches)) {
-            $package = $matches[1];
-            $relativePath = $matches[2];
+            $package = (string) $matches[1];
+            $relativePath = (string) $matches[2];
             $namespace = Str::replace('/', '\\', $relativePath);
 
             return "Pixielity\\{$package}\\{$namespace}";
@@ -112,8 +112,8 @@ class NamespaceResolver implements NamespaceResolverInterface
 
         // Pattern: modules/{Module}/src/{Namespace}/{Class}.php
         if (preg_match('#/modules/([^/]+)/src/(.+)\.php$#', $path, $matches)) {
-            $module = $matches[1];
-            $relativePath = $matches[2];
+            $module = (string) $matches[1];
+            $relativePath = (string) $matches[2];
             $namespace = Str::replace('/', '\\', $relativePath);
 
             return "Modules\\{$module}\\{$namespace}";
@@ -121,7 +121,7 @@ class NamespaceResolver implements NamespaceResolverInterface
 
         // Pattern: app/{Namespace}/{Class}.php
         if (preg_match('#/app/(.+)\.php$#', $path, $matches)) {
-            $relativePath = $matches[1];
+            $relativePath = (string) $matches[1];
             $namespace = Str::replace('/', '\\', $relativePath);
 
             return "App\\{$namespace}";
@@ -147,7 +147,8 @@ class NamespaceResolver implements NamespaceResolverInterface
         foreach ($autoloadFiles as $autoloadFile) {
             if (file_exists($autoloadFile)) {
                 $loader = require $autoloadFile;
-                if (method_exists($loader, 'getPrefixesPsr4')) {
+                // Ensure $loader is an object with getPrefixesPsr4 method
+                if (is_object($loader) && method_exists($loader, 'getPrefixesPsr4')) {
                     $prefixes = $loader->getPrefixesPsr4();
 
                     // Normalize path for comparison
