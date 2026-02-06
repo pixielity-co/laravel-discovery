@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Pixielity\Discovery\Tests\Concerns;
 
 use Illuminate\Contracts\Foundation\Application;
+
+use function in_array;
+
 use Pixielity\Discovery\Support\Reflection;
 
 /**
@@ -92,9 +95,7 @@ trait LoadsApplicationWithAttributes
      *
      * This matches Laravel's default behavior in production applications.
      *
-     * @param  Application  $app  The Laravel application instance being created
-     *
-     * @return void
+     * @param Application $app The Laravel application instance being created
      */
     protected function resolveApplicationCore($app): void
     {
@@ -133,8 +134,6 @@ trait LoadsApplicationWithAttributes
      * We use require_once instead of require to prevent the file from being loaded
      * multiple times if multiple test classes use this trait. Loading it multiple
      * times would cause errors as the attributes would be registered twice.
-     *
-     * @return void
      */
     protected function loadComposerAttributes(): void
     {
@@ -193,9 +192,7 @@ trait LoadsApplicationWithAttributes
      * so we check for the wildcard '*' first. This ensures test isolation and
      * predictable behavior.
      *
-     * @param  Application  $app  The Laravel application instance
-     *
-     * @return void
+     * @param Application $app The Laravel application instance
      */
     protected function setupEnvironmentResolver(Application $app): void
     {
@@ -213,7 +210,7 @@ trait LoadsApplicationWithAttributes
             // Check if wildcard '*' is present - this means "all environments"
             // This is the default value for #[Bind] attributes when no specific
             // environments are specified
-            if (\in_array('*', $environments, true)) {
+            if (in_array('*', $environments, true)) {
                 return true;
             }
 
@@ -221,7 +218,7 @@ trait LoadsApplicationWithAttributes
             // specified environments in the #[Bind] attribute
             // For example: #[Bind(Foo::class, environments: ['production'])]
             // would only apply when $app->environment() returns 'production'
-            return \in_array($app->environment(), $environments, true);
+            return in_array($app->environment(), $environments, true);
         });
     }
 
@@ -262,9 +259,7 @@ trait LoadsApplicationWithAttributes
      * - The CacheManager constructor requires these config values
      * - It prevents errors if code tries to access the config
      *
-     * @param  Application  $app  The Laravel application instance
-     *
-     * @return void
+     * @param Application $app The Laravel application instance
      */
     protected function defineEnvironment($app): void
     {

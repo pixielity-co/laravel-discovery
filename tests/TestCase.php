@@ -171,9 +171,8 @@ use Pixielity\Discovery\Tests\Concerns\LoadsApplicationWithAttributes;
  * @author  Pixielity Development Team
  *
  * @since   1.0.0
- *
- * @see     \Orchestra\Testbench\TestCase
- * @see     \Pixielity\Discovery\Tests\Concerns\LoadsApplicationWithAttributes
+ * @see     Orchestra
+ * @see     LoadsApplicationWithAttributes
  */
 abstract class TestCase extends Orchestra
 {
@@ -216,8 +215,6 @@ abstract class TestCase extends Orchestra
      * - Container not configured
      * - Attributes not loaded
      * - Tests failing with cryptic errors
-     *
-     * @return void
      */
     protected function setUp(): void
     {
@@ -271,8 +268,6 @@ abstract class TestCase extends Orchestra
      *
      * Calling parent::tearDown() first would destroy the application before
      * your cleanup code runs, potentially causing errors.
-     *
-     * @return void
      */
     #[Override]
     protected function tearDown(): void
@@ -343,9 +338,8 @@ abstract class TestCase extends Orchestra
      * But for testing, we rely on attribute-based binding to ensure that
      * mechanism works correctly in real-world usage.
      *
-     * @param  Application  $app  The Laravel application instance
-     *
-     * @return array<int, class-string>  Array of service provider class names
+     * @param  Application              $app The Laravel application instance
+     * @return array<int, class-string> Array of service provider class names
      */
     protected function getPackageProviders($app): array
     {
