@@ -201,7 +201,7 @@ trait LoadsApplicationWithAttributes
     {
         // The resolveEnvironmentUsing() method only exists in Laravel 12+
         // In Laravel 11, container attributes work differently and don't require this setup
-        if (! Reflection::methodExists($app, 'resolveEnvironmentUsing')) {
+        if (! method_exists($app, 'resolveEnvironmentUsing')) {
             return;
         }
 
