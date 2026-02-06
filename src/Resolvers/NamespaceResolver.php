@@ -66,7 +66,7 @@ class NamespaceResolver implements NamespaceResolverInterface
         $pattern = Str::replace('{class}', $className, $pattern);
         // Extract namespace path
         if (preg_match('#/src/(.+)/' . preg_quote($className, '#') . '\.php$#', $path, $matches)) {
-            $namespace = (string) Str::replace('/', '\\', $matches[1]);
+            $namespace = Str::replace('/', '\\', (string) $matches[1]);
 
             return Str::replace('{namespace}', $namespace, $pattern);
         }
