@@ -96,6 +96,7 @@ class NamespaceResolver implements NamespaceResolverInterface
         if (preg_match('#/packages/([^/]+)/tests/(.+)\.php$#', $path, $matches)) {
             $package = (string) $matches[1];
             $relativePath = (string) $matches[2];
+            /** @var string $namespace */
             $namespace = Str::replace('/', '\\', $relativePath);
 
             return "Pixielity\\{$package}\\Tests\\{$namespace}";
@@ -105,6 +106,7 @@ class NamespaceResolver implements NamespaceResolverInterface
         if (preg_match('#/packages/([^/]+)/src/(.+)\.php$#', $path, $matches)) {
             $package = (string) $matches[1];
             $relativePath = (string) $matches[2];
+            /** @var string $namespace */
             $namespace = Str::replace('/', '\\', $relativePath);
 
             return "Pixielity\\{$package}\\{$namespace}";
@@ -114,6 +116,7 @@ class NamespaceResolver implements NamespaceResolverInterface
         if (preg_match('#/modules/([^/]+)/src/(.+)\.php$#', $path, $matches)) {
             $module = (string) $matches[1];
             $relativePath = (string) $matches[2];
+            /** @var string $namespace */
             $namespace = Str::replace('/', '\\', $relativePath);
 
             return "Modules\\{$module}\\{$namespace}";
@@ -122,6 +125,7 @@ class NamespaceResolver implements NamespaceResolverInterface
         // Pattern: app/{Namespace}/{Class}.php
         if (preg_match('#/app/(.+)\.php$#', $path, $matches)) {
             $relativePath = (string) $matches[1];
+            /** @var string $namespace */
             $namespace = Str::replace('/', '\\', $relativePath);
 
             return "App\\{$namespace}";
