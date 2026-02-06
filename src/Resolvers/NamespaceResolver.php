@@ -51,13 +51,13 @@ class NamespaceResolver implements NamespaceResolverInterface
     {
         // Extract package name
         if (preg_match('#/packages/([^/]+)/#', $path, $matches)) {
-            $package = (string) $matches[1];
+            $package = $matches[1];
             $pattern = Str::replace('{package}', $package, $pattern);
         }
 
         // Extract module name
         if (preg_match('#/modules/([^/]+)/#', $path, $matches)) {
-            $module = (string) $matches[1];
+            $module = $matches[1];
             $pattern = Str::replace('{module}', $module, $pattern);
         }
 
@@ -66,7 +66,7 @@ class NamespaceResolver implements NamespaceResolverInterface
         $pattern = Str::replace('{class}', $className, $pattern);
         // Extract namespace path
         if (preg_match('#/src/(.+)/' . preg_quote($className, '#') . '\.php$#', $path, $matches)) {
-            $namespace = Str::replace('/', '\\', (string) $matches[1]);
+            $namespace = Str::replace('/', '\\', $matches[1]);
 
             return Str::replace('{namespace}', $namespace, $pattern);
         }
@@ -94,8 +94,8 @@ class NamespaceResolver implements NamespaceResolverInterface
 
         // Pattern: packages/{Package}/tests/{Namespace}/{Class}.php (check before generic tests pattern)
         if (preg_match('#/packages/([^/]+)/tests/(.+)\.php$#', $path, $matches)) {
-            $package = (string) $matches[1];
-            $relativePath = (string) $matches[2];
+            $package = $matches[1];
+            $relativePath = $matches[2];
             /** @var string $namespace */
             $namespace = Str::replace('/', '\\', $relativePath);
 
@@ -104,8 +104,8 @@ class NamespaceResolver implements NamespaceResolverInterface
 
         // Pattern: packages/{Package}/src/{Namespace}/{Class}.php
         if (preg_match('#/packages/([^/]+)/src/(.+)\.php$#', $path, $matches)) {
-            $package = (string) $matches[1];
-            $relativePath = (string) $matches[2];
+            $package = $matches[1];
+            $relativePath = $matches[2];
             /** @var string $namespace */
             $namespace = Str::replace('/', '\\', $relativePath);
 
@@ -114,8 +114,8 @@ class NamespaceResolver implements NamespaceResolverInterface
 
         // Pattern: modules/{Module}/src/{Namespace}/{Class}.php
         if (preg_match('#/modules/([^/]+)/src/(.+)\.php$#', $path, $matches)) {
-            $module = (string) $matches[1];
-            $relativePath = (string) $matches[2];
+            $module = $matches[1];
+            $relativePath = $matches[2];
             /** @var string $namespace */
             $namespace = Str::replace('/', '\\', $relativePath);
 
@@ -124,7 +124,7 @@ class NamespaceResolver implements NamespaceResolverInterface
 
         // Pattern: app/{Namespace}/{Class}.php
         if (preg_match('#/app/(.+)\.php$#', $path, $matches)) {
-            $relativePath = (string) $matches[1];
+            $relativePath = $matches[1];
             /** @var string $namespace */
             $namespace = Str::replace('/', '\\', $relativePath);
 
@@ -162,17 +162,16 @@ class NamespaceResolver implements NamespaceResolverInterface
                     $sortedPrefixes = [];
                     foreach ($prefixes as $namespace => $paths) {
                         foreach ($paths as $prefixPath) {
-                            $normalizedPrefixPath = str_replace('\\', '/', realpath($prefixPath));
-                            if ($normalizedPrefixPath) {
+                            $realPath = realpath($prefixPath);
+                            if ($realPath !== false) {
+                                $normalizedPrefixPath = str_replace('\\', '/', $realPath);
                                 $sortedPrefixes[$namespace] = $normalizedPrefixPath;
                             }
                         }
                     }
 
                     // Sort by path length descending
-                    uasort($sortedPrefixes, function ($a, $b) {
-                        return strlen($b) - strlen($a);
-                    });
+                    uasort($sortedPrefixes, fn ($a, $b) => strlen((string) $b) - strlen((string) $a));
 
                     // Find matching namespace
                     foreach ($sortedPrefixes as $namespace => $prefixPath) {
@@ -182,7 +181,7 @@ class NamespaceResolver implements NamespaceResolverInterface
                             $relativePath = str_replace('.php', '', $relativePath);
                             $relativeNamespace = str_replace('/', '\\', $relativePath);
 
-                            return rtrim($namespace, '\\') . '\\' . $relativeNamespace;
+                            return rtrim((string) $namespace, '\\') . '\\' . $relativeNamespace;
                         }
                     }
                 }

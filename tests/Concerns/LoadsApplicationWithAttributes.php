@@ -192,13 +192,13 @@ trait LoadsApplicationWithAttributes
      * so we check for the wildcard '*' first. This ensures test isolation and
      * predictable behavior.
      *
-     * @param Application $app The Laravel application instance
+     * @param Application $application The Laravel application instance
      */
-    protected function setupEnvironmentResolver(Application $app): void
+    protected function setupEnvironmentResolver(Application $application): void
     {
         // The resolveEnvironmentUsing() method only exists in Laravel 12+
         // In Laravel 11, container attributes work differently and don't require this setup
-        if (! Reflection::methodExists($app, 'resolveEnvironmentUsing')) {
+        if (! Reflection::methodExists($application, 'resolveEnvironmentUsing')) {
             return;
         }
 
@@ -206,7 +206,7 @@ trait LoadsApplicationWithAttributes
         // This callback is called by the container when checking if a #[Bind]
         // attribute should be applied based on the current environment
         // @phpstan-ignore-next-line
-        $app->resolveEnvironmentUsing(function (array $environments) use ($app): bool {
+        $application->resolveEnvironmentUsing(function (array $environments) use ($application): bool {
             // Check if wildcard '*' is present - this means "all environments"
             // This is the default value for #[Bind] attributes when no specific
             // environments are specified
@@ -218,7 +218,7 @@ trait LoadsApplicationWithAttributes
             // specified environments in the #[Bind] attribute
             // For example: #[Bind(Foo::class, environments: ['production'])]
             // would only apply when $app->environment() returns 'production'
-            return in_array($app->environment(), $environments, true);
+            return $application->environment($environments);
         });
     }
 
@@ -265,7 +265,7 @@ trait LoadsApplicationWithAttributes
     {
         // Use tap() for cleaner configuration as recommended by Orchestra Testbench
         // This pattern allows chaining multiple set() calls in a readable way
-        tap($app['config'], function ($config) {
+        tap($app['config'], function ($config): void {
             // Setup default database to use SQLite in-memory
             // This provides a fast, isolated database for each test run
             // without requiring any external database setup
