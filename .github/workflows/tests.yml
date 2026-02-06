@@ -34,9 +34,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, fileinfo
           coverage: xdebug
           ini-values: error_reporting=E_ALL
+
+      - name: Create bootstrap cache directory
+        run: mkdir -p bootstrap/cache
 
       - name: Validate composer.json
         run: composer validate --strict
