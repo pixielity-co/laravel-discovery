@@ -8,7 +8,7 @@
 
 [![Latest Version](https://img.shields.io/packagist/v/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
 [![Total Downloads](https://img.shields.io/packagist/dt/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
-[![Tests](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml/badge.svg)](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml)
+<!-- [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg?style=flat-square)](https://github.com/pixielity-co/laravel-discovery/actions/workflows/tests.yml) -->
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%208-brightgreen.svg?style=flat-square)](https://phpstan.org/)
 [![License](https://img.shields.io/packagist/license/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
 [![PHP Version](https://img.shields.io/packagist/php-v/pixielity/laravel-discovery.svg?style=flat-square)](https://packagist.org/packages/pixielity/laravel-discovery)
