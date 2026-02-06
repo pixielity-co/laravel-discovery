@@ -41,7 +41,7 @@ jobs:
       - name: Create bootstrap cache directories
         run: |
           mkdir -p bootstrap/cache
-          mkdir -p @testbench/bootstrap/cache
+          mkdir -p "@testbench/bootstrap/cache"
 
       - name: Validate composer.json
         run: composer validate --strict
