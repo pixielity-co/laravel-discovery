@@ -10,7 +10,14 @@
     },
     "blank_line_after_opening_tag": true,
     "blank_line_before_statement": {
-      "statements": ["break", "continue", "declare", "return", "throw", "try"]
+      "statements": [
+        "break",
+        "continue",
+        "declare",
+        "return",
+        "throw",
+        "try"
+      ]
     },
     "cast_spaces": true,
     "class_attributes_separation": {
@@ -43,7 +50,11 @@
     "no_empty_phpdoc": true,
     "no_empty_statement": true,
     "no_extra_blank_lines": {
-      "tokens": ["extra", "throw", "use"]
+      "tokens": [
+        "extra",
+        "throw",
+        "use"
+      ]
     },
     "no_leading_import_slash": true,
     "no_leading_namespace_whitespace": true,
@@ -132,12 +143,18 @@
     "standardize_not_equals": true,
     "ternary_operator_spaces": true,
     "trailing_comma_in_multiline": {
-      "elements": ["arrays"]
+      "elements": [
+        "arrays"
+      ]
     },
     "trim_array_spaces": true,
     "unary_operator_spaces": true,
     "visibility_required": {
-      "elements": ["const", "method", "property"]
+      "elements": [
+        "const",
+        "method",
+        "property"
+      ]
     },
     "whitespace_after_comma_in_array": true,
     "fully_qualified_strict_types": true,
@@ -157,10 +174,6 @@
     "_ide_helper.php",
     "_ide_helper_models.php",
     ".phpstorm.meta.php",
-    "var/cache",
-    "packages/Foundation/src/Concerns/InteractsWithPrompts.php",
-    "/Users/akouta/Projects/fulers/php-turborepo/packages/Foundation/src/Concerns/InteractsWithPrompts.php",
-    "packages/Framework/src/Database/src/Traits/HasMagicMethods.php",
-    "packages/Framework/src/Database/src/Contracts/HasMagicMethods.php"
+    "var/cache"
   ]
 }
