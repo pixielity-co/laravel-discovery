@@ -201,6 +201,7 @@ trait LoadsApplicationWithAttributes
         // Set the environment resolver callback
         // This callback is called by the container when checking if a #[Bind]
         // attribute should be applied based on the current environment
+        // @phpstan-ignore-next-line
         $app->resolveEnvironmentUsing(function (array $environments) use ($app): bool {
             // Check if wildcard '*' is present - this means "all environments"
             // This is the default value for #[Bind] attributes when no specific
