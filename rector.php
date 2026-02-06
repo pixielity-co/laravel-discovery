@@ -17,7 +17,7 @@
  *
  * @version 2.0.0
  *
- * @author Fulers Development Team
+ * @author Pixielity Development Team
  */
 
 declare(strict_types=1);
@@ -25,15 +25,14 @@ declare(strict_types=1);
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\ClassMethod\RemoveParentDelegatingConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
+use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector;
 use Rector\Set\ValueObject\SetList;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
-use RectorLaravel\Rector\ArrayDimFetch\ServerVariableToRequestFacadeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 use RectorLaravel\Rector\ClassMethod\MakeModelAttributesAndScopesProtectedRector;
 use RectorLaravel\Set\LaravelSetList;
 use RectorLaravel\Set\Packages\Faker\FakerSetList;
@@ -74,9 +73,8 @@ return RectorConfig::configure()
         '*/tests/fixtures/*',
         '*/tests/Stubs/*',
         '*/tests/stubs/*',
-        // Problematic test files with complex closure types
-        __DIR__ . '/packages/Framework/src/ServiceProvider/tests/Unit/HasModuleLifecycleTest.php',
-        // Database migrations (don't modify)
+        // Test concerns that must match parent signatures
+        __DIR__ . '/tests/Concerns/LoadsApplicationWithAttributes.php',// Database migrations (don't modify)
         '*/database/migrations/*',
         '*/src/database/migrations/*',
         '*/Migrations/*',
@@ -115,22 +113,9 @@ return RectorConfig::configure()
         // =====================================================================
         // SKIP SPECIFIC RULES FOR SPECIFIC FILES
         // =====================================================================
-        // Don't convert $_SERVER to Request facade in bootstrap code
-        ServerVariableToRequestFacadeRector::class => [
-            __DIR__ . '/packages/Foundation/src/Concerns/HasDirectories.php',
-        ],
-        // Don't remove delegating constructors that are needed for property promotion
-        RemoveParentDelegatingConstructorRector::class => [
-            __DIR__ . '/packages/Framework/src/ServiceProvider/src/ClassRouteAttributes.php',
-        ],
-        AddVoidReturnTypeWhereNoReturnRector::class => [
-            __DIR__ . '/packages/Foundation/src/Concerns/InteractsWithPrompts.php',
-        ],
         // Don't add parameter types to __call magic method (breaks Laravel compatibility)
         ParamTypeByMethodCallTypeRector::class => [
-            __DIR__ . '/packages/Foundation/src/Concerns/InteractsWithPrompts.php',
-            __DIR__ . '/packages/Framework/src/Database/src/Traits/HasMagicMethods.php',
-            __DIR__ . '/packages/Framework/src/Database/src/Contracts/HasMagicMethods.php',
+            __DIR__ . '/tests/Concerns/LoadsApplicationWithAttributes.php',
         ],
         // Don't privatize Laravel scope methods (called via magic methods)
         PrivatizeFinalClassMethodRector::class => [
@@ -141,6 +126,15 @@ return RectorConfig::configure()
         MakeModelAttributesAndScopesProtectedRector::class,
         // Don't convert Eloquent magic methods if we prefer them (optional - remove if you want explicit queries)
         // LaravelSetList::LARAVEL_ELOQUENT_MAGIC_METHOD_TO_QUERY_BUILDER,
+        // SKIP TYPE HINTS FOR ORCHESTRA TESTBENCH METHODS
+        // =====================================================================
+        // Don't add type hints to defineEnvironment() - must match Orchestra Testbench signature
+        RenameParamToMatchTypeRector::class => [
+            __DIR__ . '/tests/Concerns/LoadsApplicationWithAttributes.php',
+        ],
+        StrictArrayParamDimFetchRector::class => [
+            __DIR__ . '/tests/Concerns/LoadsApplicationWithAttributes.php',
+        ],
     ])
     // =========================================================================
     // PHP VERSION TARGET
