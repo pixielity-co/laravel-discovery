@@ -1694,8 +1694,8 @@ SOFTWARE.
 
 <div align="center">
 
-**[⬆ Back to Top](#-discovery-package)**
+**[⬆ Back to Top](#-features)**
 
-Made with ❤️ by the [Pixielity Team](https://github.com/pixielity)
+Made with ❤️ by the [Pixielity Team](https://github.com/pixielity-co)
 
 </div>
