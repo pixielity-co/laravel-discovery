@@ -51,13 +51,13 @@ class NamespaceResolver implements NamespaceResolverInterface
     {
         // Extract package name
         if (preg_match('#/packages/([^/]+)/#', $path, $matches)) {
-            $package = $matches[1];
+            $package = (string) $matches[1];
             $pattern = Str::replace('{package}', $package, $pattern);
         }
 
         // Extract module name
         if (preg_match('#/modules/([^/]+)/#', $path, $matches)) {
-            $module = $matches[1];
+            $module = (string) $matches[1];
             $pattern = Str::replace('{module}', $module, $pattern);
         }
 
@@ -66,7 +66,7 @@ class NamespaceResolver implements NamespaceResolverInterface
         $pattern = Str::replace('{class}', $className, $pattern);
         // Extract namespace path
         if (preg_match('#/src/(.+)/' . preg_quote($className, '#') . '\.php$#', $path, $matches)) {
-            $namespace = Str::replace('/', '\\', $matches[1]);
+            $namespace = (string) Str::replace('/', '\\', $matches[1]);
 
             return Str::replace('{namespace}', $namespace, $pattern);
         }
