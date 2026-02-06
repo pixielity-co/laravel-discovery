@@ -42,10 +42,7 @@
   "autoload": {
     "psr-4": {
       "Pixielity\\Discovery\\": "src/"
-    },
-    "files": [
-      "vendor/attributes.php"
-    ]
+    }
   },
   "autoload-dev": {
     "psr-4": {
