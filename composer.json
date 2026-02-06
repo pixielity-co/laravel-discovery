@@ -57,11 +57,26 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit",
-    "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-    "analyse": "vendor/bin/phpstan analyse",
-    "format": [
-      "@php vendor/bin/pint --ansi",
-      "@php vendor/bin/phpstan analyse --verbose --ansi"
+    "test:coverage": "vendor/bin/phpunit --coverage-html coverage",
+    "test:filter": "vendor/bin/phpunit --filter",
+    "analyse": "vendor/bin/phpstan analyse --memory-limit=2G",
+    "analyse:baseline": "vendor/bin/phpstan analyse --memory-limit=2G --generate-baseline",
+    "format": "@php vendor/bin/pint --ansi",
+    "format:test": "@php vendor/bin/pint --test --ansi",
+    "format:fix": "@php vendor/bin/pint --ansi",
+    "rector": "vendor/rector/rector/bin/rector process --dry-run",
+    "rector:fix": "vendor/rector/rector/bin/rector process",
+    "quality": [
+      "@format:test",
+      "@analyse"
+    ],
+    "quality:fix": [
+      "@format:fix",
+      "@rector:fix"
+    ],
+    "ci": [
+      "@test",
+      "@quality"
     ],
     "post-autoload-dump": [
       "@clear",
@@ -74,13 +89,26 @@
       "Composer\\Config::disableProcessTimeout",
       "@build",
       "@php vendor/bin/testbench serve --ansi"
-    ],
-     "rector": [
-      "vendor/rector/rector/bin/rector process --dry-run"
-    ],
-    "rector:fix": [
-      "vendor/rector/rector/bin/rector process"
     ]
+  },
+  "scripts-descriptions": {
+    "test": "Run the test suite",
+    "test:coverage": "Run tests with HTML coverage report",
+    "test:filter": "Run specific tests by filter pattern",
+    "analyse": "Run PHPStan static analysis",
+    "analyse:baseline": "Generate PHPStan baseline file",
+    "format": "Check code style with Laravel Pint",
+    "format:test": "Check code style without fixing",
+    "format:fix": "Fix code style issues with Laravel Pint",
+    "rector": "Preview Rector refactoring changes",
+    "rector:fix": "Apply Rector refactoring changes",
+    "quality": "Run all quality checks (format + analyse)",
+    "quality:fix": "Fix all quality issues (format + rector)",
+    "ci": "Run all CI checks (tests + quality)",
+    "clear": "Clear Testbench skeleton files",
+    "prepare": "Discover Testbench packages",
+    "build": "Build Testbench workbench",
+    "serve": "Start Testbench development server"
   },
   "extra": {
     "laravel": {

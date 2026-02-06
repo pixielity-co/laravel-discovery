@@ -2,9 +2,9 @@ name: Code Quality
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, develop ]
+    branches: [main, develop]
 
 jobs:
   code-style:
@@ -22,11 +22,22 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip
           coverage: none
 
-      - name: Run Laravel Pint
-        uses: aglipanci/laravel-pint-action@2.4
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
         with:
-          configPath: pint.json
-          testMode: true
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
+
+      - name: Run code style check
+        run: composer format:test
 
   phpstan:
     runs-on: ubuntu-latest
@@ -58,8 +69,8 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-stable --prefer-dist --no-interaction --no-progress
 
-      - name: Run PHPStan
-        run: vendor/bin/phpstan analyse --memory-limit=2G
+      - name: Run static analysis
+        run: composer analyse
 
   security:
     runs-on: ubuntu-latest

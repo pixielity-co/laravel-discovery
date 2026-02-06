@@ -74,7 +74,7 @@ return RectorConfig::configure()
         '*/tests/Stubs/*',
         '*/tests/stubs/*',
         // Test concerns that must match parent signatures
-        __DIR__ . '/tests/Concerns/LoadsApplicationWithAttributes.php',// Database migrations (don't modify)
+        __DIR__ . '/tests/Concerns/LoadsApplicationWithAttributes.php', // Database migrations (don't modify)
         '*/database/migrations/*',
         '*/src/database/migrations/*',
         '*/Migrations/*',
