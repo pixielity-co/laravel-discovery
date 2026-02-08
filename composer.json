@@ -118,6 +118,9 @@
         "src",
         "tests/Fixtures"
       ]
+    },
+    "branch-alias": {
+      "dev-main": "1.1.x-dev"
     }
   },
   "minimum-stability": "stable",
