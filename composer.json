@@ -46,10 +46,10 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Pixielity\\Discovery\\Tests\\": "tests/",
       "Workbench\\App\\": "workbench/app/",
-      "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-      "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+      "Pixielity\\Discovery\\Tests\\": "tests/",
+      "Workbench\\Database\\Seeders\\": "workbench/database/seeders/",
+      "Workbench\\Database\\Factories\\": "workbench/database/factories/"
     }
   },
   "scripts": {
@@ -120,7 +120,7 @@
       ]
     }
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "config": {
     "sort-packages": true,

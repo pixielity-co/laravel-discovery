@@ -7,7 +7,6 @@
     stopOnFailure="false"
     failOnDeprecation="true"
     cacheDirectory="build/phpunit"
-    bootstrap="tests/bootstrap.php"
     executionOrder="depends,defects"
     beStrictAboutTestsThatDoNotTestAnything="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
